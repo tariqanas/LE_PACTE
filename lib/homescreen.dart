@@ -1,6 +1,10 @@
+import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:flutter/material.dart';
+import 'dart:async';
+
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
+import 'package:camera/camera.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title}) : super(key: key);
@@ -40,6 +44,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
         onPressed: onPressed,
         label: const Text('Accepter 🔥'),
         backgroundColor: Colors.green,
+        heroTag: "takePictureButton",
       ),
     );
   }
@@ -50,6 +55,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
         icon: const Icon(Icons.cancel_outlined),
         onPressed: onPressed,
         label: const Text('Refuser  🏃'),
+        heroTag: "takePictureButton",
       ),
     );
   }
@@ -98,9 +104,21 @@ class _MyHomeScreenState extends State<HomeScreen> {
           _rejectButton(
               title: "refuse", onPressed: () => _countDownController.restart()),
           _proofButton(
-              title: "proof", onPressed: () => _countDownController.pause()),
+              title: "proof", onPressed: () => _openAcceptChallenge()),
         ],
       ),
     );
+  }
+
+   _openAcceptChallenge() async {
+    _countDownController.pause();
+    await availableCameras().then(
+              (value) => Navigator.push(
+                context,
+                MaterialPageRoute(
+                  builder: (context) => CameraPage(cameras: value),
+                ),
+              ),
+            );
   }
 }

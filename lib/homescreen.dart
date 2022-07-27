@@ -7,17 +7,26 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.title}) : super(key: key);
+  const HomeScreen({Key? key, required this.title, required this.streak})
+      : super(key: key);
 
   final String title;
+  final int streak;
 
   @override
   State<HomeScreen> createState() => _MyHomeScreenState();
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
+  static const String _weakMessage = 'You are Weak 👹';
   String _todayOrder = '';
-  int _duration = 86400;
+  int duration = 86400;
+  int streak = 0;
+  bool playerAccepted = false;
+  bool playerRefused = false;
+  String looserMessage =
+      'Loser ! Your Streak is going back to 0. \n see you tomorrow chicken. 🐔';
+
   final CountDownController _countDownController = CountDownController();
 
   @override
@@ -42,8 +51,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton.extended(
         icon: const Icon(Icons.add_a_photo_rounded),
         onPressed: onPressed,
-        label: const Text('Accepter 🔥'),
-        backgroundColor: Colors.green,
+        label: const Text('Accepter 👑'),
+        backgroundColor: Colors.black,
         heroTag: "takePictureButton",
       ),
     );
@@ -52,10 +61,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
   Widget _rejectButton({required String title, VoidCallback? onPressed}) {
     return Flexible(
       child: FloatingActionButton.extended(
-        icon: const Icon(Icons.cancel_outlined),
+        icon: const Icon(Icons.cancel),
         onPressed: onPressed,
-        label: const Text('Refuser  🏃'),
-        heroTag: "takePictureButton",
+        label: const Text('Refuser  🏳️'),
+        backgroundColor: Colors.black,
+        heroTag: "runButton",
       ),
     );
   }
@@ -71,29 +81,49 @@ class _MyHomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            const Text("Aujourd'hui, tu dois  :",
-                style: TextStyle(color: Colors.white, fontSize: 20)),
-            Text(_todayOrder == '' ? '⌛.👹.⌛ ' : _todayOrder + ' 🔥',
+            if (playerRefused)
+              const Text(_weakMessage,
+                  style: TextStyle(
+                      color: Colors.red,
+                      fontSize: 40,
+                      fontWeight: FontWeight.bold)),
+            if (!playerRefused)
+              const Text("Aujourd'hui, tu dois  :",
+                  style: TextStyle(color: Colors.white, fontSize: 20)),
+            if (!playerRefused)
+              Text(_todayOrder == '' ? '⌛.👹.⌛ ' : _todayOrder + ' 🔥',
+                  softWrap: false,
+                  style: const TextStyle(color: Colors.white, fontSize: 19)),
+            if (!playerRefused)
+              CircularCountDownTimer(
+                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery.of(context).size.height / 2,
+                  initialDuration: 0,
+                  controller: _countDownController,
+                  textStyle: const TextStyle(color: Colors.red, fontSize: 45),
+                  isReverse: true,
+                  isTimerTextShown: true,
+                  autoStart: true,
+                  onStart: () {
+                    debugPrint('Countdown started');
+                  },
+                  onComplete: () {
+                    debugPrint('YOU DIED !');
+                  },
+                  duration: duration,
+                  fillColor: Colors.red,
+                  ringColor: Colors.redAccent),
+            if (!playerRefused)
+              const Text('☝ Don\'t lose it !',
+                  softWrap: false,
+                  style: TextStyle(color: Colors.white, fontSize: 19)),
+            if (playerRefused)
+              Text(looserMessage,
+                  softWrap: false,
+                  style: const TextStyle(color: Colors.white, fontSize: 19)),
+            Text('⚡ Your Streak is : ' + streak.toString() + ' ⚡',
                 softWrap: false,
                 style: const TextStyle(color: Colors.white, fontSize: 19)),
-            CircularCountDownTimer(
-                width: MediaQuery.of(context).size.width / 2,
-                height: MediaQuery.of(context).size.height / 2,
-                initialDuration: 0,
-                controller: _countDownController,
-                textStyle: const TextStyle(color: Colors.red, fontSize: 45),
-                isReverse: true,
-                isTimerTextShown: true,
-                autoStart: true,
-                onStart: () {
-                  debugPrint('Countdown started');
-                },
-                onComplete: () {
-                  debugPrint('YOU DIED !');
-                },
-                duration: _duration,
-                fillColor: Colors.red,
-                ringColor: Colors.redAccent),
           ],
         ),
       ),
@@ -101,24 +131,35 @@ class _MyHomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          _rejectButton(
-              title: "refuse", onPressed: () => _countDownController.restart()),
-          _proofButton(
-              title: "proof", onPressed: () => _openAcceptChallenge()),
+          if (!playerRefused) ...[
+            _rejectButton(
+                title: "refuse", onPressed: () => _refuseTheChallenge()),
+            _proofButton(
+                title: "proof", onPressed: () => _openAcceptChallenge()),
+          ]
         ],
       ),
     );
   }
 
-   _openAcceptChallenge() async {
+  _openAcceptChallenge() async {
     _countDownController.pause();
+    playerAccepted = true;
     await availableCameras().then(
-              (value) => Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => CameraPage(cameras: value),
-                ),
-              ),
-            );
+      (value) => Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => CameraPage(cameras: value),
+        ),
+      ),
+    );
+  }
+
+  _refuseTheChallenge() {
+    setState(() {
+      playerRefused = true;
+      streak = 0;
+      _countDownController.reset();
+    });
   }
 }

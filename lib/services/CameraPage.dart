@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
 import 'package:flutter/material.dart';
@@ -11,6 +13,7 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  int streak = 0;
   late CameraController controller;
   XFile? pictureFile;
 
@@ -51,7 +54,7 @@ class _CameraPageState extends State<CameraPage> {
           child: Center(
             child: SizedBox(
               width: MediaQuery.of(context).size.width * 1,
-              height:MediaQuery.of(context).size.height * 0.6,
+              height: MediaQuery.of(context).size.height * 0.6,
               child: CameraPreview(controller),
             ),
           ),
@@ -61,6 +64,7 @@ class _CameraPageState extends State<CameraPage> {
           child: ElevatedButton(
             onPressed: () async {
               pictureFile = await controller.takePicture();
+              streak++;
               setState(() {});
             },
             child: const Text('Envoies ta preuve ! 👹 '),
@@ -72,10 +76,13 @@ class _CameraPageState extends State<CameraPage> {
             onPressed: () async {
               pictureFile = await controller.takePicture();
               setState(() {
-                 Navigator.push(
+                Navigator.push(
                   context,
                   MaterialPageRoute(
-                    builder: (context) => HomeScreen(title: 'Petite Nature 👎'),
+                    builder: (context) => const HomeScreen(
+                      title: 'Ne reviens plus.👎',
+                      streak: 15,
+                    ),
                   ),
                 );
               });
@@ -83,20 +90,18 @@ class _CameraPageState extends State<CameraPage> {
             child: const Text("Tu n'as pas les épaules.🐔"),
           ),
         ),
-   
+
         if (pictureFile != null)
-             SizedBox(
-          child:
-          Wrap(
+          SizedBox(
+              child: Wrap(
             children: [
-            Image.network(
-            pictureFile!.path,
-            height: 200,
-          )
+              Image.network(
+                pictureFile!.path,
+                height: 200,
+              )
             ],
-          )
-        )
-         
+          ))
+
         //Android/iOS
         // Image.file(File(pictureFile!.path)))
       ],

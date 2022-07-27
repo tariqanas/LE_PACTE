@@ -108,7 +108,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     debugPrint('Countdown started');
                   },
                   onComplete: () {
-                    debugPrint('YOU DIED !');
+                    debugPrint('countdown finished 24h');
+                    _refuseTheChallenge();
                   },
                   duration: duration,
                   fillColor: Colors.red,

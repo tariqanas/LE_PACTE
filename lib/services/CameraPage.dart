@@ -80,14 +80,14 @@ class _CameraPageState extends State<CameraPage> {
                   context,
                   MaterialPageRoute(
                     builder: (context) => const HomeScreen(
-                      title: 'Ne reviens plus.👎',
+                      title: 'You accepted..Tic..Tac ⏱️',
                       streak: 15,
                     ),
                   ),
                 );
               });
             },
-            child: const Text("Tu n'as pas les épaules.🐔"),
+            child: const Text("Not now, but today.🐔"),
           ),
         ),
 

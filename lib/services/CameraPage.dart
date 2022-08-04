@@ -73,7 +73,7 @@ class _CameraPageState extends State<CameraPage> {
           padding: const EdgeInsets.all(8.0),
           child: ElevatedButton(
             onPressed: () async {
-              pictureFile = await controller.takePicture();
+              controller.dispose();
               setState(() {
                 Navigator.push(
                   context,

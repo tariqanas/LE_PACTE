@@ -2,9 +2,10 @@ import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
-
+import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
+import 'package:eachday/utils/eachdayutils.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.streak})
@@ -20,13 +21,11 @@ class HomeScreen extends StatefulWidget {
 class _MyHomeScreenState extends State<HomeScreen> {
   static const String _weakMessage = 'You are Weak 👹';
   String _todayOrder = '';
-  int duration = 86400;
   int streak = 0;
   bool playerAccepted = false;
   bool playerRefused = false;
   String looserMessage =
       'Loser ! Your Streak is going back to 0. \n see you tomorrow chicken. 🐔';
-
   final CountDownController _countDownController = CountDownController();
 
   @override
@@ -111,7 +110,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
                   },
-                  duration: duration,
+                  duration: GlobalVars.timeLeft,
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
             if (!playerRefused)
@@ -145,6 +144,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   _openAcceptChallenge() async {
     _countDownController.pause();
+    GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
+        _countDownController.getTime());
     playerAccepted = true;
     await availableCameras().then(
       (value) => Navigator.push(

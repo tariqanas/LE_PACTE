@@ -1,11 +1,10 @@
-import 'dart:developer';
-
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
+  
   const CameraPage({this.cameras, Key? key}) : super(key: key);
 
   @override

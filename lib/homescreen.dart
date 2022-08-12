@@ -6,7 +6,6 @@ import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
 import 'package:eachday/utils/eachdayutils.dart';
-import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.streak})

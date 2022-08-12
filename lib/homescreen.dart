@@ -162,6 +162,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       playerRefused = true;
       streak = 0;
       _countDownController.restart();
+      EachDaysUtils.stopTicTacSound();
     });
   }
 }

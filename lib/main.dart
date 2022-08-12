@@ -1,8 +1,11 @@
 import 'package:eachday/homescreen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 void main() {
-  runApp(const MyApp());
+  WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
+      .then((value) => runApp(const MyApp()));
 }
 
 class MyApp extends StatelessWidget {
@@ -10,13 +13,14 @@ class MyApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-     return MaterialApp(
+    return MaterialApp(
       title: 'Each Day',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.red, fontFamily: 'Tapestry'),
-      home: const HomeScreen(title: 'Each Day ✌🏼👺',streak: 0,),
+      home: const HomeScreen(
+        title: 'Each Day ✌🏼👺',
+        streak: 0,
+      ),
     );
-  } 
+  }
 }
-
-

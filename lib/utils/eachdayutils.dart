@@ -1,6 +1,12 @@
 import 'package:audioplayers/audioplayers.dart';
 
 class EachDaysUtils {
+  static AudioPlayer audioPlayer = AudioPlayer();
+
+  void initAudioPlayer() {
+    audioPlayer.setReleaseMode(ReleaseMode.loop);
+  }
+
   static int convertTimeDurationToTimeStamp(String timeDuration) {
     var hhmmsstoseconds = timeDuration.split(":");
     int hourstoInt = int.parse(hhmmsstoseconds[0]);
@@ -10,8 +16,11 @@ class EachDaysUtils {
   }
 
   static Future<void> playTicTacSound() async {
-    AudioPlayer audioPlayer = AudioPlayer();
-    audioPlayer.setReleaseMode(ReleaseMode.loop);
     audioPlayer.play(AssetSource("timer_sound.mp3"));
+  }
+
+  static Future<void> stopTicTacSound() async {
+    audioPlayer.stop();
+    audioPlayer.dispose();
   }
 }

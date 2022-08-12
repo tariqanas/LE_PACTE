@@ -6,6 +6,7 @@ import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
 import 'package:eachday/utils/eachdayutils.dart';
+import 'package:audioplayers/audioplayers.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.streak})
@@ -31,11 +32,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-
     Future<String>.delayed(
             const Duration(seconds: 2), () => 'Chargement du nouveau défi.')
         .then((String value) {
       setState(() {
+        EachDaysUtils.playTicTacSound();
         fetchOrder();
       });
     });
@@ -161,7 +162,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
     setState(() {
       playerRefused = true;
       streak = 0;
-      _countDownController.reset();
+      _countDownController.restart();
     });
   }
 }

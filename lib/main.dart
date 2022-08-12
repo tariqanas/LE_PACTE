@@ -12,6 +12,7 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
      return MaterialApp(
       title: 'Each Day',
+      debugShowCheckedModeBanner: false,
       theme: ThemeData(primarySwatch: Colors.red, fontFamily: 'Tapestry'),
       home: const HomeScreen(title: 'Each Day ✌🏼👺',streak: 0,),
     );

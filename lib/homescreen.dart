@@ -20,7 +20,6 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   static const String _weakMessage = 'You are Weak 👹';
-  String _todayOrder = '';
   int streak = 0;
   bool playerAccepted = false;
   bool playerRefused = false;
@@ -42,7 +41,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
   }
 
   Future<String> fetchOrder() async {
-    return _todayOrder = await const GetTodayOrderService().getTodayOrder();
+    if (GlobalVars.todayOrder == '' && !playerRefused) {
+      return GlobalVars.todayOrder =
+          await const GetTodayOrderService().getTodayOrder();
+    }
+    return GlobalVars.todayOrder;
   }
 
   Widget _proofButton({required String title, VoidCallback? onPressed}) {
@@ -90,7 +93,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
               const Text("Aujourd'hui, tu dois  :",
                   style: TextStyle(color: Colors.white, fontSize: 20)),
             if (!playerRefused)
-              Text(_todayOrder == '' ? '⌛.👹.⌛ ' : _todayOrder + ' 🔥',
+              Text(
+                  GlobalVars.todayOrder == ''
+                      ? '⌛.👹.⌛ '
+                      : GlobalVars.todayOrder + ' 🔥',
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
             if (!playerRefused)
@@ -163,6 +169,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       streak = 0;
       _countDownController.restart();
       EachDaysUtils.stopTicTacSound();
+      GlobalVars.todayOrder = '';
     });
   }
 }

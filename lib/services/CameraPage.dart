@@ -70,6 +70,31 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
+//TODO Modify this.
+  seeHowManyPeopleSeenItButton(
+      {required String title, VoidCallback? onPressed}) {
+    return Expanded(
+      child: FloatingActionButton.extended(
+        onPressed: onPressed,
+        label: const Text('Statistique des autres ! ⚔️ '),
+        backgroundColor: Colors.blue,
+        heroTag: "okOtherPeopleButton",
+      ),
+    );
+  }
+
+//TODO Modify this.
+  seeWorldDashboardButton({required String title, VoidCallback? onPressed}) {
+    return Expanded(
+      child: FloatingActionButton.extended(
+        onPressed: onPressed,
+        label: const Text('10 Meilleurs challengers du monde ! 🏆 '),
+        backgroundColor: Color.fromARGB(255, 54, 51, 51),
+        heroTag: "okDashBoardButton",
+      ),
+    );
+  }
+
   _notNowOnpressed() {
     controller.pausePreview();
     setState(() {
@@ -93,6 +118,33 @@ class _CameraPageState extends State<CameraPage> {
 
   _sendProofOnPressed() {
     debugPrint("Sending proof for checking...");
+  }
+
+//TODO Modify this.
+  seeHowManyPeopleSeenItPressed() {
+    setState(() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const HomeScreen(
+                    title: 'You accepted..Tic..Tac ⏱️',
+                    streak: 15,
+                  )));
+    });
+  }
+
+//TODO Modify this.
+
+  _seeWorldDashBoardPressed() {
+    setState(() {
+      Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) => const HomeScreen(
+                    title: 'You accepted..Tic..Tac ⏱️',
+                    streak: 15,
+                  )));
+    });
   }
 
   @override
@@ -138,13 +190,24 @@ class _CameraPageState extends State<CameraPage> {
           ),
           Row(
             children: [
-                okSendProofButton(
-                    title: "proof", onPressed: () => _sendProofOnPressed()),
+              okSendProofButton(
+                  title: "proof", onPressed: () => _sendProofOnPressed()),
+            ],
+          ),
+          Row(
+            children: [
+              seeHowManyPeopleSeenItButton(
+                  title: "proof", onPressed: () => _sendProofOnPressed()),
+            ],
+          ),
+          Row(
+            children: [
+              seeWorldDashboardButton(
+                  title: "proof", onPressed: () => _seeWorldDashBoardPressed()),
             ],
           ),
         ],
       ),
-    );      
-
+    );
   }
 }

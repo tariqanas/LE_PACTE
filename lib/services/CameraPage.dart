@@ -49,11 +49,11 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   Widget okSendProofButton({required String title, VoidCallback? onPressed}) {
-    return Flexible(
+    return Expanded(
       child: FloatingActionButton.extended(
         onPressed: onPressed,
         label: const Text('Envoyer la preuve au diable ! 👹 '),
-        backgroundColor: Colors.red,
+        backgroundColor: Colors.green,
         heroTag: "okSendProofButton",
       ),
     );
@@ -137,13 +137,14 @@ class _CameraPageState extends State<CameraPage> {
             ],
           ),
           Row(
-            children: <Widget> [
-              okSendProofButton(
-                  title: "proof", onPressed: () => _sendProofOnPressed()),
+            children: [
+                okSendProofButton(
+                    title: "proof", onPressed: () => _sendProofOnPressed()),
             ],
-          )
+          ),
         ],
       ),
-    );
+    );      
+
   }
 }

@@ -12,7 +12,12 @@ class CameraPage extends StatefulWidget {
 }
 
 class _CameraPageState extends State<CameraPage> {
+  bool pictureSent = false;
+  bool pictureTaken = false;
+  bool gotValidationFromAdmin = false;
+  bool waitingForAdminAproval = false;
   int streak = 0;
+
   late CameraController controller;
   XFile? pictureFile;
 
@@ -40,9 +45,11 @@ class _CameraPageState extends State<CameraPage> {
   Widget notNowButton({required String title, VoidCallback? onPressed}) {
     return Flexible(
       child: FloatingActionButton.extended(
-        onPressed: onPressed,
-        label: const Text('Trop dûr pour moi..🐔'),
-        backgroundColor: Colors.red,
+        onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
+        label: (waitingForAdminAproval || pictureSent)
+            ? const Text('Le diable vérifieras..👹⏱️ ',style: TextStyle(color: Colors.black),)
+            : const Text('Trop dûr pour moi..🐔'),
+        backgroundColor:  Colors.red,
         heroTag: "waitButton",
       ),
     );
@@ -51,9 +58,13 @@ class _CameraPageState extends State<CameraPage> {
   Widget okSendProofButton({required String title, VoidCallback? onPressed}) {
     return Expanded(
       child: FloatingActionButton.extended(
-        onPressed: onPressed,
-        label: const Text('Envoyer la preuve au diable ! 👹 '),
-        backgroundColor: Colors.green,
+        onPressed: (waitingForAdminAproval || pictureSent || !pictureTaken) ? null : onPressed,
+        label: (waitingForAdminAproval || pictureSent)
+            ? const Text('En attente de validation ⏱️')
+            : const Text('Envoyer la preuve au diable ! 👹 '),
+        backgroundColor: (waitingForAdminAproval || pictureSent)
+            ? Colors.grey
+            : Colors.green,
         heroTag: "okSendProofButton",
       ),
     );
@@ -62,9 +73,12 @@ class _CameraPageState extends State<CameraPage> {
   Widget okTakePictureButton({required String title, VoidCallback? onPressed}) {
     return Flexible(
       child: FloatingActionButton.extended(
-        onPressed: onPressed,
-        label: const Text('Prendre une photo ! 👹 '),
-        backgroundColor: Colors.red,
+        onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
+        label: (waitingForAdminAproval || pictureSent)
+            ? const Text('Photo envoyée  ! 👹✔️')
+            : const Text('Prendre une photo 👹📷 '),
+        backgroundColor:
+            (waitingForAdminAproval || pictureSent) ? Colors.grey : Colors.red,
         heroTag: "okCaptureProofButton",
       ),
     );
@@ -88,8 +102,8 @@ class _CameraPageState extends State<CameraPage> {
     return Expanded(
       child: FloatingActionButton.extended(
         onPressed: onPressed,
-        label: const Text('10 Meilleurs challengers du monde ! 🏆 '),
-        backgroundColor: Color.fromARGB(255, 54, 51, 51),
+        label: const Text('10 Meilleurs challengers du monde ! 🏆 ',style: TextStyle(color: Colors.black),),
+        backgroundColor: Color.fromARGB(255, 255, 238, 0),
         heroTag: "okDashBoardButton",
       ),
     );
@@ -97,6 +111,7 @@ class _CameraPageState extends State<CameraPage> {
 
   _notNowOnpressed() {
     controller.pausePreview();
+    pictureTaken = false;
     setState(() {
       Navigator.push(
           context,
@@ -111,13 +126,19 @@ class _CameraPageState extends State<CameraPage> {
   _takePictureOnPressed() async {
     controller.resumePreview();
     pictureFile = await controller.takePicture();
-    setState(() {
-      streak++;
-    });
+    streak++;
+    pictureTaken = true;
+    setState(() {});
   }
 
   _sendProofOnPressed() {
     debugPrint("Sending proof for checking...");
+    pictureSent = true;
+    waitingForAdminAproval = true;
+    setState(() {});
+
+    //Handle validation.(DB)
+    // Wait for approval to increase streak.
   }
 
 //TODO Modify this.

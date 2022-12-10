@@ -47,9 +47,12 @@ class _CameraPageState extends State<CameraPage> {
       child: FloatingActionButton.extended(
         onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
         label: (waitingForAdminAproval || pictureSent)
-            ? const Text('Le diable vérifieras..👹⏱️ ',style: TextStyle(color: Colors.black),)
+            ? const Text(
+                'Le diable vérifieras..👹⏱️ ',
+                style: TextStyle(color: Colors.black),
+              )
             : const Text('Trop dûr pour moi..🐔'),
-        backgroundColor:  Colors.red,
+        backgroundColor: Colors.red,
         heroTag: "waitButton",
       ),
     );
@@ -58,7 +61,9 @@ class _CameraPageState extends State<CameraPage> {
   Widget okSendProofButton({required String title, VoidCallback? onPressed}) {
     return Expanded(
       child: FloatingActionButton.extended(
-        onPressed: (waitingForAdminAproval || pictureSent || !pictureTaken) ? null : onPressed,
+        onPressed: (waitingForAdminAproval || pictureSent || !pictureTaken)
+            ? null
+            : onPressed,
         label: (waitingForAdminAproval || pictureSent)
             ? const Text('En attente de validation ⏱️')
             : const Text('Envoyer la preuve au diable ! 👹 '),
@@ -102,7 +107,10 @@ class _CameraPageState extends State<CameraPage> {
     return Expanded(
       child: FloatingActionButton.extended(
         onPressed: onPressed,
-        label: const Text('10 Meilleurs challengers du monde ! 🏆 ',style: TextStyle(color: Colors.black),),
+        label: const Text(
+          '10 Meilleurs challengers du monde ! 🏆 ',
+          style: TextStyle(color: Colors.black),
+        ),
         backgroundColor: Color.fromARGB(255, 255, 238, 0),
         heroTag: "okDashBoardButton",
       ),
@@ -135,6 +143,7 @@ class _CameraPageState extends State<CameraPage> {
     debugPrint("Sending proof for checking...");
     pictureSent = true;
     waitingForAdminAproval = true;
+    pictureFile = null;
     setState(() {});
 
     //Handle validation.(DB)
@@ -177,14 +186,19 @@ class _CameraPageState extends State<CameraPage> {
         ),
       );
     }
-    return SingleChildScrollView(
-      child: Column(
+    return Scaffold(
+      resizeToAvoidBottomInset: false,
+      appBar: AppBar(
+        centerTitle: true,
+        title: const Text('Time to prove it : 👹🧾 '),
+      ),
+      body: ListView(
         children: [
-          Padding(
-            padding: const EdgeInsets.all(0.0),
+          SizedBox(
+            // padding: const EdgeInsets.all(0.0),
             child: Center(
               child: SizedBox(
-                width: MediaQuery.of(context).size.width * 1,
+                width: MediaQuery.of(context).size.height * 1,
                 height: MediaQuery.of(context).size.height * 0.4,
                 child: CameraPreview(controller),
               ),
@@ -200,32 +214,43 @@ class _CameraPageState extends State<CameraPage> {
             )),
           //Android/iOS
           // Image.file(File(pictureFile!.path)))
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        
+          SizedBox(
+              child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
               okTakePictureButton(
                   title: "proof", onPressed: () => _takePictureOnPressed()),
               notNowButton(
                   title: "notNow", onPressed: () => _notNowOnpressed()),
             ],
+          )),
+          SizedBox(
+            child: Row(
+              children: [
+                okSendProofButton(
+                    title: "proof", onPressed: () => _sendProofOnPressed()),
+              ],
+            ),
           ),
-          Row(
-            children: [
-              okSendProofButton(
-                  title: "proof", onPressed: () => _sendProofOnPressed()),
-            ],
+
+          SizedBox(
+            child: Row(
+              children: [
+                seeHowManyPeopleSeenItButton(
+                    title: "proof", onPressed: () => _sendProofOnPressed()),
+              ],
+            ),
           ),
-          Row(
-            children: [
-              seeHowManyPeopleSeenItButton(
-                  title: "proof", onPressed: () => _sendProofOnPressed()),
-            ],
-          ),
-          Row(
-            children: [
-              seeWorldDashboardButton(
-                  title: "proof", onPressed: () => _seeWorldDashBoardPressed()),
-            ],
+
+          SizedBox(
+            child: Row(
+              children: [
+                seeWorldDashboardButton(
+                    title: "proof",
+                    onPressed: () => _seeWorldDashBoardPressed()),
+              ],
+            ),
           ),
         ],
       ),

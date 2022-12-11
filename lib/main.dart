@@ -14,11 +14,11 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Each Day',
+      title: 'Le Pacte',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(scaffoldBackgroundColor: Colors.black, primarySwatch: Colors.red, fontFamily: 'Tapestry'),
       home: const HomeScreen(
-        title: 'Each Day ✌🏼👺',
+        title: 'Le Pacte  ✌🏼👺',
         streak: 0,
       ),
     );

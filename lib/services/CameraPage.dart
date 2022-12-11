@@ -190,10 +190,12 @@ class _CameraPageState extends State<CameraPage> {
       resizeToAvoidBottomInset: false,
       appBar: AppBar(
         centerTitle: true,
-        title: const Text('Time to prove it : 👹🧾 '),
+        title: const Text('Prouves-le : 👹🧾 '),
+        automaticallyImplyLeading: false,
+
       ),
-      body: ListView(
-        children: [
+      body: Center(
+       child: Column(children:[
           SizedBox(
             // padding: const EdgeInsets.all(0.0),
             child: Center(
@@ -204,17 +206,20 @@ class _CameraPageState extends State<CameraPage> {
               ),
             ),
           ),
+
           if (pictureFile != null)
             SizedBox(
                 child: Stack(
               children: [
                 Image.network(pictureFile!.path,
-                    height: 300, filterQuality: FilterQuality.medium)
+                  filterQuality: FilterQuality.medium)
               ],
             )),
           //Android/iOS
           // Image.file(File(pictureFile!.path)))
-        
+       const  Expanded(child: 
+          Center(child: Text(''),)
+        ),
           SizedBox(
               child: Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -254,6 +259,6 @@ class _CameraPageState extends State<CameraPage> {
           ),
         ],
       ),
-    );
+    ));
   }
 }

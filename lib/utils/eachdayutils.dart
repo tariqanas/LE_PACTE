@@ -1,7 +1,11 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 
 class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
+  static String endMessage = "You're time is done ! You Lost. ⚡";
+  static String almostEndMessage = "Less then 10 minutes left.⏱️";
 
   void initAudioPlayer() {
     audioPlayer.setReleaseMode(ReleaseMode.loop);
@@ -22,5 +26,16 @@ class EachDaysUtils {
   static Future<void> stopTicTacSound() async {
     audioPlayer.stop();
     audioPlayer.dispose();
+  }
+
+  static showEndingToast(bool timerEnded) {
+    Fluttertoast.showToast(
+        msg: timerEnded? endMessage: almostEndMessage,
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM_LEFT,
+        backgroundColor: Colors.red,
+        timeInSecForIosWeb: 1,
+        textColor: Colors.black,
+        fontSize: 20.0);
   }
 }

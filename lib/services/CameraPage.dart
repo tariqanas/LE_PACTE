@@ -1,11 +1,13 @@
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
+import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
 
-  const CameraPage({this.cameras, Key? key}) : super(key: key);
+  const CameraPage({this.cameras, Key? key,})
+      : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -187,78 +189,80 @@ class _CameraPageState extends State<CameraPage> {
       );
     }
     return Scaffold(
-      resizeToAvoidBottomInset: false,
-      appBar: AppBar(
-        centerTitle: true,
-        title: const Text('Prouves-le : 👹🧾 '),
-        automaticallyImplyLeading: false,
-
-      ),
-      body: Center(
-       child: Column(children:[
-          SizedBox(
-            // padding: const EdgeInsets.all(0.0),
-            child: Center(
-              child: SizedBox(
-                width: MediaQuery.of(context).size.height * 1,
-                height: MediaQuery.of(context).size.height * 0.4,
-                child: CameraPreview(controller),
-              ),
-            ),
-          ),
-
-          if (pictureFile != null)
-            SizedBox(
-                child: Stack(
-              children: [
-                Image.network(pictureFile!.path,
-                  filterQuality: FilterQuality.medium)
-              ],
-            )),
-          //Android/iOS
-          // Image.file(File(pictureFile!.path)))
-       const  Expanded(child: 
-          Center(child: Text(''),)
+        resizeToAvoidBottomInset: false,
+        appBar: AppBar(
+          centerTitle: true,
+          title: const Text('Prouves-le : 👹🧾 '),
+          automaticallyImplyLeading: false,
         ),
-          SizedBox(
-              child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
+        body: Center(
+          child: Column(
             children: [
-              okTakePictureButton(
-                  title: "proof", onPressed: () => _takePictureOnPressed()),
-              notNowButton(
-                  title: "notNow", onPressed: () => _notNowOnpressed()),
+              SizedBox(
+                // padding: const EdgeInsets.all(0.0),
+                child: Center(
+                  child: SizedBox(
+                    width: MediaQuery.of(context).size.height * 1,
+                    height: MediaQuery.of(context).size.height * 0.4,
+                    child: CameraPreview(controller),
+                  ),
+                ),
+              ),
+
+              if (pictureFile != null)
+                SizedBox(
+                    child: Stack(
+                  children: [
+                    Image.network(pictureFile!.path,
+                        filterQuality: FilterQuality.medium)
+                  ],
+                )),
+              //Android/iOS
+              // Image.file(File(pictureFile!.path)))
+              const Expanded(
+                  child: Center(
+                child: Text(''),
+              )),
+              SizedBox(
+                  child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  okTakePictureButton(
+                      title: "proof", onPressed: () => _takePictureOnPressed()),
+                  notNowButton(
+                      title: "notNow", onPressed: () => _notNowOnpressed()),
+                ],
+              )),
+              SizedBox(
+                child: Row(
+                  children: [
+                    okSendProofButton(
+                        title: "proof", onPressed: () => _sendProofOnPressed()),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                child: Row(
+                  children: [
+                    seeHowManyPeopleSeenItButton(
+                        title: "proof",
+                        onPressed: () => EachDaysUtils.showEndingToast(false)),
+                  ],
+                ),
+              ),
+
+              SizedBox(
+                child: Row(
+                  children: [
+                    seeWorldDashboardButton(
+                        title: "proof",
+                        onPressed: () => _seeWorldDashBoardPressed()),
+                  ],
+                ),
+              ),
             ],
-          )),
-          SizedBox(
-            child: Row(
-              children: [
-                okSendProofButton(
-                    title: "proof", onPressed: () => _sendProofOnPressed()),
-              ],
-            ),
           ),
-
-          SizedBox(
-            child: Row(
-              children: [
-                seeHowManyPeopleSeenItButton(
-                    title: "proof", onPressed: () => _sendProofOnPressed()),
-              ],
-            ),
-          ),
-
-          SizedBox(
-            child: Row(
-              children: [
-                seeWorldDashboardButton(
-                    title: "proof",
-                    onPressed: () => _seeWorldDashBoardPressed()),
-              ],
-            ),
-          ),
-        ],
-      ),
-    ));
+        ));
   }
 }

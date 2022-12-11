@@ -1,3 +1,5 @@
+import 'dart:js_util';
+
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:flutter/material.dart';
@@ -25,6 +27,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
   bool playerRefused = false;
   String looserMessage =
       'Loser ! Your Streak is going back to 0. \n see you tomorrow chicken. 🐔';
+  Timer? timer;
   final CountDownController _countDownController = CountDownController();
 
   @override
@@ -36,6 +39,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
       setState(() {
         EachDaysUtils.playTicTacSound();
         fetchOrder();
+        timer = Timer.periodic(const Duration(seconds: 1),
+            (Timer t) => _verifyIfCountDownHit10MinutesOrNo());
       });
     });
   }
@@ -76,9 +81,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        centerTitle: true,
-        title: Text(widget.title),
-      ),
+          centerTitle: true,
+          title: Text(widget.title),
+          automaticallyImplyLeading: false),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -115,6 +120,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   onComplete: () {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
+                    EachDaysUtils.showEndingToast(true);
                   },
                   duration: GlobalVars.timeLeft,
                   fillColor: Colors.red,
@@ -149,8 +155,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
   }
 
   _openAcceptChallenge() async {
-    _countDownController.pause();
-    GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
+    
+   GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
         _countDownController.getTime());
     playerAccepted = true;
     await availableCameras().then(
@@ -171,5 +177,12 @@ class _MyHomeScreenState extends State<HomeScreen> {
       EachDaysUtils.stopTicTacSound();
       GlobalVars.todayOrder = '';
     });
+  }
+
+  _verifyIfCountDownHit10MinutesOrNo() {
+    if (_countDownController.getTime() == "00:10:00") {
+      EachDaysUtils.showEndingToast(false);
+      timer?.cancel();
+    }
   }
 }

@@ -1,8 +1,7 @@
-import 'dart:js_util';
-
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'dart:async';
 import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -33,14 +32,14 @@ class _MyHomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime();
+    _verifyIfCountDownHit10MinutesOrNo();
     Future<String>.delayed(
             const Duration(seconds: 2), () => 'Chargement du nouveau défi.')
         .then((String value) {
       setState(() {
         EachDaysUtils.playTicTacSound();
         fetchOrder();
-        timer = Timer.periodic(const Duration(seconds: 1),
-            (Timer t) => _verifyIfCountDownHit10MinutesOrNo());
       });
     });
   }
@@ -155,8 +154,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
   }
 
   _openAcceptChallenge() async {
-    
-   GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
+    GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
         _countDownController.getTime());
     playerAccepted = true;
     await availableCameras().then(
@@ -180,9 +178,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
   }
 
   _verifyIfCountDownHit10MinutesOrNo() {
-    if (_countDownController.getTime() == "00:10:00") {
+    if (GlobalVars.timeLeft <= 600) {
       EachDaysUtils.showEndingToast(false);
-      timer?.cancel();
     }
   }
 }

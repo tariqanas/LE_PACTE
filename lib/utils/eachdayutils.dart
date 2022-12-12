@@ -1,6 +1,8 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:intl/intl.dart';
+import 'package:eachday/globalvars/globalvars.dart';
 
 class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
@@ -30,12 +32,23 @@ class EachDaysUtils {
 
   static showEndingToast(bool timerEnded) {
     Fluttertoast.showToast(
-        msg: timerEnded? endMessage: almostEndMessage,
+        msg: timerEnded ? endMessage : almostEndMessage,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM_LEFT,
         backgroundColor: Colors.red,
         timeInSecForIosWeb: 1,
         textColor: Colors.black,
         fontSize: 20.0);
+  }
+
+  static howMuchTimeLeftAccordingToCurrentTime() {
+    var format = DateFormat("HH:mm:ss");
+    var one = format.parse("23:59:59");
+    var two = format.parse(DateTime.now().hour.toString() +
+        ":" +
+        DateTime.now().minute.toString() +
+        ":" +
+        DateTime.now().second.toString());
+    GlobalVars.timeLeft = one.difference(two).inSeconds.toInt();
   }
 }

@@ -20,12 +20,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
-  static const String _weakMessage = 'You are Weak 👹';
-  int streak = 0;
-  bool playerAccepted = false;
-  bool playerRefused = false;
-  String looserMessage =
-      'Loser ! Your Streak is going back to 0. \n see you tomorrow chicken. 🐔';
   Timer? timer;
   final CountDownController _countDownController = CountDownController();
 
@@ -45,7 +39,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
   }
 
   Future<String> fetchOrder() async {
-    if (GlobalVars.todayOrder == '' && !playerRefused) {
+    if (GlobalVars.todayOrder == '' && !GlobalVars.playerRefused) {
       return GlobalVars.todayOrder =
           await const GetTodayOrderService().getTodayOrder();
     }
@@ -87,23 +81,23 @@ class _MyHomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (playerRefused)
-              const Text(_weakMessage,
-                  style: TextStyle(
+            if (GlobalVars.playerRefused)
+              Text(GlobalVars.weakMessage,
+                  style: const TextStyle(
                       color: Colors.red,
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
-            if (!playerRefused)
+            if (!GlobalVars.playerRefused)
               const Text("Aujourd'hui, tu dois  :",
                   style: TextStyle(color: Colors.white, fontSize: 20)),
-            if (!playerRefused)
+            if (!GlobalVars.playerRefused)
               Text(
                   GlobalVars.todayOrder == ''
                       ? '⌛.👹.⌛ '
                       : GlobalVars.todayOrder + ' 🔥',
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
-            if (!playerRefused)
+            if (!GlobalVars.playerRefused)
               CircularCountDownTimer(
                   width: MediaQuery.of(context).size.width / 2,
                   height: MediaQuery.of(context).size.height / 2,
@@ -124,15 +118,15 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   duration: GlobalVars.timeLeft,
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
-            if (!playerRefused)
+            if (!GlobalVars.playerRefused)
               const Text('☝ Don\'t lose it !',
                   softWrap: false,
                   style: TextStyle(color: Colors.white, fontSize: 19)),
-            if (playerRefused)
-              Text(looserMessage,
+            if (GlobalVars.playerRefused)
+              Text(GlobalVars.looserMessage,
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
-            Text('⚡ Your Streak is : ' + streak.toString() + ' ⚡',
+            Text('⚡ Your Streak is : ' + GlobalVars.streak.toString() + ' ⚡',
                 softWrap: false,
                 style: const TextStyle(color: Colors.white, fontSize: 19)),
           ],
@@ -142,7 +136,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       bottomNavigationBar: Row(
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
-          if (!playerRefused) ...[
+          if (!GlobalVars.playerRefused) ...[
             _rejectButton(
                 title: "refuse", onPressed: () => _refuseTheChallenge()),
             _proofButton(
@@ -156,7 +150,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
   _openAcceptChallenge() async {
     GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
         _countDownController.getTime());
-    playerAccepted = true;
+    GlobalVars.playerAccepted = true;
     await availableCameras().then(
       (value) => Navigator.push(
         context,
@@ -169,8 +163,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   _refuseTheChallenge() {
     setState(() {
-      playerRefused = true;
-      streak = 0;
+      GlobalVars.playerRefused = true;
+      GlobalVars.streak = 0;
       _countDownController.restart();
       EachDaysUtils.stopTicTacSound();
       GlobalVars.todayOrder = '';
@@ -182,4 +176,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
       EachDaysUtils.showEndingToast(false);
     }
   }
+
+/*   _isPlayerEligibleToPlayToday() {
+
+    if (GlobalVars.timeLeft < 0 && TodayWasAlreadSet()) {
+      _refuseTheChallenge();
+    }
+  } */
 }

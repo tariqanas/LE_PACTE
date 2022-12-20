@@ -1,7 +1,6 @@
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'dart:async';
 import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -20,7 +19,6 @@ class HomeScreen extends StatefulWidget {
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
-  Timer? timer;
   final CountDownController _countDownController = CountDownController();
 
   @override

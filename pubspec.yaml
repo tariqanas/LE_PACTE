@@ -37,14 +37,21 @@ dependencies:
   path_provider:
   path:
   audioplayers: ^1.0.1
-  intl: ^0.16.1
+  intl: ^0.17.0
+  provider: ^5.0.0
   fluttertoast: ^8.1.2
+  firebase_core: ^2.4.0
+  firebase_auth: ^4.2.0
+  google_sign_in:
+  flutter_svg: ^0.22.0
 
 flutter_icons:
     android: "launcher_icon"
     ios: true
     image_path: "assets/icon/ed_icon.png"
 
+#Google icon
+font_awesome_flutter: ^9.0.0
 
 
 dev_dependencies:
@@ -75,6 +82,9 @@ flutter:
     - assets/
     - assets/quotes/quotes.txt
     - assets/timer_sound.mp3
+    - assets/icon/google.svg
+    - assets/icon/phone.svg
+    - assets/splash/each_day_splash.png
 
   fonts:
     - family: Tapestry

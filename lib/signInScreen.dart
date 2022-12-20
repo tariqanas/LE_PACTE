@@ -1,4 +1,3 @@
-import 'package:eachday/homescreen.dart';
 import 'package:eachday/services/google_sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';

@@ -1,5 +1,8 @@
+import 'dart:io';
+
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'globalvars/globalvars.dart';
@@ -70,10 +73,26 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   @override
   Widget build(BuildContext context) {
+    String? nullableUserPicture = FirebaseAuth.instance.currentUser?.photoURL;
+    String? nullableUserUsername =
+        FirebaseAuth.instance.currentUser?.displayName;
+    String userPicture = "";
+    String userName = "";
+    if (nullableUserPicture != null) {
+      userPicture = nullableUserPicture;
+    }
+    if (nullableUserUsername != null) {
+      userName = nullableUserUsername;
+    }
+
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
-          title: Text(widget.title),
+          backgroundColor: Colors.black,
+          title: Row(children: [ const Expanded(child: Text("🇫🇷")),
+            Text("🔥 "+ userName.toUpperCase() +" 🔥  "),
+         ClipRRect(borderRadius: BorderRadius.circular(100),
+         child: Image.network(userPicture, repeat: ImageRepeat.noRepeat,fit: BoxFit.fitWidth,height: 55,))]),
           automaticallyImplyLeading: false),
       body: Center(
         child: Column(
@@ -106,7 +125,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   isTimerTextShown: true,
                   autoStart: true,
                   onStart: () {
-                    debugPrint('Countdown started');
+                    EachDaysUtils.verboseIt(
+                        'Countdown started' + _countDownController.getTime());
                   },
                   onComplete: () {
                     debugPrint('countdown finished 24h');

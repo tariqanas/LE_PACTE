@@ -1,3 +1,4 @@
+import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -15,17 +16,16 @@ class GoogleSignInProvider extends ChangeNotifier {
       accessToken: googleAuth?.accessToken,
       idToken: googleAuth?.idToken,
     );
-    debugPrint("Launching with credentiens");
-    debugPrint(credientials.accessToken);
-
+   
     UserCredential result =
         await FirebaseAuth.instance.signInWithCredential(credientials);
-    /*    notifyListeners(); */
 
-    debugPrint("Checking usaa");
+    EachDaysUtils.verboseIt("Checking user ");
+
     if (result.user != null) {
-      debugPrint("user not null");
-      debugPrint("user is " + result.user.toString());
+      
+       EachDaysUtils.verboseIt("User exists, switching to Main Menu..");
+      
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(

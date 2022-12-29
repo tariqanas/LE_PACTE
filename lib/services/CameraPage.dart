@@ -1,13 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
+import 'package:eachday/services/notificationService.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
 
-  const CameraPage({this.cameras, Key? key,})
-      : super(key: key);
+  const CameraPage({
+    this.cameras,
+    Key? key,
+  }) : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -19,6 +22,7 @@ class _CameraPageState extends State<CameraPage> {
   bool gotValidationFromAdmin = false;
   bool waitingForAdminAproval = false;
   int streak = 0;
+  
 
   late CameraController controller;
   XFile? pictureFile;
@@ -26,6 +30,7 @@ class _CameraPageState extends State<CameraPage> {
   @override
   void initState() {
     super.initState();
+   
     controller = CameraController(
       widget.cameras![1],
       ResolutionPreset.high,
@@ -257,7 +262,7 @@ class _CameraPageState extends State<CameraPage> {
                   children: [
                     seeWorldDashboardButton(
                         title: "proof",
-                        onPressed: () => _seeWorldDashBoardPressed()),
+                        onPressed: () => EachDaysUtils.verboseIt("See Champions !!!!")),
                   ],
                 ),
               ),

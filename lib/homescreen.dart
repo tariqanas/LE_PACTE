@@ -10,6 +10,8 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 
+import 'services/notificationService.dart';
+
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.streak})
       : super(key: key);
@@ -23,10 +25,13 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   final CountDownController _countDownController = CountDownController();
-
+  late final NotificationService notificationService;
   @override
   void initState() {
     super.initState();
+     notificationService = NotificationService();
+      notificationService.initializePlatformNotifications();
+    listenToNotificationStream();
     EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime();
     _verifyIfCountDownHit10MinutesOrNo();
     Future<String>.delayed(
@@ -39,6 +44,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
     });
   }
 
+  void listenToNotificationStream() =>
+      notificationService.behaviorSubject.listen((payload) {
+        EachDaysUtils.verboseIt("10 minute notification sent");
+      });
   Future<String> fetchOrder() async {
     if (GlobalVars.todayOrder == '' && !GlobalVars.playerRefused) {
       return GlobalVars.todayOrder =
@@ -132,6 +141,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
                     EachDaysUtils.showEndingToast(true);
+                    notificationService.showLocalNotification(id: 1, title: "Faible👹 ", body: "ton score repasse à 0. Comme toi.👎 ", payload: "ton score repasse à 0. Comme toi.👎 ");
                   },
                   duration: GlobalVars.timeLeft,
                   fillColor: Colors.red,
@@ -192,6 +202,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
   _verifyIfCountDownHit10MinutesOrNo() {
     if (GlobalVars.timeLeft <= 600) {
       EachDaysUtils.showEndingToast(false);
+      notificationService.showLocalNotification(
+                                id: 0,
+                                title: 'Le Pacte 👹 ',
+                                body: 'Il te reste juste 10 minutes 👹⏱️ ',
+                                payload: 'Il te reste juste 10 minutes 👹⏱️')
     }
   }
 

@@ -29,8 +29,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
-     notificationService = NotificationService();
-      notificationService.initializePlatformNotifications();
+    notificationService = NotificationService();
+    notificationService.initializePlatformNotifications();
     listenToNotificationStream();
     EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime();
     _verifyIfCountDownHit10MinutesOrNo();
@@ -98,10 +98,18 @@ class _MyHomeScreenState extends State<HomeScreen> {
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.black,
-          title: Row(children: [ const Expanded(child: Text("🇫🇷")),
-            Text("🔥 "+ userName.toUpperCase() +" 🔥  "),
-         ClipRRect(borderRadius: BorderRadius.circular(100),
-         child: Image.network(userPicture, repeat: ImageRepeat.noRepeat,fit: BoxFit.fitWidth,height: 55,))]),
+          title: Row(children: [
+            const Expanded(child: Text("🇫🇷")),
+            Text("🔥 " + userName.toUpperCase() + " 🔥  "),
+            ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.network(
+                  userPicture,
+                  repeat: ImageRepeat.noRepeat,
+                  fit: BoxFit.fitWidth,
+                  height: 55,
+                ))
+          ]),
           automaticallyImplyLeading: false),
       body: Center(
         child: Column(
@@ -141,7 +149,11 @@ class _MyHomeScreenState extends State<HomeScreen> {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
                     EachDaysUtils.showEndingToast(true);
-                    notificationService.showLocalNotification(id: 1, title: "Faible👹 ", body: "ton score repasse à 0. Comme toi.👎 ", payload: "ton score repasse à 0. Comme toi.👎 ");
+                    notificationService.showLocalNotification(
+                        id: 1,
+                        title: "Faible👹 ",
+                        body: "ton score repasse à 0. Comme toi.👎 ",
+                        payload: "ton score repasse à 0. Comme toi.👎 ");
                   },
                   duration: GlobalVars.timeLeft,
                   fillColor: Colors.red,
@@ -203,10 +215,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
     if (GlobalVars.timeLeft <= 600) {
       EachDaysUtils.showEndingToast(false);
       notificationService.showLocalNotification(
-                                id: 0,
-                                title: 'Le Pacte 👹 ',
-                                body: 'Il te reste juste 10 minutes 👹⏱️ ',
-                                payload: 'Il te reste juste 10 minutes 👹⏱️')
+          id: 0,
+          title: 'Le Pacte 👹 ',
+          body: 'Il te reste juste 10 minutes 👹⏱️ ',
+          payload: 'Il te reste juste 10 minutes 👹⏱️');
     }
   }
 

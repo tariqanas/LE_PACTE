@@ -1,6 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
-import 'package:eachday/services/notificationService.dart';
+import 'package:eachday/services/EvidenceUploaderService.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 
@@ -22,15 +22,14 @@ class _CameraPageState extends State<CameraPage> {
   bool gotValidationFromAdmin = false;
   bool waitingForAdminAproval = false;
   int streak = 0;
-  
 
   late CameraController controller;
   XFile? pictureFile;
+  EvidenceUploaderService evidence = new EvidenceUploaderService();
 
   @override
   void initState() {
     super.initState();
-   
     controller = CameraController(
       widget.cameras![1],
       ResolutionPreset.high,
@@ -58,7 +57,7 @@ class _CameraPageState extends State<CameraPage> {
                 'Le diable vérifieras..👹⏱️ ',
                 style: TextStyle(color: Colors.black),
               )
-            : const Text('Trop dûr pour moi..🐔'),
+            : const Text('Pas tout de suite..🐔'),
         backgroundColor: Colors.red,
         heroTag: "waitButton",
       ),
@@ -147,9 +146,12 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   _sendProofOnPressed() {
-    debugPrint("Sending proof for checking...");
+    EachDaysUtils.verboseIt("Sending proof for checking...");
     pictureSent = true;
     waitingForAdminAproval = true;
+    var currentUser = EachDaysUtils().getCurrentConnectedUser();
+    EvidenceUploaderService().uploadEvidenceToFireBaseStorage(
+        pictureFile, currentUser, "challengeDescription");
     pictureFile = null;
     setState(() {});
 
@@ -262,7 +264,8 @@ class _CameraPageState extends State<CameraPage> {
                   children: [
                     seeWorldDashboardButton(
                         title: "proof",
-                        onPressed: () => EachDaysUtils.verboseIt("See Champions !!!!")),
+                        onPressed: () =>
+                            EachDaysUtils.verboseIt("See Champions !!!!")),
                   ],
                 ),
               ),

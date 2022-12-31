@@ -16,6 +16,7 @@ class lePacteUser {
   bool didUserSendAPictureToday = false;
   bool refusedChallengeToday = false;
   bool userBlocked = false;
+  bool didUserGivePermissionForPicturing = false;
 }
 
 

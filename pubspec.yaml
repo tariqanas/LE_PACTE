@@ -47,6 +47,8 @@ dependencies:
   logger: ^1.1.0
   flutter_local_notifications: ^9.7.0
   rxdart: ^0.27.7
+  firebase_storage: ^11.0.10
+  permission_handler: ^10.2.0
 
 flutter_icons:
     android: "launcher_icon"

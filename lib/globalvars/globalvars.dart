@@ -2,11 +2,11 @@ class GlobalVars {
   static int timeLeft = 86400;
   static String todayOrder = '';
   static var todaysDate = DateTime.now();
-  static String weakMessage = 'You are Weak 👹';
+  static String weakMessage = 'Tu es faible !  👹';
   static int streak = 15;
   static bool playerAccepted = false;
   static bool playerRefused = false;
   static String looserMessage =
-      'Loser ! Your Streak is going back to 0. \n see you tomorrow chicken. 🐔';
+      'Null ! Ton score repart de  0. \n à demain, poulle mouillée. 🐔';
       /*static CounterToZero ;  */
 }

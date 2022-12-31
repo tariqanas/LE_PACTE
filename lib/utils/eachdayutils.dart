@@ -1,4 +1,5 @@
 import 'package:audioplayers/audioplayers.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
@@ -6,21 +7,18 @@ import 'package:eachday/globalvars/globalvars.dart';
 import 'package:logger/logger.dart';
 
 class EachDaysUtils {
-
   static AudioPlayer audioPlayer = AudioPlayer();
   static String endMessage = "You're time is done ! You Lost. ⚡";
   static String almostEndMessage = "Less then 10 minutes left.⏱️";
 
   static verboseIt(String verboseMessage) {
-    var logger = Logger(
-      printer: PrettyPrinter(methodCount: 0));
-      logger.v(verboseMessage);
+    var logger = Logger(printer: PrettyPrinter(methodCount: 0));
+    logger.v(verboseMessage);
   }
 
   static debugIt(String debugMessage) {
-    var logger = Logger(
-      printer: PrettyPrinter(methodCount: 0));
-      logger.d(debugMessage);
+    var logger = Logger(printer: PrettyPrinter(methodCount: 0));
+    logger.d(debugMessage);
   }
 
   void initAudioPlayer() {
@@ -33,7 +31,7 @@ class EachDaysUtils {
     int minutestoInt = int.parse(hhmmsstoseconds[1]);
     int secondstoInt = 0;
     if (hhmmsstoseconds.length == 3) {
-    secondstoInt = int.parse(hhmmsstoseconds[2]);
+      secondstoInt = int.parse(hhmmsstoseconds[2]);
     }
     return hourstoInt * 3600 + minutestoInt * 60 + secondstoInt;
   }
@@ -67,5 +65,13 @@ class EachDaysUtils {
         ":" +
         DateTime.now().second.toString());
     GlobalVars.timeLeft = one.difference(two).inSeconds.toInt();
+  }
+
+  getCurrentConnectedUser() {
+    User? currentUser = FirebaseAuth.instance.currentUser;
+    if (currentUser != null) {
+      return currentUser;
+    }
+    verboseIt("There is no current user");
   }
 }

@@ -1,6 +1,7 @@
 {
   "project_info": {
     "project_number": "1043013430227",
+    "firebase_url": "https://le-pacte-default-rtdb.europe-west1.firebasedatabase.app",
     "project_id": "le-pacte",
     "storage_bucket": "le-pacte.appspot.com"
   },
@@ -13,6 +14,14 @@
         }
       },
       "oauth_client": [
+        {
+          "client_id": "1043013430227-j83qk15c9u384v6ps9ghdlk5f3knmlas.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.eachday",
+            "certificate_hash": "8b8ab38105197fb5477b91714c6542729d002971"
+          }
+        },
         {
           "client_id": "1043013430227-n80r0cehfks7abjj1nio5kosmu66al86.apps.googleusercontent.com",
           "client_type": 3

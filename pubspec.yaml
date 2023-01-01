@@ -49,6 +49,8 @@ dependencies:
   rxdart: ^0.27.7
   firebase_storage: ^11.0.10
   permission_handler: ^10.2.0
+  firebase_database: ^10.0.9
+  
 
 flutter_icons:
     android: "launcher_icon"

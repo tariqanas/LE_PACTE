@@ -142,8 +142,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   isTimerTextShown: true,
                   autoStart: true,
                   onStart: () {
-                    EachDaysUtils.verboseIt(
-                        'Countdown started' + _countDownController.getTime());
+                   /*  EachDaysUtils.verboseIt(
+                        'Countdown started' + _countDownController.getTime()); */
                   },
                   onComplete: () {
                     debugPrint('countdown finished 24h');

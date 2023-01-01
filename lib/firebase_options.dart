@@ -52,6 +52,7 @@ class DefaultFirebaseOptions {
     messagingSenderId: '1043013430227',
     projectId: 'le-pacte',
     authDomain: 'le-pacte.firebaseapp.com',
+    databaseURL: 'https://le-pacte-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'le-pacte.appspot.com',
     measurementId: 'G-N78KXJ9XSP',
   );
@@ -61,6 +62,7 @@ class DefaultFirebaseOptions {
     appId: '1:1043013430227:android:5ec3c9d081096aed51dd26',
     messagingSenderId: '1043013430227',
     projectId: 'le-pacte',
+    databaseURL: 'https://le-pacte-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'le-pacte.appspot.com',
   );
 
@@ -69,7 +71,9 @@ class DefaultFirebaseOptions {
     appId: '1:1043013430227:ios:f9be2a0c933cb60851dd26',
     messagingSenderId: '1043013430227',
     projectId: 'le-pacte',
+    databaseURL: 'https://le-pacte-default-rtdb.europe-west1.firebasedatabase.app',
     storageBucket: 'le-pacte.appspot.com',
+    androidClientId: '1043013430227-j83qk15c9u384v6ps9ghdlk5f3knmlas.apps.googleusercontent.com',
     iosClientId: '1043013430227-nvbs0u0rps49f16bltht97vnms142r4i.apps.googleusercontent.com',
     iosBundleId: 'com.example.eachday',
   );

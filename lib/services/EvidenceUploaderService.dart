@@ -16,13 +16,17 @@ class EvidenceUploaderService {
 
     var permissionOnCameraStatus = await Permission.camera.status;
 
-    File userProof = File(pictureTaken!.path);
-
     if (permissionOnCameraStatus.isGranted) {
+      File userProof = File(pictureTaken!.path);
       await _firebaseStorage
           .ref()
           .child(connectedUser.displayName! + '/' + challengeDescription)
-          .putFile(userProof);
+          .putFile(userProof)
+          .catchError((e) => EachDaysUtils.verboseIt(
+              "Can't upload message for user" +
+                  connectedUser.displayName.toString() +
+                  "because of " +
+                  e.toString()));
     }
 
     EachDaysUtils.verboseIt(connectedUser.displayName! +

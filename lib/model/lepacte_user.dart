@@ -2,7 +2,7 @@ import 'package:eachday/model/lepacte_roles.dart';
 
 // ignore: camel_case_types
 class lePacteUser {
-  late String id;
+ /*  late String id;
   late String username;
   late String previousChallenge;
   late String currentChallenge;
@@ -16,7 +16,24 @@ class lePacteUser {
   bool didUserSendAPictureToday = false;
   bool refusedChallengeToday = false;
   bool userBlocked = false;
+  bool didUserGivePermissionForPicturing = false; */
+
+    String? id;
+   String? username;
+   String? previousChallenge;
+   String? currentChallenge;
+   String? urlOfPictureTakenToday;
+   DateTime? creationTime;
+   DateTime? lastSignInTime;
+   DateTime? dateOfLastRefusedChallenge;
+   int? howManyTimesUserRefused;
+  String role = lePacteRoles.theRooky.name;
+  int streak = 0;
+  bool didUserSendAPictureToday = false;
+  bool refusedChallengeToday = false;
+  bool userBlocked = false;
   bool didUserGivePermissionForPicturing = false;
+
 }
 
 

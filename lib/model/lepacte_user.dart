@@ -9,7 +9,7 @@ class lePacteUser {
   String? urlOfPictureTakenToday;
   DateTime? lastSignInTime;
   DateTime? dateOfLastRefusedChallenge;
-  DateTime creationTime =  DateTime.now();
+  DateTime creationTime = DateTime.now();
   int? howManyTimesUserRefused;
   String role = lePacteRoles.theRooky.name;
   int streak = 0;
@@ -18,24 +18,23 @@ class lePacteUser {
   bool userBlocked = false;
   bool didUserGivePermissionForPicturing = false;
 
-
-  lePacteUser.WithoutParams() {}
+  lePacteUser.withoutParams();
 
   lePacteUser(
-    this.id,
-    this.username,
-    this.previousChallenge,
-    this.currentChallenge,
-    this.urlOfPictureTakenToday,
-    this.creationTime,
-    this.lastSignInTime,
-    this.dateOfLastRefusedChallenge,
-    this.howManyTimesUserRefused,
-    this.streak,
-    this.didUserSendAPictureToday,
-    this.refusedChallengeToday,
-    this.userBlocked,
-    this.didUserGivePermissionForPicturing);
+      this.id,
+      this.username,
+      this.previousChallenge,
+      this.currentChallenge,
+      this.urlOfPictureTakenToday,
+      this.creationTime,
+      this.lastSignInTime,
+      this.dateOfLastRefusedChallenge,
+      this.howManyTimesUserRefused,
+      this.streak,
+      this.didUserSendAPictureToday,
+      this.refusedChallengeToday,
+      this.userBlocked,
+      this.didUserGivePermissionForPicturing);
 }
 
 

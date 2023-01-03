@@ -1,7 +1,11 @@
+import 'dart:convert';
+import 'dart:developer';
+
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
+import 'package:flutter/cupertino.dart';
 
 // ignore: camel_case_types
 class handleFireBaseDB {
@@ -9,22 +13,20 @@ class handleFireBaseDB {
       FirebaseDatabase.instance.ref();
 
   saveConnectedUsersData(User connectionAttemptingUser) async {
-    EachDaysUtils.verboseIt("GOING TO");
-    final usersRef = realTimeDatabaseReference.child('/users');
-    lePacteUser pacteUser = getLePacteUserData(connectionAttemptingUser);
+    String? pacteUserUID = getLePacteUserData(connectionAttemptingUser);
 
-    if (pacteUser.id == null) {
-      EachDaysUtils.verboseIt("SETTING USER");
-      //TODO insert an object user not a orhpan key value
-      //https://stackoverflow.com/questions/54106751/flutter-firebase-database-setobject-issue
-      usersRef.set({
-        'id': pacteUser.id,
-        'username': pacteUser.username,
+    if (pacteUserUID == null) {
+      lePacteUser pacteUser = lePacteUser.WithoutParams();
+      realTimeDatabaseReference
+          .child('users')
+          .child(connectionAttemptingUser.uid)
+          .set({
+        'username': connectionAttemptingUser.displayName,
         'previousChallenge': pacteUser.previousChallenge,
         'currentChallenge': pacteUser.currentChallenge,
         'urlOfPictureTakenToday': pacteUser.urlOfPictureTakenToday,
-        'creationTime': pacteUser.creationTime,
-        'lastSignInTime': pacteUser.lastSignInTime,
+        'creationTime': pacteUser.creationTime.toString(),
+        'lastSignInTime':pacteUser.creationTime.toString(),
         'dateOfLastRefusedChallenge': pacteUser.dateOfLastRefusedChallenge,
         'howManyTimesUserRefused': pacteUser.howManyTimesUserRefused,
         'role': pacteUser.role,
@@ -34,29 +36,29 @@ class handleFireBaseDB {
         'userBlocked': pacteUser.userBlocked,
         'didUserGivePermissionForPicturing':
             pacteUser.didUserGivePermissionForPicturing
-      });
-      EachDaysUtils.verboseIt("The user is add" + pacteUser.id.toString() + " the database. ");
+      }).then((value) => {
+                EachDaysUtils.verboseIt(
+                    "User" + connectionAttemptingUser.uid + " added to database")
+              });
     }
-
-    
   }
 
-//TODO correct this.
-  getLePacteUserData(User connectionAttemptingUser) async {
-    lePacteUser? foundUser;
-    final usersRef = realTimeDatabaseReference.child('/users');
-    final snapshot = await usersRef
-        .child(connectionAttemptingUser.uid)
-        .get();
+  String? getLePacteUserData(User connectionAttemptingUser) {
+    EachDaysUtils.verboseIt("Getting user" + connectionAttemptingUser.uid);
+    String? foundUser;
+    Map<Object?, Object?> data;
 
-    if (snapshot.exists) {
-      EachDaysUtils.verboseIt("Found somehing");
-      EachDaysUtils.verboseIt(snapshot.value.toString());
-      return snapshot.value;
-    }
-    EachDaysUtils.verboseIt("The user" +
-        connectionAttemptingUser.displayName.toString() +
-        "doesn't exist");
-    return Future.error("The user doesn't exist");
+    realTimeDatabaseReference
+        .child('users')
+        .child(connectionAttemptingUser.uid)
+        .get()
+        .then((value) => {
+              if (value.exists)
+                {
+                  EachDaysUtils.verboseIt('found user' + connectionAttemptingUser.uid),
+                  foundUser = connectionAttemptingUser.uid,
+                }
+            });
+    return foundUser;
   }
 }

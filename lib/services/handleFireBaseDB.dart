@@ -10,33 +10,35 @@ class handleFireBaseDB {
   final DatabaseReference realTimeDatabaseReference =
       FirebaseDatabase.instance.ref();
 
-  Future<lePacteUser> saveConnectedUsersData(User connectionAttemptingUser) async  {
-    lePacteUser pacteUser = lePacteUser.withoutParams();
-    lePacteUser maybeFoundUser = await  getLePacteUserData(connectionAttemptingUser);
+  Future<lePacteUser> saveConnectedUsersData(
+      User connectionAttemptingUser) async {
+    lePacteUser maquetteUser = lePacteUser.withoutParams();
+    lePacteUser pacteUser = await getLePacteUserData(connectionAttemptingUser);
 
-    if (maybeFoundUser.getUsername == "" || maybeFoundUser.getUsername == null) {
-      EachDaysUtils.verboseIt("got a value" + maybeFoundUser.username);
+    if (pacteUser.getUsername == "" || pacteUser.getUsername == null) {
+      EachDaysUtils.verboseIt("got a value" + pacteUser.username);
       realTimeDatabaseReference
           .child('users')
           .child(connectionAttemptingUser.uid)
           .set({
             'username': connectionAttemptingUser.displayName,
-            'previousChallenge': pacteUser.previousChallenge,
-            'currentChallenge': pacteUser.currentChallenge,
-            'urlOfPictureTakenToday': pacteUser.urlOfPictureTakenToday,
-            'creationTime': pacteUser.creationTime.toString(),
-            'lastSignInTime': pacteUser.creationTime.toString(),
+            'previousChallenge': maquetteUser.previousChallenge,
+            'currentChallenge': maquetteUser.currentChallenge,
+            'urlOfPictureTakenToday': maquetteUser.urlOfPictureTakenToday,
+            'creationTime': maquetteUser.creationTime.toString(),
+            'lastSignInTime': maquetteUser.creationTime.toString(),
             'dateOfLastRefusedChallenge':
-                pacteUser.dateOfLastRefusedChallenge.toString(),
-            'howManyTimesUserRefused': pacteUser.howManyTimesUserRefused,
-            'role': pacteUser.role,
-            'streak': pacteUser.streak,
+                maquetteUser.dateOfLastRefusedChallenge.toString(),
+            'howManyTimesUserRefused': maquetteUser.howManyTimesUserRefused,
+            'role': maquetteUser.role,
+            'streak': maquetteUser.streak,
             'didUserSendAPictureToday':
-                pacteUser.didUserSendAPictureToday.toString(),
-            'refusedChallengeToday': pacteUser.refusedChallengeToday.toString(),
-            'userBlocked': pacteUser.userBlocked.toString(),
+                maquetteUser.didUserSendAPictureToday.toString(),
+            'refusedChallengeToday':
+                maquetteUser.refusedChallengeToday.toString(),
+            'userBlocked': maquetteUser.userBlocked.toString(),
             'didUserGivePermissionForPicturing':
-                pacteUser.didUserGivePermissionForPicturing.toString()
+                maquetteUser.didUserGivePermissionForPicturing.toString()
           })
           .then((value) => {
                 EachDaysUtils.verboseIt("User" +
@@ -44,15 +46,18 @@ class handleFireBaseDB {
                     " added to database"),
               })
           .catchError((error) {
-            EachDaysUtils.debugIt("ERROOOOOOR" + error.toString());
+            EachDaysUtils.debugIt("Error saving user" + error.toString());
           })
-          .whenComplete(() => EachDaysUtils.verboseIt("Done Save connect"),);
+          .whenComplete(
+            () => EachDaysUtils.verboseIt("Done Save connect"),
+          );
     }
-    return maybeFoundUser;
+    return pacteUser;
   }
 
   Future<lePacteUser> getLePacteUserData(User connectionAttemptingUser) async {
-    EachDaysUtils.verboseIt("Getting user" + connectionAttemptingUser.uid);
+    EachDaysUtils.verboseIt(
+        "getLePacteUserData" + connectionAttemptingUser.uid);
     lePacteUser foundUser = lePacteUser.withoutParams();
 
     await realTimeDatabaseReference
@@ -63,20 +68,17 @@ class handleFireBaseDB {
               if (value.exists)
                 {
                   EachDaysUtils.verboseIt(
-                      'found user' + value.toString()),
-                       EachDaysUtils.verboseIt(
                       'found user' + connectionAttemptingUser.uid),
                   foundUser = EachDaysUtils.googleUserToLePacteUserMapper(
                       connectionAttemptingUser, value)
                 }
             })
         .catchError((onError) {
-      EachDaysUtils.debugIt("Error on get" + onError.toString());
-      throw Exception("Error on get");
+      EachDaysUtils.debugIt("Error on getLePacteUserData" + onError.toString());
+      throw Exception("Error on getLePacteUserData");
     }).whenComplete(() => {
               EachDaysUtils.verboseIt(
-                  "Finished GetLePacteUserData: " + foundUser.id.toString()),
-              EachDaysUtils.debugIt("Send back" + foundUser.id.toString())
+                  "Finished GetLePacteUserData: " + foundUser.id.toString())
             });
 
     return Future.value(foundUser);

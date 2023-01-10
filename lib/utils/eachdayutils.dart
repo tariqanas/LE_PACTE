@@ -1,6 +1,3 @@
-import 'dart:developer';
-import 'dart:ffi';
-
 import 'package:audioplayers/audioplayers.dart';
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -96,7 +93,6 @@ class EachDaysUtils {
     lePacteUser pacteUser = lePacteUser.withoutParams();
     if (snapshot.value != null) {
       final data = snapshot.value as Map;
-      EachDaysUtils.debugIt("DAAAATE" + data['streak'].toString());
       pacteUser.setId = connectionAttemptingUser.uid;
       pacteUser.setUsername = connectionAttemptingUser.displayName;
       pacteUser.setCreationTime = DateTime.parse(data['creationTime']);

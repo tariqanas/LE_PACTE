@@ -30,20 +30,17 @@ class GoogleSignInProvider extends ChangeNotifier {
       EachDaysUtils.verboseIt(
           "User exists, saving user..  (in google provider)");
 
-      lePacteUser foundOrNotUser =
+      lePacteUser pacteUser =
           await Future.value(_baseDB.saveConnectedUsersData(result.user!));
 
         Future.delayed(const Duration(seconds: 1), () {
           EachDaysUtils.showRandomToast();
-
-          EachDaysUtils.debugIt(
-              "Here is your user " + foundOrNotUser.streak.toString());
-          if (foundOrNotUser.id != null) {
+          if (pacteUser.id != null) {
             Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(
                     builder: (context) => HomeScreen(
-                        title: "Le Pacte  ✌🏼👺", streak: foundOrNotUser.streak)));
+                        title: "Le Pacte  ✌🏼👺", streak: pacteUser.streak)));
           }
         });
       

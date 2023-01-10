@@ -1,3 +1,4 @@
+import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
@@ -26,14 +27,26 @@ class GoogleSignInProvider extends ChangeNotifier {
     EachDaysUtils.verboseIt("Checking user ");
 
     if (result.user != null) {
-      EachDaysUtils.verboseIt("User exists, saving user..");
-      _baseDB.saveConnectedUsersData(result.user!);
-      EachDaysUtils.verboseIt("switching to Main Menu");
-      Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-              builder: (context) =>
-                  const HomeScreen(title: "Le Pacte  ✌🏼👺", streak: 20)));
+      EachDaysUtils.verboseIt(
+          "User exists, saving user..  (in google provider)");
+
+      lePacteUser foundOrNotUser =
+          await Future.value(_baseDB.saveConnectedUsersData(result.user!));
+
+        Future.delayed(const Duration(seconds: 1), () {
+          EachDaysUtils.showRandomToast();
+
+          EachDaysUtils.debugIt(
+              "Here is your user " + foundOrNotUser.streak.toString());
+          if (foundOrNotUser.id != null) {
+            Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => HomeScreen(
+                        title: "Le Pacte  ✌🏼👺", streak: foundOrNotUser.streak)));
+          }
+        });
+      
     }
   }
 }

@@ -166,7 +166,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
               Text(GlobalVars.looserMessage,
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
-            Text('⚡ Your Streak is : ' + GlobalVars.streak.toString() + ' ⚡',
+            Text('⚡ Your Streak is : ' + widget.streak.toString() + ' ⚡',
                 softWrap: false,
                 style: const TextStyle(color: Colors.white, fontSize: 19)),
           ],

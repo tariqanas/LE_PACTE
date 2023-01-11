@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -10,20 +11,23 @@ import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:camera/camera.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 
+import 'services/handleFireBaseDB.dart';
 import 'services/notificationService.dart';
 
 class HomeScreen extends StatefulWidget {
-  const HomeScreen({Key? key, required this.title, required this.streak})
+  const HomeScreen({Key? key, required this.title, required this.connectedUser})
       : super(key: key);
 
   final String title;
-  final int streak;
+  final lePacteUser connectedUser;
 
   @override
   State<HomeScreen> createState() => _MyHomeScreenState();
 }
 
 class _MyHomeScreenState extends State<HomeScreen> {
+  final handleFireBaseDB handledb = handleFireBaseDB();
+
   final CountDownController _countDownController = CountDownController();
   late final NotificationService notificationService;
   @override
@@ -31,16 +35,19 @@ class _MyHomeScreenState extends State<HomeScreen> {
     super.initState();
     notificationService = NotificationService();
     notificationService.initializePlatformNotifications();
+    EachDaysUtils.playTicTacSound();
     listenToNotificationStream();
     EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime();
     _verifyIfCountDownHit10MinutesOrNo();
     Future<String>.delayed(
-            const Duration(seconds: 2), () => 'Chargement du nouveau défi.')
-        .then((String value) {
-      setState(() {
-        EachDaysUtils.playTicTacSound();
-        fetchOrder();
-      });
+            const Duration(seconds: 2), () => 'Chargement du défi.')
+        .then((value) async {
+      debugPrint("Fetching order for " +
+          widget.connectedUser.id +
+          (" " + widget.connectedUser.username));
+      await fetchOrder(widget.connectedUser).then((value) => setState(() {
+            widget.connectedUser.currentChallenge = value;
+          }));
     });
   }
 
@@ -48,12 +55,42 @@ class _MyHomeScreenState extends State<HomeScreen> {
       notificationService.behaviorSubject.listen((payload) {
         EachDaysUtils.verboseIt("10 minute notification sent");
       });
-  Future<String> fetchOrder() async {
-    if (GlobalVars.todayOrder == '' && !GlobalVars.playerRefused) {
-      return GlobalVars.todayOrder =
-          await const GetTodayOrderService().getTodayOrder();
+
+  Future<String> fetchOrder(lePacteUser connectedUser) async {
+    DateTime currentChallengeDate =
+        DateUtils.dateOnly(connectedUser.getDateOfLastSavedChallenge);
+    DateTime todaysDate = DateUtils.dateOnly(DateTime.now());
+
+    if (connectedUser.currentChallenge == "") {
+      await const GetTodayOrderService().getTodayOrder().then(
+            (currentchallenge) => {
+              handledb.saveConnectedUserChallenge(
+                  currentchallenge,
+                  connectedUser.getPreviousChallenge,
+                  connectedUser,
+                  DateTime.now()),
+              connectedUser.currentChallenge = currentchallenge.toString()
+            },
+          );
+    } else if (connectedUser.currentChallenge != "") {
+      if (currentChallengeDate.isAtSameMomentAs(todaysDate)) {
+        return Future.value(connectedUser.currentChallenge);
+      } else if (currentChallengeDate.isBefore(todaysDate)) {
+        await const GetTodayOrderService()
+            .getTodayOrder()
+            .then((newChallenge) => {
+                  handledb.saveConnectedUserChallenge(
+                      newChallenge,
+                      connectedUser.currentChallenge,
+                      connectedUser,
+                      DateTime.now()),
+                  connectedUser.currentChallenge = newChallenge,
+                });
+
+        return connectedUser.getCurrentChallenge.toString();
+      }
     }
-    return GlobalVars.todayOrder;
+    return connectedUser.currentChallenge;
   }
 
   Widget _proofButton({required String title, VoidCallback? onPressed}) {
@@ -126,9 +163,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   style: TextStyle(color: Colors.white, fontSize: 20)),
             if (!GlobalVars.playerRefused)
               Text(
-                  GlobalVars.todayOrder == ''
+                  widget.connectedUser.currentChallenge == ''
                       ? '⌛.👹.⌛ '
-                      : GlobalVars.todayOrder + ' 🔥',
+                      : widget.connectedUser.currentChallenge + ' 🔥',
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
             if (!GlobalVars.playerRefused)
@@ -142,7 +179,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   isTimerTextShown: true,
                   autoStart: true,
                   onStart: () {
-                   /*  EachDaysUtils.verboseIt(
+                    /*  EachDaysUtils.verboseIt(
                         'Countdown started' + _countDownController.getTime()); */
                   },
                   onComplete: () {
@@ -166,7 +203,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
               Text(GlobalVars.looserMessage,
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
-            Text('⚡ Your Streak is : ' + widget.streak.toString() + ' ⚡',
+            Text(
+                '⚡ Your Streak is : ' +
+                    widget.connectedUser.getStreak.toString() +
+                    ' ⚡',
                 softWrap: false,
                 style: const TextStyle(color: Colors.white, fontSize: 19)),
           ],
@@ -180,14 +220,15 @@ class _MyHomeScreenState extends State<HomeScreen> {
             _rejectButton(
                 title: "refuse", onPressed: () => _refuseTheChallenge()),
             _proofButton(
-                title: "proof", onPressed: () => _openAcceptChallenge()),
+                title: "proof",
+                onPressed: () => _openAcceptChallenge(widget.connectedUser)),
           ]
         ],
       ),
     );
   }
 
-  _openAcceptChallenge() async {
+  _openAcceptChallenge(lePacteUser connectedUser) async {
     GlobalVars.timeLeft = EachDaysUtils.convertTimeDurationToTimeStamp(
         _countDownController.getTime());
     GlobalVars.playerAccepted = true;
@@ -195,7 +236,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
       (value) => Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) => CameraPage(cameras: value),
+          builder: (context) =>
+              CameraPage(cameras: value, connectedUser: connectedUser),
         ),
       ),
     );

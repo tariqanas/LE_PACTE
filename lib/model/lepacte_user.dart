@@ -4,15 +4,16 @@ import 'package:eachday/model/lepacte_roles.dart';
 
 // ignore: camel_case_types
 class lePacteUser {
-  String id="";
-  String username="";
-  String previousChallenge="";
-  String currentChallenge="";
-  String urlOfPictureTakenToday="";
+  String id = "";
+  String username = "";
+  String previousChallenge = "";
+  String currentChallenge = "";
+  String urlOfPictureTakenToday = "";
   DateTime lastSignInTime = DateTime.now();
   DateTime dateOfLastRefusedChallenge = DateTime.now();
   DateTime creationTime = DateTime.now();
-  int howManyTimesUserRefused=0;
+  DateTime dateOfLastSavedChallenge = DateTime.now();
+  int howManyTimesUserRefused = 0;
   String role = lePacteRoles.theRooky.name;
   int streak = 0;
   String didUserSendAPictureToday = "false";
@@ -91,4 +92,8 @@ class lePacteUser {
   set setDidUserGivePermissionForPicturing(didUserGivePermissionForPicturing) =>
       this.didUserGivePermissionForPicturing =
           didUserGivePermissionForPicturing;
+  get getDateOfLastSavedChallenge => this.dateOfLastSavedChallenge;
+
+  set setDateOfLastSavedChallenge(dateOfLastSavedChallenge) =>
+      this.dateOfLastSavedChallenge = dateOfLastSavedChallenge;
 }

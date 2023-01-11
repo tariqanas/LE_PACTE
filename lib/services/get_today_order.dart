@@ -4,7 +4,7 @@ import "dart:math";
 class GetTodayOrderService {
   const GetTodayOrderService();
 
-  getTodayOrder() async {
+  Future<String> getTodayOrder() async {
     
     final _random = Random();
     String text = await rootBundle.loadString('assets/quotes/quotes.txt');

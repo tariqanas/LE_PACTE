@@ -96,8 +96,7 @@ class EachDaysUtils {
       pacteUser.setId = connectionAttemptingUser.uid;
       pacteUser.setUsername = connectionAttemptingUser.displayName;
       pacteUser.setCreationTime = DateTime.parse(data['creationTime']);
-      pacteUser.setPreviousChallenge =
-          data['previousChallenge'];
+      pacteUser.setPreviousChallenge = data['previousChallenge'];
       pacteUser.currentChallenge =
           data['previousChallenge'] != null ? data['currentChallenge'] : null;
       pacteUser.urlOfPictureTakenToday = data['urlOfPictureTakenToday'];
@@ -105,16 +104,16 @@ class EachDaysUtils {
       pacteUser.dateOfLastRefusedChallenge =
           DateTime.parse(data['dateOfLastRefusedChallenge']);
 
-      pacteUser.howManyTimesUserRefused =
-          data['howManyTimesUserRefused'];
+      pacteUser.howManyTimesUserRefused = data['howManyTimesUserRefused'];
       pacteUser.role = data['role'];
       pacteUser.streak = data['streak'] as int;
-      pacteUser.didUserSendAPictureToday =
-          data['didUserSendAPictureToday'] ;
+      pacteUser.didUserSendAPictureToday = data['didUserSendAPictureToday'];
       pacteUser.refusedChallengeToday = data['refusedChallengeToday'];
       pacteUser.userBlocked = data['userBlocked'];
       pacteUser.didUserGivePermissionForPicturing =
-          data['didUserGivePermissionForPicturing'] ;
+          data['didUserGivePermissionForPicturing'];
+      pacteUser.dateOfLastSavedChallenge =
+          data['dateOfLastSavedChallenge'] = DateTime.parse(data['dateOfLastSavedChallenge']);
     }
 
     return pacteUser;

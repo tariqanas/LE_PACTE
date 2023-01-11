@@ -1,16 +1,16 @@
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
+import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/EvidenceUploaderService.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
+  final lePacteUser connectedUser;
 
-  const CameraPage({
-    this.cameras,
-    Key? key,
-  }) : super(key: key);
+  const CameraPage({this.cameras, Key? key, required this.connectedUser})
+      : super(key: key);
 
   @override
   _CameraPageState createState() => _CameraPageState();
@@ -130,9 +130,8 @@ class _CameraPageState extends State<CameraPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const HomeScreen(
-                    title: 'You accepted..Tic..Tac ⏱️',
-                    streak: 15,
+              builder: (context) => HomeScreen(
+                    title: 'You accepted..Tic..Tac ⏱️',connectedUser: widget.connectedUser,
                   )));
     });
   }
@@ -165,9 +164,9 @@ class _CameraPageState extends State<CameraPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const HomeScreen(
+              builder: (context) => HomeScreen(
                     title: 'You accepted..Tic..Tac ⏱️',
-                    streak: 15,
+                    connectedUser: widget.connectedUser,
                   )));
     });
   }
@@ -179,9 +178,9 @@ class _CameraPageState extends State<CameraPage> {
       Navigator.push(
           context,
           MaterialPageRoute(
-              builder: (context) => const HomeScreen(
+              builder: (context) => HomeScreen(
                     title: 'You accepted..Tic..Tac ⏱️',
-                    streak: 15,
+                    connectedUser: widget.connectedUser,
                   )));
     });
   }

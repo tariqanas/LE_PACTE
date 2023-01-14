@@ -50,6 +50,8 @@ dependencies:
   firebase_storage: ^11.0.10
   permission_handler: ^10.2.0
   firebase_database: ^10.0.9
+  image_picker: ^0.8.6
+  flutter_awesome_buttons: ^1.1.0
   
 
 flutter_icons:

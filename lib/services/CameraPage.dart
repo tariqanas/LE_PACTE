@@ -1,9 +1,12 @@
+import 'dart:io';
+
 import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/EvidenceUploaderService.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -22,33 +25,25 @@ class _CameraPageState extends State<CameraPage> {
   bool gotValidationFromAdmin = false;
   bool waitingForAdminAproval = false;
   int streak = 0;
+  final imagePicker = ImagePicker();
+  AnimationController? _animationController;
 
   late CameraController controller;
   XFile? pictureFile;
-  EvidenceUploaderService evidence = new EvidenceUploaderService();
+  EvidenceUploaderService evidence = EvidenceUploaderService();
 
   @override
   void initState() {
     super.initState();
-    controller = CameraController(
-      widget.cameras![1],
-      ResolutionPreset.high,
-    );
-    controller.initialize().then((_) {
-      if (!mounted) {
-        return;
-      }
-      setState(() {});
-    });
+    setState(() {});
   }
 
   @override
   void dispose() {
-    controller.dispose();
     super.dispose();
   }
 
-  Widget notNowButton({required String title, VoidCallback? onPressed}) {
+  Widget notNowButton({required String title, onPressed}) {
     return Flexible(
       child: FloatingActionButton.extended(
         onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
@@ -64,7 +59,7 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget okSendProofButton({required String title, VoidCallback? onPressed}) {
+  Widget okSendProofButton({required String title, onPressed}) {
     return Expanded(
       child: FloatingActionButton.extended(
         onPressed: (waitingForAdminAproval || pictureSent || !pictureTaken)
@@ -81,7 +76,7 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget okTakePictureButton({required String title, VoidCallback? onPressed}) {
+  Widget okTakePictureButton({required String title, onPressed}) {
     return Flexible(
       child: FloatingActionButton.extended(
         onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
@@ -96,8 +91,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
 //TODO Modify this.
-  seeHowManyPeopleSeenItButton(
-      {required String title, VoidCallback? onPressed}) {
+  seeHowManyPeopleSeenItButton({required String title, onPressed}) {
     return Expanded(
       child: FloatingActionButton.extended(
         onPressed: onPressed,
@@ -109,7 +103,7 @@ class _CameraPageState extends State<CameraPage> {
   }
 
 //TODO Modify this.
-  seeWorldDashboardButton({required String title, VoidCallback? onPressed}) {
+  seeWorldDashboardButton({required String title, onPressed}) {
     return Expanded(
       child: FloatingActionButton.extended(
         onPressed: onPressed,
@@ -124,24 +118,25 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   _notNowOnpressed() {
-    controller.pausePreview();
     pictureTaken = false;
     setState(() {
       Navigator.push(
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen(
-                    title: 'You accepted..Tic..Tac ⏱️',connectedUser: widget.connectedUser,
+                    title: 'You accepted..Tic..Tac ⏱️',
+                    connectedUser: widget.connectedUser,
                   )));
     });
   }
 
   _takePictureOnPressed() async {
-    controller.resumePreview();
-    pictureFile = await controller.takePicture();
-    streak++;
-    pictureTaken = true;
-    setState(() {});
+    final image = await getImage();
+    setState(() {
+      pictureFile = image;
+      streak = streak++;
+      pictureTaken = true;
+    });
   }
 
   _sendProofOnPressed() {
@@ -151,7 +146,7 @@ class _CameraPageState extends State<CameraPage> {
     var currentUser = EachDaysUtils().getCurrentConnectedUser();
     EvidenceUploaderService().uploadEvidenceToFireBaseStorage(
         pictureFile, currentUser, "challengeDescription");
-    pictureFile = null;
+    pictureFile = XFile("");
     setState(() {});
 
     //Handle validation.(DB)
@@ -187,89 +182,86 @@ class _CameraPageState extends State<CameraPage> {
 
   @override
   Widget build(BuildContext context) {
-    if (!controller.value.isInitialized) {
-      return const SizedBox(
-        child: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
     return Scaffold(
         resizeToAvoidBottomInset: false,
-        appBar: AppBar(
+  /*       appBar: AppBar(
           centerTitle: true,
           title: const Text('Prouves-le : 👹🧾 '),
           automaticallyImplyLeading: false,
-        ),
-        body: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                // padding: const EdgeInsets.all(0.0),
+        ), */
+        body: Column(
+          children: [
+            processCameraPicture(context, pictureFile),
+            const Expanded(
                 child: Center(
-                  child: SizedBox(
-                    width: MediaQuery.of(context).size.height * 1,
-                    height: MediaQuery.of(context).size.height * 0.4,
-                    child: CameraPreview(controller),
-                  ),
-                ),
-              ),
-
-              if (pictureFile != null)
-                SizedBox(
-                    child: Stack(
-                  children: [
-                    Image.network(pictureFile!.path,
-                        filterQuality: FilterQuality.medium)
-                  ],
-                )),
-              //Android/iOS
-              // Image.file(File(pictureFile!.path)))
-              const Expanded(
-                  child: Center(
-                child: Text(''),
-              )),
-              SizedBox(
-                  child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
+              child: Text(''),
+            )),
+            SizedBox(
+                child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceAround,
+              children: [
+                okTakePictureButton(
+                    title: "proof", onPressed: () => _takePictureOnPressed()),
+                notNowButton(
+                    title: "notNow", onPressed: () => _notNowOnpressed()),
+              ],
+            )),
+            SizedBox(
+              child: Row(
                 children: [
-                  okTakePictureButton(
-                      title: "proof", onPressed: () => _takePictureOnPressed()),
-                  notNowButton(
-                      title: "notNow", onPressed: () => _notNowOnpressed()),
+                  okSendProofButton(
+                      title: "proof", onPressed: () => _sendProofOnPressed()),
                 ],
-              )),
-              SizedBox(
-                child: Row(
-                  children: [
-                    okSendProofButton(
-                        title: "proof", onPressed: () => _sendProofOnPressed()),
-                  ],
-                ),
               ),
-
-              SizedBox(
-                child: Row(
-                  children: [
-                    seeHowManyPeopleSeenItButton(
-                        title: "proof",
-                        onPressed: () => EachDaysUtils.showEndingToast(false)),
-                  ],
-                ),
+            ),
+            SizedBox(
+              child: Row(
+                children: [
+                  seeHowManyPeopleSeenItButton(
+                      title: "proof",
+                      onPressed: () => EachDaysUtils.showEndingToast(false)),
+                ],
               ),
-
-              SizedBox(
-                child: Row(
-                  children: [
-                    seeWorldDashboardButton(
-                        title: "proof",
-                        onPressed: () =>
-                            EachDaysUtils.verboseIt("See Champions !!!!")),
-                  ],
-                ),
+            ),
+            SizedBox(
+              child: Row(
+                children: [
+                  seeWorldDashboardButton(
+                      title: "proof",
+                      onPressed: () =>
+                          EachDaysUtils.verboseIt("See Champions !!!!")),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ));
   }
+
+  Future getImage() async {
+    final image = await imagePicker.pickImage(source: ImageSource.camera);
+    pictureFile = XFile(image!.path);
+    return pictureFile;
+  }
+}
+
+Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
+  if (pictureFile == null) {
+    debugPrint('yp null');
+    return Container(
+      margin: const EdgeInsets.only(top: 20.0),
+      child: Image.asset("assets/splash/each_day_splash.png"),
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
+    );
+  }
+  debugPrint("Not null");
+  return Container(
+    margin: const EdgeInsets.only(top: 20.0),
+    child: Image.file(
+      File(pictureFile.path),
+      repeat: ImageRepeat.noRepeat,
+      height: MediaQuery.of(context).size.height / 2,
+      width: MediaQuery.of(context).size.width,
+    ),
+  );
 }

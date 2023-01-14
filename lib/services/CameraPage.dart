@@ -4,9 +4,12 @@ import 'package:camera/camera.dart';
 import 'package:eachday/homescreen.dart';
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/EvidenceUploaderService.dart';
+import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+
+import 'handleFireBaseDB.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -26,11 +29,11 @@ class _CameraPageState extends State<CameraPage> {
   bool waitingForAdminAproval = false;
   int streak = 0;
   final imagePicker = ImagePicker();
-  AnimationController? _animationController;
-
   late CameraController controller;
   XFile? pictureFile;
   EvidenceUploaderService evidence = EvidenceUploaderService();
+
+  handleFireBaseDB handleDB = handleFireBaseDB();
 
   @override
   void initState() {
@@ -147,6 +150,8 @@ class _CameraPageState extends State<CameraPage> {
     EvidenceUploaderService().uploadEvidenceToFireBaseStorage(
         pictureFile, currentUser, "challengeDescription");
     pictureFile = XFile("");
+
+    handleDB.sendProofToTheDevilOrEscape(currentUser, pictureSent);
     setState(() {});
 
     //Handle validation.(DB)
@@ -184,11 +189,12 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-  /*       appBar: AppBar(
+               appBar: AppBar(
           centerTitle: true,
           title: const Text('Prouves-le : 👹🧾 '),
           automaticallyImplyLeading: false,
-        ), */
+          backgroundColor: Colors.black,
+        ), 
         body: Column(
           children: [
             processCameraPicture(context, pictureFile),
@@ -246,7 +252,6 @@ class _CameraPageState extends State<CameraPage> {
 
 Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   if (pictureFile == null) {
-    debugPrint('yp null');
     return Container(
       margin: const EdgeInsets.only(top: 20.0),
       child: Image.asset("assets/splash/each_day_splash.png"),

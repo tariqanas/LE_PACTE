@@ -73,7 +73,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
             },
           );
     } else if (connectedUser.currentChallenge != "") {
-      if (currentChallengeDate.isAtSameMomentAs(todaysDate)) {
+      if (currentChallengeDate.isAtSameMomentAs(todaysDate) &&
+          (connectedUser.didUserSendAPictureToday == "false" &&
+              connectedUser.refusedChallengeToday == "false")) {
         return Future.value(connectedUser.currentChallenge);
       } else if (currentChallengeDate.isBefore(todaysDate)) {
         await const GetTodayOrderService()
@@ -89,6 +91,17 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
         return connectedUser.getCurrentChallenge.toString();
       }
+    }
+    if (currentChallengeDate.isAtSameMomentAs(todaysDate) &&
+        (connectedUser.refusedChallengeToday == "true")) {
+      connectedUser.streak = 0;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) =>
+              HomeScreen(title: "Faible ! 👎 ", connectedUser: connectedUser),
+        ),
+      );
     }
     return connectedUser.currentChallenge;
   }
@@ -152,16 +165,16 @@ class _MyHomeScreenState extends State<HomeScreen> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            if (GlobalVars.playerRefused)
+            if (widget.connectedUser.refusedChallengeToday == "true")
               Text(GlobalVars.weakMessage,
                   style: const TextStyle(
                       color: Colors.red,
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
-            if (!GlobalVars.playerRefused)
+            if (widget.connectedUser.refusedChallengeToday == "false")
               const Text("Aujourd'hui, tu dois  :",
                   style: TextStyle(color: Colors.white, fontSize: 20)),
-            if (!GlobalVars.playerRefused)
+            if (widget.connectedUser.refusedChallengeToday =="false")
               Text(
                   widget.connectedUser.currentChallenge == ''
                       ? '⌛.👹.⌛ '
@@ -243,14 +256,14 @@ class _MyHomeScreenState extends State<HomeScreen> {
     );
   }
 
-  _refuseTheChallenge() {
-    setState(() {
-      GlobalVars.playerRefused = true;
-      GlobalVars.streak = 0;
-      _countDownController.restart();
-      EachDaysUtils.stopTicTacSound();
-      GlobalVars.todayOrder = '';
-    });
+  _refuseTheChallenge() async {
+    _countDownController.restart();
+    EachDaysUtils.stopTicTacSound();
+    await handledb.sendProofToTheDevilOrEscape(widget.connectedUser, false);
+     setState(() {
+      
+    }); 
+
   }
 
   _verifyIfCountDownHit10MinutesOrNo() {
@@ -263,11 +276,4 @@ class _MyHomeScreenState extends State<HomeScreen> {
           payload: 'Il te reste juste 10 minutes 👹⏱️');
     }
   }
-
-/*   _isPlayerEligibleToPlayToday() {
-
-    if (GlobalVars.timeLeft < 0 && TodayWasAlreadSet()) {
-      _refuseTheChallenge();
-    }
-  } */
 }

@@ -106,4 +106,28 @@ class handleFireBaseDB {
                   "Couldn't save ConnectedUserChallenge" + error.toString())
             });
   }
+
+  Future sendProofToTheDevilOrEscape(
+      lePacteUser pacteUser, bool decision) async {
+    if (decision) {
+      realTimeDatabaseReference
+          .child('users')
+          .child(pacteUser.id)
+          .update({'didUserSendAPictureToday': decision.toString()}).then(
+              (value) =>
+                  EachDaysUtils.verboseIt("The user accepted the challenge"));
+    } else {
+      debugPrint(pacteUser.id + " said " + decision.toString());
+      realTimeDatabaseReference
+          .child('users')
+          .child(pacteUser.id)
+          .update({'refusedChallengeToday': decision.toString() == false.toString() ? true.toString() : decision.toString()
+          })
+          .then((value) => EachDaysUtils.verboseIt("The used refused it"))
+          .onError((error, stackTrace) => EachDaysUtils.verboseIt(
+              "couldn't Update Proof" +
+                  error.toString() +
+                  stackTrace.toString()));
+    }
+  }
 }

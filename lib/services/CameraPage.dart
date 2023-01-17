@@ -146,12 +146,11 @@ class _CameraPageState extends State<CameraPage> {
     EachDaysUtils.verboseIt("Sending proof for checking...");
     pictureSent = true;
     waitingForAdminAproval = true;
-    var currentUser = EachDaysUtils().getCurrentConnectedUser();
     EvidenceUploaderService().uploadEvidenceToFireBaseStorage(
-        pictureFile, currentUser, "challengeDescription");
+        pictureFile, widget.connectedUser, widget.connectedUser.currentChallenge);
     pictureFile = XFile("");
 
-    handleDB.sendProofToTheDevilOrEscape(currentUser, pictureSent);
+    handleDB.sendProofToTheDevilOrEscape(widget.connectedUser, pictureSent);
     setState(() {});
 
     //Handle validation.(DB)

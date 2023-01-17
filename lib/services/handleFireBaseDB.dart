@@ -134,7 +134,7 @@ class handleFireBaseDB {
     }
   }
 
-  Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
+   Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
     realTimeDatabaseReference
         .child('users')
         .child(pacteUser.id)

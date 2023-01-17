@@ -33,30 +33,27 @@ class _MyHomeScreenState extends State<HomeScreen> {
   @override
   void initState() {
     super.initState();
+    bool isUserEligibleToplayToday = false;
 
-    _verifyIfUserIsEligibleToPlayToday(widget.connectedUser)
-        .then((eligible) => {
-              EachDaysUtils.verboseIt("Got value , " + eligible.toString()),
-              if (eligible)
-                {
-                  notificationService = NotificationService(),
-                  notificationService.initializePlatformNotifications(),
-                  EachDaysUtils.playTicTacSound(),
-                  listenToNotificationStream(),
-                  EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime(),
-                  _verifyIfCountDownHit10MinutesOrNo(),
-                  Future<String>.delayed(const Duration(seconds: 2),
-                      () => 'Chargement du défi.').then((value) async {
-                    debugPrint("Fetching order for " +
-                        widget.connectedUser.id +
-                        (" " + widget.connectedUser.username));
-                    await fetchOrder(widget.connectedUser)
-                        .then((value) => setState(() {
-                              widget.connectedUser.currentChallenge = value;
-                            }));
-                  })
-                }
-            });
+    _verifyIfUserIsEligibleToPlayToday(widget.connectedUser).then((value) => {
+          isUserEligibleToplayToday = value,
+          
+          if (isUserEligibleToplayToday)
+            {
+              notificationService = NotificationService(),
+              notificationService.initializePlatformNotifications(),
+              EachDaysUtils.playTicTacSound(),
+              listenToNotificationStream(),
+              _verifyIfCountDownHit10MinutesOrNo(),
+
+                 fetchOrder(widget.connectedUser)
+                    .then((value) => setState(() {
+                          widget.connectedUser.currentChallenge = value;
+                          widget.connectedUser.refusedChallengeToday = "false";
+                        }))
+      
+            }
+        });
   }
 
   void listenToNotificationStream() =>
@@ -213,7 +210,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                         body: "ton score repasse à 0. Comme toi.👎 ",
                         payload: "ton score repasse à 0. Comme toi.👎 ");
                   },
-                  duration: GlobalVars.timeLeft,
+                  duration:
+                      EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime(),
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
             if (widget.connectedUser.refusedChallengeToday == "false")
@@ -284,37 +282,34 @@ class _MyHomeScreenState extends State<HomeScreen> {
     }
   }
 
-  Future _verifyIfUserIsEligibleToPlayToday(lePacteUser pacteUser) async {
-    EachDaysUtils.verboseIt("I'am here 0 ");
+  Future<bool> _verifyIfUserIsEligibleToPlayToday(lePacteUser pacteUser) async {
     if (pacteUser.refusedChallengeToday == "false" &&
         DateUtils.dateOnly(pacteUser.dateOfLastRefusedChallenge)
             .isAtSameMomentAs(DateUtils.dateOnly(DateTime.now())) &&
         pacteUser.didUserSendAPictureToday == "false" &&
         DateUtils.dateOnly(pacteUser.dateOfLastSavedChallenge)
             .isAtSameMomentAs(DateUtils.dateOnly(DateTime.now()))) {
-              EachDaysUtils.verboseIt("I'am here 1 ");
-      return Future.value(true);
+      EachDaysUtils.verboseIt("I'am here 1 ");
+      return true;
     }
     if (pacteUser.refusedChallengeToday == "true" &&
         DateUtils.dateOnly(pacteUser.dateOfLastRefusedChallenge)
             .isAtSameMomentAs(DateUtils.dateOnly(DateTime.now()))) {
-              EachDaysUtils.verboseIt("I'am here 2");
-      return Future.value(false);
+      EachDaysUtils.verboseIt("I'am here 2");
+      return false;
     }
     if (pacteUser.didUserSendAPictureToday == "true" &&
         pacteUser.dateOfLastSavedChallenge
             .isAtSameMomentAs(DateUtils.dateOnly(DateTime.now()))) {
-              EachDaysUtils.verboseIt("I'am here 3 ");
-      return Future.value(false);
+      EachDaysUtils.verboseIt("I'am here 3 ");
+      return false;
     }
     if (pacteUser.refusedChallengeToday == "true" &&
         DateUtils.dateOnly(pacteUser.dateOfLastRefusedChallenge)
             .isBefore(DateUtils.dateOnly(DateTime.now()))) {
-              EachDaysUtils.verboseIt("I'am here 4 ");
-      await handledb
-          .resetGamingPossibilityStatus(pacteUser)
-          .then((value) => {});
-      return Future.value(true);
+      EachDaysUtils.verboseIt("I'am here 4 ");
+      await handledb.resetGamingPossibilityStatus(pacteUser);
+      return true;
     }
 
     if (pacteUser.didUserSendAPictureToday == "true" &&
@@ -323,10 +318,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
       await handledb
           .resetGamingPossibilityStatus(pacteUser)
           .then((value) => {});
-EachDaysUtils.verboseIt("I'am here 5 ");
-      return Future.value(true);
+      EachDaysUtils.verboseIt("I'am here 5 ");
+      return true;
     }
-EachDaysUtils.verboseIt("I'am here 6 ");
-    return Future.value(false);
+    EachDaysUtils.verboseIt("I'am here 6 ");
+    return true;
   }
 }

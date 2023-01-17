@@ -77,7 +77,9 @@ class EachDaysUtils {
         DateTime.now().minute.toString() +
         ":" +
         DateTime.now().second.toString());
+
     GlobalVars.timeLeft = one.difference(two).inSeconds.toInt();
+    return GlobalVars.timeLeft;
   }
 
   getCurrentConnectedUser() {
@@ -112,8 +114,8 @@ class EachDaysUtils {
       pacteUser.userBlocked = data['userBlocked'];
       pacteUser.didUserGivePermissionForPicturing =
           data['didUserGivePermissionForPicturing'];
-      pacteUser.dateOfLastSavedChallenge =
-          data['dateOfLastSavedChallenge'] = DateTime.parse(data['dateOfLastSavedChallenge']);
+      pacteUser.dateOfLastSavedChallenge = data['dateOfLastSavedChallenge'] =
+          DateTime.parse(data['dateOfLastSavedChallenge']);
     }
 
     return pacteUser;

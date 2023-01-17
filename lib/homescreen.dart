@@ -37,7 +37,6 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
     _verifyIfUserIsEligibleToPlayToday(widget.connectedUser).then((value) => {
           isUserEligibleToplayToday = value,
-          
           if (isUserEligibleToplayToday)
             {
               notificationService = NotificationService(),
@@ -82,7 +81,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
           (connectedUser.didUserSendAPictureToday == "false" &&
               connectedUser.refusedChallengeToday == "false")) {
         return Future.value(connectedUser.currentChallenge);
-      } else if (currentChallengeDate.isBefore(todaysDate)) {
+      } else if (currentChallengeDate.isBefore(todaysDate) && currentChallengeDate.year != 1970) {
         await const GetTodayOrderService()
             .getTodayOrder()
             .then((newChallenge) => {

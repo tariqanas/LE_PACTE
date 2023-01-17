@@ -140,9 +140,9 @@ class handleFireBaseDB {
         .child(pacteUser.id)
         .update({
           'didUserSendAPictureToday': false.toString(),
-          'dateOfLastSavedChallenge': DateTime.now().subtract(const Duration(days: 1)).toString(),
+          'dateOfLastSavedChallenge': DateTime.parse("1970-01-01").toString(),
           'refusedChallengeToday': false.toString(),
-          'dateOfLastRefusedChallenge': DateTime.now().subtract(const Duration(days: 1)).toString()
+          'dateOfLastRefusedChallenge': DateTime.parse("1970-01-01").toString()
         })
         .then(
             (value) => EachDaysUtils.verboseIt("[Reset, user can play again]") )

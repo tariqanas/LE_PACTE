@@ -10,9 +10,9 @@ class lePacteUser {
   String currentChallenge = "";
   String urlOfPictureTakenToday = "";
   DateTime lastSignInTime = DateTime.now();
-  DateTime dateOfLastRefusedChallenge = DateTime.now();
+  DateTime dateOfLastRefusedChallenge = DateTime.parse("1970-01-01");
   DateTime creationTime = DateTime.now();
-  DateTime dateOfLastSavedChallenge = DateTime.now();
+  DateTime dateOfLastSavedChallenge = DateTime.parse("1970-01-01");
   int howManyTimesUserRefused = 0;
   String role = lePacteRoles.theRooky.name;
   int streak = 0;

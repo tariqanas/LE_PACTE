@@ -279,9 +279,17 @@ class _CameraPageState extends State<CameraPage> {
               child: Row(
                 children: [
                   seeWorldDashboardButtonV2(
-                      title: "proof",
-                      onPressed: () =>
-                          EachDaysUtils.verboseIt("See Champions !!!!")),
+                    title: "proof",
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                title: const Text('10 Meilleurs démons 👹🏆 '),
+                                content: _buildPopupDialog(context));
+                          });
+                    },
+                  )
                 ],
               ),
             ),
@@ -315,4 +323,24 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
     ),
   );
 }
+
+Widget _buildPopupDialog(BuildContext context) {
+  return Container(
+    height: MediaQuery.of(context).size.height * 0.7, // Change as per your requirement
+    width: MediaQuery.of(context).size.width * 0.7, // Change as per your requirement
+    child: ListView.builder(
+      shrinkWrap: true,
+      itemCount: 10,
+      itemBuilder: (BuildContext context, int index) {
+        return const ListTile(
+          title: Text('Direct Answerz.', style: TextStyle(decoration: TextDecoration.underline),),
+        );
+      },
+    ),
+  );
+}
+
+// https://flutterawesome.com/a-flutter-listview-builder-with-image-and-text/
+// https://flutterawesome.com/a-lazy-loading-listview-easy-to-implementation-easy-to-customize-with-your-own-loading-animation/
+// List view with image and text.
 

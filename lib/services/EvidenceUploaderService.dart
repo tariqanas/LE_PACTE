@@ -9,8 +9,8 @@ import 'package:permission_handler/permission_handler.dart';
 import '../utils/eachdayutils.dart';
 
 class EvidenceUploaderService {
-  uploadEvidenceToFireBaseStorage(XFile? pictureTaken, lePacteUser connectedUser,
-      String challengeDescription) async {
+  uploadEvidenceToFireBaseStorage(
+      XFile? pictureTaken, lePacteUser connectedUser) async {
     final _firebaseStorage = FirebaseStorage.instance;
     final handleFireBaseDB handleDb = handleFireBaseDB();
 
@@ -22,26 +22,22 @@ class EvidenceUploaderService {
       File userProof = File(pictureTaken!.path);
       await _firebaseStorage
           .ref()
-          .child(connectedUser.username + '/' + challengeDescription)
-          .putFile(userProof).then((p0) => {
-
-            // Fix bug  here. (50% compare between username and displayname) 
-            // Update DB last SavedDate, (Call here to saveDecision not there. 
-            // We're not sure it's going to work)
-            // Boolean SendPicture.
-            // Update booleans to prevent resending.
-            // Add a ticket maybe .. to see if he can't still log to do stuff.
-          })
+          .child(connectedUser.username + '/' + connectedUser.currentChallenge)
+          .putFile(userProof)
+          .then((picture) => {
+                handleDb.sendProofToTheDevilOrEscape(connectedUser, true),
+                EachDaysUtils.verboseIt(connectedUser.username +
+                    "took a picture" +
+                    "Description : " +
+                    connectedUser.currentChallenge)
+              })
           .catchError((e) => EachDaysUtils.verboseIt(
-              "Can't upload message for user" +
+              "Can't upload message for user " +
                   connectedUser.username.toString() +
-                  "because of " +
+                  " because of " +
                   e.toString()));
+    } else {
+      EachDaysUtils.verboseIt("User had no Camera persmission !! ");
     }
-
-    EachDaysUtils.verboseIt(connectedUser.username +
-        "took a picture" +
-        "Description : " +
-        challengeDescription);
   }
 }

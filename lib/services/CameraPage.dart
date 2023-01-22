@@ -8,6 +8,7 @@ import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:animated_button/animated_button.dart';
 
 import 'handleFireBaseDB.dart';
 
@@ -46,76 +47,120 @@ class _CameraPageState extends State<CameraPage> {
     super.dispose();
   }
 
-  Widget notNowButton({required String title, onPressed}) {
+  Widget notNowButtonV2({required String title, onPressed}) {
     return Flexible(
-      child: FloatingActionButton.extended(
-        onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
-        label: (waitingForAdminAproval || pictureSent)
+      child: AnimatedButton(
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
             ? const Text(
                 'Le diable vérifieras..👹⏱️ ',
-                style: TextStyle(color: Colors.black),
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
               )
-            : const Text('Pas tout de suite..🐔'),
-        backgroundColor: Colors.red,
-        heroTag: "waitButton",
+            : const Text('Pas tout de suite..🐔',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
+        onPressed: onPressed,
+        enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
+            widget.connectedUser.refusedChallengeToday == "false"),
+        shadowDegree: ShadowDegree.dark,
+        color: const Color.fromARGB(255, 117, 15, 15),
+        height: 50,
       ),
     );
   }
 
-  Widget okSendProofButton({required String title, onPressed}) {
-    return Expanded(
-      child: FloatingActionButton.extended(
-        onPressed: (waitingForAdminAproval || pictureSent || !pictureTaken)
-            ? null
-            : onPressed,
-        label: (waitingForAdminAproval || pictureSent)
-            ? const Text('En attente de validation ⏱️')
-            : const Text('Envoyer la preuve au diable ! 👹 '),
-        backgroundColor: (waitingForAdminAproval || pictureSent)
-            ? Colors.grey
-            : Colors.green,
-        heroTag: "okSendProofButton",
-      ),
-    );
-  }
-
-  Widget okTakePictureButton({required String title, onPressed}) {
+  Widget okSendProofButtonV2({required String title, onPressed}) {
     return Flexible(
-      child: FloatingActionButton.extended(
-        onPressed: (waitingForAdminAproval || pictureSent) ? null : onPressed,
-        label: (waitingForAdminAproval || pictureSent)
-            ? const Text('Photo envoyée  ! 👹✔️')
-            : const Text('Prendre une photo 👹📷 '),
-        backgroundColor:
-            (waitingForAdminAproval || pictureSent) ? Colors.grey : Colors.red,
-        heroTag: "okCaptureProofButton",
+      child: AnimatedButton(
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
+            ? const Text('En attente de validation ⏱️',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500))
+            : const Text('Envoyer la preuve au diable ! 👹 ',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
+        enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
+            widget.connectedUser.refusedChallengeToday == "false"),
+        onPressed: onPressed,
+        shadowDegree: ShadowDegree.dark,
+        color: const Color.fromARGB(255, 117, 15, 15),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
       ),
     );
   }
 
-//TODO Modify this.
-  seeHowManyPeopleSeenItButton({required String title, onPressed}) {
-    return Expanded(
-      child: FloatingActionButton.extended(
-        onPressed: onPressed,
-        label: const Text('Statistique des autres ! ⚔️ '),
-        backgroundColor: Colors.blue,
-        heroTag: "okOtherPeopleButton",
+  Widget okTakePictureV2({required String title, onPressed}) {
+    return Flexible(
+      child: AnimatedButton(
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
+            ? const Text('Photo envoyée  ! 👹✔️',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500))
+            : const Text('Prendre une photo 👹📷 ',
+                style: TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
+        enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
+            widget.connectedUser.refusedChallengeToday == "false"),
+        onPressed: () {
+          if (widget.connectedUser.didUserSendAPictureToday == "false" &&
+              widget.connectedUser.refusedChallengeToday == "false") {
+            onPressed();
+          }
+        },
+        shadowDegree: ShadowDegree.dark,
+        color: const Color.fromARGB(255, 117, 15, 15),
+        height: 50,
       ),
     );
   }
 
-//TODO Modify this.
-  seeWorldDashboardButton({required String title, onPressed}) {
-    return Expanded(
-      child: FloatingActionButton.extended(
-        onPressed: onPressed,
-        label: const Text(
-          '10 Meilleurs challengers du monde ! 🏆 ',
-          style: TextStyle(color: Colors.black),
+  Widget seeHowManyPeopleSeenItButtonV2({required String title, onPressed}) {
+    return Flexible(
+      child: AnimatedButton(
+        child: const Text(
+          'Statistique des autres ! ⚔️ ',
+          style: TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.white,
+              fontWeight: FontWeight.w500),
         ),
-        backgroundColor: Color.fromARGB(255, 255, 238, 0),
-        heroTag: "okDashBoardButton",
+        onPressed: onPressed,
+        shadowDegree: ShadowDegree.dark,
+        color: const Color.fromARGB(255, 117, 15, 15),
+        height: 50,
+        width: MediaQuery.of(context).size.width,
+      ),
+    );
+  }
+
+  Widget seeWorldDashboardButtonV2({required String title, onPressed}) {
+    return Flexible(
+      child: AnimatedButton(
+        child: const Text('10 Meilleurs challengers du monde ! 🏆 ',
+            style: TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+                fontWeight: FontWeight.w500)),
+        onPressed: onPressed,
+        shadowDegree: ShadowDegree.dark,
+        color: const Color.fromARGB(255, 117, 15, 15),
+        width: MediaQuery.of(context).size.width,
       ),
     );
   }
@@ -143,18 +188,19 @@ class _CameraPageState extends State<CameraPage> {
   }
 
   _sendProofOnPressed() {
-    EachDaysUtils.verboseIt("Sending proof for checking...");
-    pictureSent = true;
-    waitingForAdminAproval = true;
-    EvidenceUploaderService().uploadEvidenceToFireBaseStorage(
-        pictureFile, widget.connectedUser, widget.connectedUser.currentChallenge);
-    pictureFile = XFile("");
+    if (pictureTaken) {
+      EachDaysUtils.verboseIt("Sending proof for checking...");
+      pictureSent = true;
+      EvidenceUploaderService()
+          .uploadEvidenceToFireBaseStorage(pictureFile, widget.connectedUser);
+      pictureFile = null;
 
-    handleDB.sendProofToTheDevilOrEscape(widget.connectedUser, pictureSent);
-    setState(() {});
-
-    //Handle validation.(DB)
-    // Wait for approval to increase streak.
+      setState(() {
+        widget.connectedUser.didUserSendAPictureToday = "true";
+      });
+    } else {
+      EachDaysUtils.takeaPictureFirst();
+    }
   }
 
 //TODO Modify this.
@@ -188,12 +234,12 @@ class _CameraPageState extends State<CameraPage> {
   Widget build(BuildContext context) {
     return Scaffold(
         resizeToAvoidBottomInset: false,
-               appBar: AppBar(
+        appBar: AppBar(
           centerTitle: true,
           title: const Text('Prouves-le : 👹🧾 '),
           automaticallyImplyLeading: false,
           backgroundColor: Colors.black,
-        ), 
+        ),
         body: Column(
           children: [
             processCameraPicture(context, pictureFile),
@@ -205,24 +251,25 @@ class _CameraPageState extends State<CameraPage> {
                 child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
-                okTakePictureButton(
+                okTakePictureV2(
                     title: "proof", onPressed: () => _takePictureOnPressed()),
-                notNowButton(
+                notNowButtonV2(
                     title: "notNow", onPressed: () => _notNowOnpressed()),
               ],
             )),
             SizedBox(
               child: Row(
                 children: [
-                  okSendProofButton(
-                      title: "proof", onPressed: () => _sendProofOnPressed()),
+                  okSendProofButtonV2(
+                      title: "sendProof",
+                      onPressed: () => _sendProofOnPressed()),
                 ],
               ),
             ),
             SizedBox(
               child: Row(
                 children: [
-                  seeHowManyPeopleSeenItButton(
+                  seeHowManyPeopleSeenItButtonV2(
                       title: "proof",
                       onPressed: () => EachDaysUtils.showEndingToast(false)),
                 ],
@@ -231,7 +278,7 @@ class _CameraPageState extends State<CameraPage> {
             SizedBox(
               child: Row(
                 children: [
-                  seeWorldDashboardButton(
+                  seeWorldDashboardButtonV2(
                       title: "proof",
                       onPressed: () =>
                           EachDaysUtils.verboseIt("See Champions !!!!")),
@@ -258,7 +305,6 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
       width: MediaQuery.of(context).size.width,
     );
   }
-  debugPrint("Not null");
   return Container(
     margin: const EdgeInsets.only(top: 20.0),
     child: Image.file(
@@ -269,3 +315,4 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
     ),
   );
 }
+

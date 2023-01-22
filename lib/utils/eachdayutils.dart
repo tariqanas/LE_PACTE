@@ -8,6 +8,7 @@ import 'package:intl/intl.dart';
 import 'package:eachday/globalvars/globalvars.dart';
 import 'package:logger/logger.dart';
 
+
 class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
   static String endMessage = "You're time is done ! You Lost. ⚡";
@@ -60,13 +61,25 @@ class EachDaysUtils {
 
   static showRandomToast() {
     Fluttertoast.showToast(
-        msg: "hmm.. Interesting.. ",
+        msg: "..⌛.. ",
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM,
         backgroundColor: Color.fromARGB(255, 238, 72, 60),
         timeInSecForIosWeb: 1,
         textColor: Color.fromARGB(255, 255, 255, 255),
         fontSize: 20.0);
+  }
+
+  static takeaPictureFirst() {
+    Fluttertoast.showToast(
+        msg: "Réfléchis 😈! ",
+        toastLength: Toast.LENGTH_LONG,
+        gravity: ToastGravity.BOTTOM,
+        backgroundColor: Color.fromARGB(255, 0, 0, 0),
+        timeInSecForIosWeb: 1,
+        textColor: Color.fromARGB(255, 233, 2, 2),
+        fontSize: 20.0);
+    return null;
   }
 
   static howMuchTimeLeftAccordingToCurrentTime() {
@@ -124,4 +137,5 @@ class EachDaysUtils {
   static String parseBoolToStringForJson(bool bool) {
     return bool.toString().toLowerCase();
   }
+
 }

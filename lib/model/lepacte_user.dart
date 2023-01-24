@@ -9,6 +9,7 @@ class lePacteUser {
   String previousChallenge = "";
   String currentChallenge = "";
   String urlOfPictureTakenToday = "";
+  String profilePicture = "";
   DateTime lastSignInTime = DateTime.now();
   DateTime dateOfLastRefusedChallenge = DateTime.parse("1970-01-01");
   DateTime creationTime = DateTime.now();

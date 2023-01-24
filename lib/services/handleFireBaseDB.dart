@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:ffi';
 
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/utils/eachdayutils.dart';
@@ -134,7 +135,7 @@ class handleFireBaseDB {
     }
   }
 
-   Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
+  Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
     realTimeDatabaseReference
         .child('users')
         .child(pacteUser.id)
@@ -145,10 +146,29 @@ class handleFireBaseDB {
           'dateOfLastRefusedChallenge': DateTime.parse("1970-01-01").toString()
         })
         .then(
-            (value) => EachDaysUtils.verboseIt("[Reset, user can play again]") )
+            (value) => EachDaysUtils.verboseIt("[Reset, user can play again]"))
         .onError((error, stackTrace) => EachDaysUtils.verboseIt(
             "couldn't Update playing status" +
                 error.toString() +
                 stackTrace.toString()));
+  }
+
+ List<String> getTopTenUsersByScoring() {
+    List<String> tenFirstUsers = [];
+
+    realTimeDatabaseReference
+        .orderByChild("users")
+        .limitToLast(10)
+        .onChildAdded
+        .forEach((element) {
+      var mapConverted = element.snapshot.value as Map;
+      for (var item in mapConverted.values) {
+        tenFirstUsers.add(item['username'] + "-lePacteUserPicture:"+item['profilePicture']);
+      }
+    });
+
+  //  Should wait before return.
+    print(tenFirstUsers.length);
+    return tenFirstUsers;
   }
 }

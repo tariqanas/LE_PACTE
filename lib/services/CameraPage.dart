@@ -6,10 +6,11 @@ import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/EvidenceUploaderService.dart';
 import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animated_button/animated_button.dart';
-
+import 'package:getwidget/getwidget.dart';
 import 'handleFireBaseDB.dart';
 
 class CameraPage extends StatefulWidget {
@@ -32,9 +33,7 @@ class _CameraPageState extends State<CameraPage> {
   final imagePicker = ImagePicker();
   late CameraController controller;
   XFile? pictureFile;
-  EvidenceUploaderService evidence = EvidenceUploaderService();
-
-  handleFireBaseDB handleDB = handleFireBaseDB();
+  final providerUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
@@ -286,7 +285,8 @@ class _CameraPageState extends State<CameraPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                                 title: const Text('10 Meilleurs démons 👹🏆 '),
-                                content: _buildPopupDialog(context));
+                                content:
+                                    _buildPopupDialog(context, providerUser));
                           });
                     },
                   )
@@ -324,23 +324,22 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   );
 }
 
-Widget _buildPopupDialog(BuildContext context) {
-  return Container(
-    height: MediaQuery.of(context).size.height * 0.7, // Change as per your requirement
-    width: MediaQuery.of(context).size.width * 0.7, // Change as per your requirement
+Widget _buildPopupDialog(BuildContext context, User? connectedUser)  {
+  List<String> topTenUsers =  handleFireBaseDB().getTopTenUsersByScoring();
+
+  return SizedBox(
+    height: MediaQuery.of(context).size.height *
+        0.7, // Change as per your requirement
+    width: MediaQuery.of(context).size.width *
+        0.7, // Change as per your requirement
     child: ListView.builder(
-      shrinkWrap: true,
-      itemCount: 10,
-      itemBuilder: (BuildContext context, int index) {
-        return const ListTile(
-          title: Text('Direct Answerz.', style: TextStyle(decoration: TextDecoration.underline),),
-        );
-      },
-    ),
+        shrinkWrap: true,
+        itemCount: topTenUsers.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GFListTile(
+              titleText: "Direct Answerz",
+              avatar: Image.network(connectedUser!.photoURL.toString()),
+              icon: const Icon(Icons.favorite, color: Colors.red));
+        }),
   );
 }
-
-// https://flutterawesome.com/a-flutter-listview-builder-with-image-and-text/
-// https://flutterawesome.com/a-lazy-loading-listview-easy-to-implementation-easy-to-customize-with-your-own-loading-animation/
-// List view with image and text.
-

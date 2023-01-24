@@ -153,8 +153,8 @@ class handleFireBaseDB {
                 stackTrace.toString()));
   }
 
- List<String> getTopTenUsersByScoring() {
-    List<String> tenFirstUsers = [];
+  List<dynamic> getTopTenUsersByScoring() {
+    List<dynamic> tenFirstUsers = [];
 
     realTimeDatabaseReference
         .orderByChild("users")
@@ -163,11 +163,11 @@ class handleFireBaseDB {
         .forEach((element) {
       var mapConverted = element.snapshot.value as Map;
       for (var item in mapConverted.values) {
-        tenFirstUsers.add(item['username'] + "-lePacteUserPicture:"+item['profilePicture']);
+        tenFirstUsers.add({"title": item['username'], "profilePicture": item['profilePicture']});
       }
     });
 
-  //  Should wait before return.
+    //  Should wait before return.
     print(tenFirstUsers.length);
     return tenFirstUsers;
   }

@@ -325,7 +325,7 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
 }
 
 Widget _buildPopupDialog(BuildContext context, User? connectedUser)  {
-  List<String> topTenUsers =  handleFireBaseDB().getTopTenUsersByScoring();
+  List<dynamic> topTenUsers =  handleFireBaseDB().getTopTenUsersByScoring();
 
   return SizedBox(
     height: MediaQuery.of(context).size.height *
@@ -337,8 +337,8 @@ Widget _buildPopupDialog(BuildContext context, User? connectedUser)  {
         itemCount: topTenUsers.length,
         itemBuilder: (BuildContext context, int index) {
           return GFListTile(
-              titleText: "Direct Answerz",
-              avatar: Image.network(connectedUser!.photoURL.toString()),
+              titleText: topTenUsers[index]['title'],
+              avatar: Image.network(topTenUsers[index]['profilePicture']),
               icon: const Icon(Icons.favorite, color: Colors.red));
         }),
   );

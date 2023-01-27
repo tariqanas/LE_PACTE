@@ -34,10 +34,12 @@ class _CameraPageState extends State<CameraPage> {
   late CameraController controller;
   XFile? pictureFile;
   final providerUser = FirebaseAuth.instance.currentUser;
+  static List<dynamic> topTenUsers = [];
 
   @override
   void initState() {
     super.initState();
+    topTenUsers = handleFireBaseDB().getTopTenUsersByScoring();
     setState(() {});
   }
 
@@ -324,9 +326,8 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   );
 }
 
-Widget _buildPopupDialog(BuildContext context, User? connectedUser)  {
-  List<dynamic> topTenUsers =  handleFireBaseDB().getTopTenUsersByScoring();
-
+Widget _buildPopupDialog(BuildContext context, User? connectedUser) {
+  debugPrint(_CameraPageState.topTenUsers.length.toString());
   return SizedBox(
     height: MediaQuery.of(context).size.height *
         0.7, // Change as per your requirement
@@ -334,11 +335,11 @@ Widget _buildPopupDialog(BuildContext context, User? connectedUser)  {
         0.7, // Change as per your requirement
     child: ListView.builder(
         shrinkWrap: true,
-        itemCount: topTenUsers.length,
+        itemCount: _CameraPageState.topTenUsers.length,
         itemBuilder: (BuildContext context, int index) {
           return GFListTile(
-              titleText: topTenUsers[index]['title'],
-              avatar: Image.network(topTenUsers[index]['profilePicture']),
+              titleText: _CameraPageState.topTenUsers[index]['title'],
+              avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture']),
               icon: const Icon(Icons.favorite, color: Colors.red));
         }),
   );

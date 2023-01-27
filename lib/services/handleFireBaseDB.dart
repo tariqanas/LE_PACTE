@@ -1,5 +1,6 @@
 import 'dart:async';
 import 'dart:ffi';
+import 'dart:io';
 
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/utils/eachdayutils.dart';
@@ -29,6 +30,7 @@ class handleFireBaseDB {
             'previousChallenge': maquetteUser.previousChallenge,
             'currentChallenge': maquetteUser.currentChallenge,
             'urlOfPictureTakenToday': maquetteUser.urlOfPictureTakenToday,
+            'profilePicture': connectionAttemptingUser.photoURL,
             'creationTime': maquetteUser.creationTime.toString(),
             'lastSignInTime': maquetteUser.creationTime.toString(),
             'dateOfLastRefusedChallenge':
@@ -156,19 +158,20 @@ class handleFireBaseDB {
   List<dynamic> getTopTenUsersByScoring() {
     List<dynamic> tenFirstUsers = [];
 
-    realTimeDatabaseReference
+      realTimeDatabaseReference
         .orderByChild("users")
         .limitToLast(10)
         .onChildAdded
         .forEach((element) {
-      var mapConverted = element.snapshot.value as Map;
-      for (var item in mapConverted.values) {
-        tenFirstUsers.add({"title": item['username'], "profilePicture": item['profilePicture']});
+      for (var item in (element.snapshot.value as Map).values) {
+        tenFirstUsers.add({
+          "title": item['username'],
+          "profilePicture": item['profilePicture']
+        });
       }
     });
 
     //  Should wait before return.
-    print(tenFirstUsers.length);
     return tenFirstUsers;
   }
 }

@@ -6,10 +6,11 @@ import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/EvidenceUploaderService.dart';
 import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animated_button/animated_button.dart';
-
+import 'package:getwidget/getwidget.dart';
 import 'handleFireBaseDB.dart';
 
 class CameraPage extends StatefulWidget {
@@ -32,13 +33,13 @@ class _CameraPageState extends State<CameraPage> {
   final imagePicker = ImagePicker();
   late CameraController controller;
   XFile? pictureFile;
-  EvidenceUploaderService evidence = EvidenceUploaderService();
-
-  handleFireBaseDB handleDB = handleFireBaseDB();
+  final providerUser = FirebaseAuth.instance.currentUser;
+  static List<dynamic> topTenUsers = [];
 
   @override
   void initState() {
     super.initState();
+    topTenUsers = handleFireBaseDB().getTopTenUsersByScoring();
     setState(() {});
   }
 
@@ -279,9 +280,18 @@ class _CameraPageState extends State<CameraPage> {
               child: Row(
                 children: [
                   seeWorldDashboardButtonV2(
-                      title: "proof",
-                      onPressed: () =>
-                          EachDaysUtils.verboseIt("See Champions !!!!")),
+                    title: "proof",
+                    onPressed: () {
+                      showDialog(
+                          context: context,
+                          builder: (BuildContext context) {
+                            return AlertDialog(
+                                title: const Text('10 Meilleurs démons 👹🏆 '),
+                                content:
+                                    _buildPopupDialog(context, providerUser));
+                          });
+                    },
+                  )
                 ],
               ),
             ),
@@ -316,3 +326,21 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   );
 }
 
+Widget _buildPopupDialog(BuildContext context, User? connectedUser) {
+  debugPrint(_CameraPageState.topTenUsers.length.toString());
+  return SizedBox(
+    height: MediaQuery.of(context).size.height *
+        0.7, // Change as per your requirement
+    width: MediaQuery.of(context).size.width *
+        0.7, // Change as per your requirement
+    child: ListView.builder(
+        shrinkWrap: true,
+        itemCount: _CameraPageState.topTenUsers.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GFListTile(
+              titleText: _CameraPageState.topTenUsers[index]['title'],
+              avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture']),
+              icon: const Icon(Icons.favorite, color: Colors.red));
+        }),
+  );
+}

@@ -8,7 +8,6 @@ import 'package:intl/intl.dart';
 import 'package:eachday/globalvars/globalvars.dart';
 import 'package:logger/logger.dart';
 
-
 class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
   static String endMessage = "You're time is done ! You Lost. ⚡";
@@ -118,7 +117,7 @@ class EachDaysUtils {
       pacteUser.lastSignInTime = DateTime.parse(data['lastSignInTime']);
       pacteUser.dateOfLastRefusedChallenge =
           DateTime.parse(data['dateOfLastRefusedChallenge']);
-
+      pacteUser.profilePicture = connectionAttemptingUser.photoURL!;
       pacteUser.howManyTimesUserRefused = data['howManyTimesUserRefused'];
       pacteUser.role = data['role'];
       pacteUser.streak = data['streak'] as int;
@@ -137,5 +136,4 @@ class EachDaysUtils {
   static String parseBoolToStringForJson(bool bool) {
     return bool.toString().toLowerCase();
   }
-
 }

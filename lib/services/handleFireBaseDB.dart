@@ -1,4 +1,6 @@
 import 'dart:async';
+import 'dart:ffi';
+import 'dart:io';
 
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/utils/eachdayutils.dart';
@@ -28,6 +30,7 @@ class handleFireBaseDB {
             'previousChallenge': maquetteUser.previousChallenge,
             'currentChallenge': maquetteUser.currentChallenge,
             'urlOfPictureTakenToday': maquetteUser.urlOfPictureTakenToday,
+            'profilePicture': connectionAttemptingUser.photoURL,
             'creationTime': maquetteUser.creationTime.toString(),
             'lastSignInTime': maquetteUser.creationTime.toString(),
             'dateOfLastRefusedChallenge':
@@ -134,7 +137,7 @@ class handleFireBaseDB {
     }
   }
 
-   Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
+  Future resetGamingPossibilityStatus(lePacteUser pacteUser) async {
     realTimeDatabaseReference
         .child('users')
         .child(pacteUser.id)
@@ -145,10 +148,30 @@ class handleFireBaseDB {
           'dateOfLastRefusedChallenge': DateTime.parse("1970-01-01").toString()
         })
         .then(
-            (value) => EachDaysUtils.verboseIt("[Reset, user can play again]") )
+            (value) => EachDaysUtils.verboseIt("[Reset, user can play again]"))
         .onError((error, stackTrace) => EachDaysUtils.verboseIt(
             "couldn't Update playing status" +
                 error.toString() +
                 stackTrace.toString()));
+  }
+
+  List<dynamic> getTopTenUsersByScoring() {
+    List<dynamic> tenFirstUsers = [];
+
+      realTimeDatabaseReference
+        .orderByChild("users")
+        .limitToLast(10)
+        .onChildAdded
+        .forEach((element) {
+      for (var item in (element.snapshot.value as Map).values) {
+        tenFirstUsers.add({
+          "title": item['username'],
+          "profilePicture": item['profilePicture']
+        });
+      }
+    });
+
+    //  Should wait before return.
+    return tenFirstUsers;
   }
 }

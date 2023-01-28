@@ -1,5 +1,6 @@
 import 'package:eachday/services/FacebookSignInProvider.dart';
 import 'package:eachday/services/google_sign_in_provider.dart';
+import 'package:eachday/services/twitterSignInProvider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -56,9 +57,8 @@ class _SignInPageState extends State<SignInPage> {
               buttonItem(
                   "assets/icon/twitter.svg", "Connectes-toi avec Twitter", 25,
                   () {
-                final provider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.googleLogin(context);
+                final twitterProvider = TwitterSignInProvider();
+                twitterProvider.loginWithTwitter(context);
               }),
               colorButton("Rejoins la communauté."),
               const SizedBox(

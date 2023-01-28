@@ -12,6 +12,9 @@ class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
   static String endMessage = "You're time is done ! You Lost. ⚡";
   static String almostEndMessage = "Less then 10 minutes left.⏱️";
+  static String twitterApiClientID = "ckEzS1VBcnJLMExmVnNfUzZMb3k6MTpjaQ";
+  static String twitterClientSecret =
+      "qRDICZ-kbdF7sqfsUEqLP2SUMfeX7xgpmPRF0sEV-9q0Zlo-hD";
 
   static verboseIt(String verboseMessage) {
     var logger = Logger(printer: PrettyPrinter(methodCount: 0));

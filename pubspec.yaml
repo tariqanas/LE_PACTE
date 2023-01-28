@@ -54,6 +54,7 @@ dependencies:
   animated_button: ^0.2.0
   getwidget: ^2.0.4
   flutter_facebook_auth: ^5.0.7
+  flutter_twitter_login: "^1.1.0"
 
   
 

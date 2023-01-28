@@ -171,7 +171,6 @@ class handleFireBaseDB {
       }
     });
 
-    //  Should wait before return.
     return tenFirstUsers;
   }
 }

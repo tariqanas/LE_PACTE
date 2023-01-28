@@ -1,3 +1,4 @@
+import 'package:eachday/services/FacebookSignInProvider.dart';
 import 'package:eachday/services/google_sign_in_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -48,11 +49,9 @@ class _SignInPageState extends State<SignInPage> {
                 googleProvider.googleLogin(context);
               }),
               buttonItem(
-                  "assets/icon/fbk.svg", "Connectes-toi avec Facebook", 25,
-                  () {
-                final facebookProvider =
-                    Provider.of<GoogleSignInProvider>(context, listen: false);
-                facebookProvider.googleLogin(context);
+                  "assets/icon/fbk.svg", "Connectes-toi avec Facebook", 25, () {
+                final facebookProvider = FacebookSignInProvider();
+                facebookProvider.signInWithFacebook(context);
               }),
               buttonItem(
                   "assets/icon/twitter.svg", "Connectes-toi avec Twitter", 25,

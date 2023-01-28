@@ -23,6 +23,8 @@ class GoogleSignInProvider extends ChangeNotifier {
     UserCredential result =
         await FirebaseAuth.instance.signInWithCredential(credientials);
 
+
+
     EachDaysUtils.verboseIt("Checking user ");
 
     if (result.user != null) {
@@ -42,9 +44,9 @@ class GoogleSignInProvider extends ChangeNotifier {
                                   builder: (context) => HomeScreen(
                                       title: "Le Pacte  ✌🏼👺",
                                       connectedUser: processedUser)))
-                        }else {
-                        EachDaysUtils.verboseIt("UserId is null")
                         }
+                      else
+                        {EachDaysUtils.verboseIt("UserId is null")}
                     })
               });
     }

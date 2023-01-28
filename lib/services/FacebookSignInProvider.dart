@@ -9,19 +9,44 @@ import '../homescreen.dart';
 class FacebookSignInProvider extends ChangeNotifier {
   final handleFireBaseDB _baseDB = handleFireBaseDB();
 
-  Future signInWithFacebook() async {
-    final LoginResult loginResult = await FacebookAuth.instance.login();
+  Future signInWithFacebook(BuildContext buildContext) async {
+    final LoginResult loginResult = await FacebookAuth.instance
+        .login(permissions: ['email', 'public_profile']);
 
-    // Create a credential from the access token
-    final OAuthCredential facebookAuthCredential =
-        FacebookAuthProvider.credential(loginResult.accessToken.token);
+    final facebookAuthCredential =
+        FacebookAuthProvider.credential(loginResult.accessToken!.token);
 
-    // Once signed in, return the UserCredential
-    UserCredential credentials = await FirebaseAuth.instance
-        .signInWithCredential(facebookAuthCredential);
-    if (credentials.user != null) {
-      EachDaysUtils.verboseIt(
-          "Got user" + credentials.user!.displayName.toString());
+    final userData = await FacebookAuth.instance.getUserData();
+
+    try {
+      final credentials = await FirebaseAuth.instance
+          .signInWithCredential(facebookAuthCredential);
+
+          if (credentials.user != null) {
+               EachDaysUtils.verboseIt(
+          "User exists, saving user (in Facebook provider)");
+
+      await Future.value(_baseDB.saveConnectedUsersData(credentials.user!))
+          .then((processedUser) => {
+                Future.delayed(const Duration(seconds: 1), () {
+                  EachDaysUtils.showRandomToast();
+                }).then((value) => {
+                      if (processedUser.id != "")
+                        {
+                          Navigator.pushReplacement(
+                              buildContext,
+                              MaterialPageRoute(
+                                  builder: (context) => HomeScreen(
+                                      title: "Le Pacte  ✌🏼👺",
+                                      connectedUser: processedUser)))
+                        }
+                      else
+                        {EachDaysUtils.verboseIt("UserId is null")}
+                    })
+              });
+          }
+    } catch (error) {
+      EachDaysUtils.verboseIt(error.toString());
     }
   }
 }

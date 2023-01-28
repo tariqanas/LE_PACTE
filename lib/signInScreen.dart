@@ -43,6 +43,20 @@ class _SignInPageState extends State<SignInPage> {
               buttonItem(
                   "assets/icon/google.svg", "Connectes-toi avec Google", 25,
                   () {
+                final googleProvider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                googleProvider.googleLogin(context);
+              }),
+              buttonItem(
+                  "assets/icon/fbk.svg", "Connectes-toi avec Facebook", 25,
+                  () {
+                final facebookProvider =
+                    Provider.of<GoogleSignInProvider>(context, listen: false);
+                facebookProvider.googleLogin(context);
+              }),
+              buttonItem(
+                  "assets/icon/twitter.svg", "Connectes-toi avec Twitter", 25,
+                  () {
                 final provider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 provider.googleLogin(context);
@@ -56,7 +70,7 @@ class _SignInPageState extends State<SignInPage> {
                 children: const [
                   InkWell(
                     child: Text(
-                      " Tu as un compte Google non 👹?",
+                      " Fais ton choix ! 👹.",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -162,9 +176,9 @@ class _SignInPageState extends State<SignInPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           gradient: const LinearGradient(colors: [
-            Color.fromARGB(255, 255, 13, 0),
-            Color.fromARGB(255, 201, 73, 26),
-            Color(0xFFFD746C),
+            Color.fromARGB(255, 0, 0, 0),
+            Color.fromARGB(255, 255, 0, 0),
+            Color.fromARGB(255, 0, 0, 0),
           ]),
         ),
         child: Center(

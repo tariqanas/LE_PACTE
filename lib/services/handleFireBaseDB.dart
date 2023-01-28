@@ -165,7 +165,7 @@ class handleFireBaseDB {
         .forEach((element) {
       for (var item in (element.snapshot.value as Map).values) {
         tenFirstUsers.add({
-          "title": item['username'],
+          "title": item['username'] +" : " + item['streak'].toString(),
           "profilePicture": item['profilePicture']
         });
       }

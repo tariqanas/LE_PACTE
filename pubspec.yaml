@@ -53,6 +53,7 @@ dependencies:
   image_picker: ^0.8.6
   animated_button: ^0.2.0
   getwidget: ^2.0.4
+  flutter_facebook_auth: ^5.0.7
 
   
 
@@ -95,6 +96,8 @@ flutter:
     - assets/timer_sound.mp3
     - assets/icon/google.svg
     - assets/icon/phone.svg
+    - assets/icon/fbk.svg
+    - assets/icon/twitter.svg
     - assets/splash/each_day_splash.png
 
   fonts:

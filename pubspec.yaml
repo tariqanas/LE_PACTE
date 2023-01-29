@@ -54,7 +54,6 @@ dependencies:
   animated_button: ^0.2.0
   getwidget: ^2.0.4
   flutter_facebook_auth: ^5.0.7
-  flutter_twitter_login: "^1.1.0"
 
   
 
@@ -96,7 +95,8 @@ flutter:
     - assets/quotes/quotes.txt
     - assets/timer_sound.mp3
     - assets/icon/google.svg
-    - assets/icon/phone.svg
+    - assets/icon/email.svg
+    - assets/icon/demon.svg
     - assets/icon/fbk.svg
     - assets/icon/twitter.svg
     - assets/splash/each_day_splash.png

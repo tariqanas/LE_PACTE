@@ -148,6 +148,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       userName = nullableUserUsername;
     }
 
+//Replace FR by signOut.
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,

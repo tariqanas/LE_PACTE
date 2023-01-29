@@ -1,6 +1,8 @@
 import 'package:eachday/services/FacebookSignInProvider.dart';
+import 'package:eachday/services/emailLogin.dart';
 import 'package:eachday/services/google_sign_in_provider.dart';
-import 'package:eachday/services/twitterSignInProvider.dart';
+import 'package:eachday/utils/eachdayutils.dart';
+import 'package:eachday/SignUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -54,15 +56,34 @@ class _SignInPageState extends State<SignInPage> {
                 final facebookProvider = FacebookSignInProvider();
                 facebookProvider.signInWithFacebook(context);
               }),
-              buttonItem(
-                  "assets/icon/twitter.svg", "Connectes-toi avec Twitter", 25,
-                  () {
-                final twitterProvider = TwitterSignInProvider();
-                twitterProvider.loginWithTwitter(context);
+              buttonItem("assets/icon/email.svg",
+                  "Connectes-toi avec ton compte le pacte", 25, () {
+                final emailSignIn = EmailSignIn();
+                emailSignIn.loginWithYourEmail(context, "email", "password");
               }),
               colorButton("Rejoins la communauté."),
               const SizedBox(
                 height: 15,
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  InkWell(
+                    child: const Text(
+                      " Sinon, crées un compte lePacte.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                        color: Colors.orangeAccent,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () {
+                      EachDaysUtils.verboseIt("Redirecting to Sign Up");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                    },
+                  ),
+                ],
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,

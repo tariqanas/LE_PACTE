@@ -1,5 +1,6 @@
 import 'package:audioplayers/audioplayers.dart';
 import 'package:eachday/model/lepacte_user.dart';
+import 'package:eachday/signInScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_database/firebase_database.dart';
 import 'package:flutter/material.dart';
@@ -12,7 +13,7 @@ class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
   static String endMessage = "You're time is done ! You Lost. ⚡";
   static String almostEndMessage = "Less then 10 minutes left.⏱️";
-
+  
   static verboseIt(String verboseMessage) {
     var logger = Logger(printer: PrettyPrinter(methodCount: 0));
     logger.v(verboseMessage);
@@ -69,6 +70,16 @@ class EachDaysUtils {
         fontSize: 20.0);
   }
 
+  static showSpecificToast(String message) {
+       Fluttertoast.showToast(
+        msg: message,
+        toastLength: Toast.LENGTH_SHORT,
+        gravity: ToastGravity.CENTER,
+        backgroundColor: Colors.black,
+        timeInSecForIosWeb: 1,
+        textColor: Color.fromARGB(255, 255, 255, 255),
+        fontSize: 20.0);
+  }
   static takeaPictureFirst() {
     Fluttertoast.showToast(
         msg: "Réfléchis 😈! ",
@@ -108,7 +119,7 @@ class EachDaysUtils {
     if (snapshot.value != null) {
       final data = snapshot.value as Map;
       pacteUser.setId = connectionAttemptingUser.uid;
-      pacteUser.setUsername = connectionAttemptingUser.displayName;
+      pacteUser.setUsername = data['username'] != "" ? data['username'] : connectionAttemptingUser.displayName;
       pacteUser.setCreationTime = DateTime.parse(data['creationTime']);
       pacteUser.setPreviousChallenge = data['previousChallenge'];
       pacteUser.currentChallenge =
@@ -117,7 +128,7 @@ class EachDaysUtils {
       pacteUser.lastSignInTime = DateTime.parse(data['lastSignInTime']);
       pacteUser.dateOfLastRefusedChallenge =
           DateTime.parse(data['dateOfLastRefusedChallenge']);
-      pacteUser.profilePicture = connectionAttemptingUser.photoURL!;
+      pacteUser.profilePicture = data['profilePicture'] != "" ? data['profilePicture'] : connectionAttemptingUser.photoURL!;
       pacteUser.howManyTimesUserRefused = data['howManyTimesUserRefused'];
       pacteUser.role = data['role'];
       pacteUser.streak = data['streak'] as int;
@@ -135,5 +146,21 @@ class EachDaysUtils {
 
   static String parseBoolToStringForJson(bool bool) {
     return bool.toString().toLowerCase();
+  }
+
+  static void signOut(BuildContext context) async {
+    await FirebaseAuth.instance.signOut();
+    Navigator.pushReplacement(
+        context, MaterialPageRoute(builder: (context) => const SignInPage()));
+  }
+
+   static  SnackBar ShowSnackBar(String message) {
+     SnackBar snackBar = SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const  Color.fromARGB(255, 117, 15, 15),
+        content:  Text(message,
+            style: const TextStyle(color: Colors.white)));
+    return snackBar;
   }
 }

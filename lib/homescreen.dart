@@ -5,6 +5,7 @@ import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'dart:async';
 import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -139,7 +140,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
     String? nullableUserPicture = FirebaseAuth.instance.currentUser?.photoURL;
     String? nullableUserUsername =
         FirebaseAuth.instance.currentUser?.displayName;
-    String userPicture = "";
+    String userPicture = "assets/icon/demon.svg";
     String userName = "";
     if (nullableUserPicture != null) {
       userPicture = nullableUserPicture;
@@ -148,22 +149,28 @@ class _MyHomeScreenState extends State<HomeScreen> {
       userName = nullableUserUsername;
     }
 
+//Replace FR by signOut.
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.black,
-          title: Row(children: [
-            const Expanded(child: Text("🇫🇷")),
-            Text("🔥 " + userName.toUpperCase() + " 🔥  "),
-            ClipRRect(
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+            const Expanded(child: Text("🇫🇷"), flex:0,),
+            Expanded(child: Text(" 🔥 " + widget.connectedUser.username.toUpperCase() + " 🔥   ", textAlign: TextAlign.center,), flex:1),
+            Expanded(flex:0 , child: ClipRRect(
                 borderRadius: BorderRadius.circular(100),
-                child: Image.network(
+                child: nullableUserPicture != null? Image.network(
                   userPicture,
                   repeat: ImageRepeat.noRepeat,
                   fit: BoxFit.fitWidth,
                   height: 55,
-                ))
-          ]),
+                ): SvgPicture.asset(
+                  userPicture,
+                  fit: BoxFit.fitWidth
+                   ))
+      )]),
           automaticallyImplyLeading: false),
       body: Center(
         child: Column(
@@ -214,7 +221,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
             if (widget.connectedUser.refusedChallengeToday == "false")
-              const Text('☝ Don\'t lose it !',
+              const Text('☝ Ne perds pas tes points !',
                   softWrap: false,
                   style: TextStyle(color: Colors.white, fontSize: 19)),
             if (widget.connectedUser.refusedChallengeToday == "true")
@@ -222,7 +229,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
             Text(
-                '⚡ Your Streak is : ' +
+                '⚡ Total de tes points : ' +
                     widget.connectedUser.getStreak.toString() +
                     ' ⚡',
                 softWrap: false,

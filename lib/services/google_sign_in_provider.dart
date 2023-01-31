@@ -23,13 +23,15 @@ class GoogleSignInProvider extends ChangeNotifier {
     UserCredential result =
         await FirebaseAuth.instance.signInWithCredential(credientials);
 
+
+
     EachDaysUtils.verboseIt("Checking user ");
 
     if (result.user != null) {
       EachDaysUtils.verboseIt(
           "User exists, saving user (in google provider)");
 
-      await Future.value(_baseDB.saveConnectedUsersData(result.user!))
+      await Future.value(_baseDB.saveConnectedUsersData(result.user!,""))
           .then((processedUser) => {
                 Future.delayed(const Duration(seconds: 1), () {
                   EachDaysUtils.showRandomToast();
@@ -42,9 +44,9 @@ class GoogleSignInProvider extends ChangeNotifier {
                                   builder: (context) => HomeScreen(
                                       title: "Le Pacte  ✌🏼👺",
                                       connectedUser: processedUser)))
-                        }else {
-                        EachDaysUtils.verboseIt("UserId is null")
                         }
+                      else
+                        {EachDaysUtils.verboseIt("UserId is null while google signIn")}
                     })
               });
     }

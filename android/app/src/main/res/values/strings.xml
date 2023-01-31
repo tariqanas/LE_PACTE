@@ -1,0 +1,7 @@
+
+<resources>
+<string name="app_name">"lePacte"</string>
+<string name="facebook_app_id">843059853447120</string>
+<string name="fb_login_protocol_scheme">fb843059853447120</string>
+<string name="facebook_client_token">91582a71b7f3ac026bb48daa8d1c8ca6</string>
+</resources>

@@ -1,4 +1,8 @@
+import 'package:eachday/services/FacebookSignInProvider.dart';
+import 'package:eachday/services/emailLogin.dart';
 import 'package:eachday/services/google_sign_in_provider.dart';
+import 'package:eachday/utils/eachdayutils.dart';
+import 'package:eachday/SignUpScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
@@ -43,9 +47,19 @@ class _SignInPageState extends State<SignInPage> {
               buttonItem(
                   "assets/icon/google.svg", "Connectes-toi avec Google", 25,
                   () {
-                final provider =
+                final googleProvider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
-                provider.googleLogin(context);
+                googleProvider.googleLogin(context);
+              }),
+              buttonItem(
+                  "assets/icon/fbk.svg", "Connectes-toi avec Facebook", 25, () {
+                final facebookProvider = FacebookSignInProvider();
+                facebookProvider.signInWithFacebook(context);
+              }),
+              buttonItem("assets/icon/email.svg",
+                  "Connectes-toi avec ton compte le pacte", 25, () {
+                final emailSignIn = EmailSignIn();
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen(isUserSignIn : true)));
               }),
               colorButton("Rejoins la communauté."),
               const SizedBox(
@@ -53,10 +67,30 @@ class _SignInPageState extends State<SignInPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
+                children:  [
+                  InkWell(
+                    child: const Text(
+                      " Sinon, crées un compte lePacte.",
+                      style: TextStyle(
+                        fontWeight: FontWeight.normal,
+                        decoration: TextDecoration.underline,
+                        color: Colors.orangeAccent,
+                        fontSize: 18,
+                      ),
+                    ),
+                    onTap: () {
+                      EachDaysUtils.verboseIt("Redirecting to Sign Up");
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen(isUserSignIn: false)));
+                    },
+                  ),
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.center,
                 children: const [
                   InkWell(
                     child: Text(
-                      " Tu as un compte Google non 👹?",
+                      " Fais ton choix ! 👹.",
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
@@ -162,9 +196,9 @@ class _SignInPageState extends State<SignInPage> {
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(50),
           gradient: const LinearGradient(colors: [
-            Color.fromARGB(255, 255, 13, 0),
-            Color.fromARGB(255, 201, 73, 26),
-            Color(0xFFFD746C),
+            Color.fromARGB(255, 0, 0, 0),
+            Color.fromARGB(255, 255, 0, 0),
+            Color.fromARGB(255, 0, 0, 0),
           ]),
         ),
         child: Center(

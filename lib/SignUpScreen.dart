@@ -4,12 +4,13 @@ import 'package:eachday/utils/eachdayutils.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:getwidget/components/alert/gf_alert.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
 
 class SignUpScreen extends StatefulWidget {
-  const SignUpScreen({Key? key}) : super(key: key);
+  const SignUpScreen({Key? key, required this.isUserSignIn}) : super(key: key);
+
+  final bool isUserSignIn;
 
   @override
   State<SignUpScreen> createState() => _SignUpScreenState();
@@ -35,7 +36,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                 child: ListView(children: [
                   SizedBox(
                     child: Image.asset("assets/splash/each_day_splash.png"),
-                    height: 300,
+                    height: 200,
                   ),
                   GFTextField(
                     autocorrect: false,
@@ -76,66 +77,83 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     style: const TextStyle(color: Colors.white),
                     color: Colors.white,
                   ),
-                  GFTextField(
-                    keyboardAppearance: Brightness.light,
-                    obscureText: true,
-                    autofocus: false,
-                    expands: false,
-                    maxLength: 50,
-                    maxLines: 1,
-                    showCursor: true,
-                    controller: passwordConfirmationController,
-                    decoration: const InputDecoration(
-                        labelText: 'confirmes ton  mot de passe ! ',
-                        prefixIcon: Icon(Icons.lock),
-                        labelStyle: TextStyle(color: Colors.white),
-                        errorMaxLines: 1,
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 117, 15, 15)),
-                    initialValue: "Renseigne ton pacte passe !",
-                    style: const TextStyle(color: Colors.white),
-                    color: Colors.white,
-                  ),
-                  GFTextField(
-                    keyboardAppearance: Brightness.light,
-                    autocorrect: true,
-                    autofocus: false,
-                    maxLength: 10,
-                    maxLines: 1,
-                    expands: false,
-                    showCursor: true,
-                    controller: userNameController,
-                    decoration: const InputDecoration(
-                        labelText: 'Comment je t\'appellerais ?',
-                        prefixIcon: Icon(Icons.spoke),
-                        labelStyle: TextStyle(color: Colors.white),
-                        errorMaxLines: 1,
-                        filled: true,
-                        fillColor: Color.fromARGB(255, 117, 15, 15)),
-                    style: const TextStyle(color: Colors.white),
-                    initialValue: "Disciple",
-                    color: Colors.white,
-                  ),
-                  buttonItem(
-                      "assets/icon/demon.svg",
-                      passwordController.text ==
-                              passwordConfirmationController.text
-                          ? "Crées un nouveau compte"
-                          : "Tes mots de passes sont différents ! ",
-                      25, () {
-                    final emailSignIn = EmailSignIn();
-                    if (passwordConfirmationController.text !=
-                        passwordController.text) {
-                      EachDaysUtils.showSpecificToast(
-                          "Je t'ai dis que tes mots de passes étaient différents ");
-                    } else {
-                      emailSignIn.SignUpWithaNewEmailAndPassword(
-                          context,
-                          emailController.text,
-                          passwordController.text,
-                          userNameController.text);
-                    }
-                  }),
+                  if (!widget.isUserSignIn)
+                    GFTextField(
+                      keyboardAppearance: Brightness.light,
+                      obscureText: true,
+                      autofocus: false,
+                      expands: false,
+                      maxLength: 50,
+                      maxLines: 1,
+                      showCursor: true,
+                      controller: passwordConfirmationController,
+                      decoration: const InputDecoration(
+                          labelText: 'confirmes ton  mot de passe ! ',
+                          prefixIcon: Icon(Icons.lock),
+                          labelStyle: TextStyle(color: Colors.white),
+                          errorMaxLines: 1,
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 117, 15, 15)),
+                      initialValue: "Renseigne ton pacte passe !",
+                      style: const TextStyle(color: Colors.white),
+                      color: Colors.white,
+                    ),
+                  if (!widget.isUserSignIn)
+                    GFTextField(
+                      keyboardAppearance: Brightness.light,
+                      autocorrect: true,
+                      autofocus: false,
+                      maxLength: 10,
+                      maxLines: 1,
+                      expands: false,
+                      showCursor: true,
+                      controller: userNameController,
+                      decoration: const InputDecoration(
+                          labelText: 'Comment je t\'appellerais ?',
+                          prefixIcon: Icon(Icons.spoke),
+                          labelStyle: TextStyle(color: Colors.white),
+                          errorMaxLines: 1,
+                          filled: true,
+                          fillColor: Color.fromARGB(255, 117, 15, 15)),
+                      style: const TextStyle(color: Colors.white),
+                      initialValue: "Disciple",
+                      color: Colors.white,
+                    ),
+                  if (!widget.isUserSignIn)
+                    buttonItem(
+                        "assets/icon/demon.svg",
+                        passwordController.text ==
+                                passwordConfirmationController.text
+                            ? "Crées un nouveau compte"
+                            : "Tes mots de passes sont différents ! ",
+                        25, () {
+                      final emailSignIn = EmailSignIn();
+                      if (passwordConfirmationController.text !=
+                          passwordController.text) {
+                        SnackBar snackBar = EachDaysUtils.ShowSnackBar(
+                            "Je t'ai dis que tes mots de passes étaient différents. 😑  ");
+                        ScaffoldMessenger.of(context).showSnackBar(snackBar);
+                      } else {
+                        emailSignIn.SignUpWithaNewEmailAndPassword(
+                            context,
+                            emailController.text,
+                            passwordController.text,
+                            userNameController.text);
+                      }
+                    }),
+                  if (widget.isUserSignIn)
+                    buttonItem("assets/icon/demon.svg", "À toi de jouer.", 25,
+                        () {
+                      final emailSignIn = EmailSignIn();
+                      if (emailController.text == "" ||
+                          passwordController.text == "") {
+                        EachDaysUtils.showSpecificToast(
+                            "Renseignes tes identifiants ! ");
+                      } else {
+                        emailSignIn.loginWithYourEmail(context,
+                            emailController.text, passwordController.text);
+                      }
+                    }),
                   GFButton(
                     onPressed: () => {
                       Navigator.pushReplacement(

@@ -31,7 +31,7 @@ class GoogleSignInProvider extends ChangeNotifier {
       EachDaysUtils.verboseIt(
           "User exists, saving user (in google provider)");
 
-      await Future.value(_baseDB.saveConnectedUsersData(result.user!))
+      await Future.value(_baseDB.saveConnectedUsersData(result.user!,""))
           .then((processedUser) => {
                 Future.delayed(const Duration(seconds: 1), () {
                   EachDaysUtils.showRandomToast();
@@ -46,7 +46,7 @@ class GoogleSignInProvider extends ChangeNotifier {
                                       connectedUser: processedUser)))
                         }
                       else
-                        {EachDaysUtils.verboseIt("UserId is null")}
+                        {EachDaysUtils.verboseIt("UserId is null while google signIn")}
                     })
               });
     }

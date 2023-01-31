@@ -119,7 +119,7 @@ class EachDaysUtils {
     if (snapshot.value != null) {
       final data = snapshot.value as Map;
       pacteUser.setId = connectionAttemptingUser.uid;
-      pacteUser.setUsername = connectionAttemptingUser.displayName;
+      pacteUser.setUsername = data['username'] != "" ? data['username'] : connectionAttemptingUser.displayName;
       pacteUser.setCreationTime = DateTime.parse(data['creationTime']);
       pacteUser.setPreviousChallenge = data['previousChallenge'];
       pacteUser.currentChallenge =
@@ -128,7 +128,7 @@ class EachDaysUtils {
       pacteUser.lastSignInTime = DateTime.parse(data['lastSignInTime']);
       pacteUser.dateOfLastRefusedChallenge =
           DateTime.parse(data['dateOfLastRefusedChallenge']);
-      pacteUser.profilePicture = connectionAttemptingUser.photoURL!;
+      pacteUser.profilePicture = data['profilePicture'] != "" ? data['profilePicture'] : connectionAttemptingUser.photoURL!;
       pacteUser.howManyTimesUserRefused = data['howManyTimesUserRefused'];
       pacteUser.role = data['role'];
       pacteUser.streak = data['streak'] as int;
@@ -152,5 +152,15 @@ class EachDaysUtils {
     await FirebaseAuth.instance.signOut();
     Navigator.pushReplacement(
         context, MaterialPageRoute(builder: (context) => const SignInPage()));
+  }
+
+   static  SnackBar ShowSnackBar(String message) {
+     SnackBar snackBar = SnackBar(
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: const  Color.fromARGB(255, 117, 15, 15),
+        content:  Text(message,
+            style: const TextStyle(color: Colors.white)));
+    return snackBar;
   }
 }

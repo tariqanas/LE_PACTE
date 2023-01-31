@@ -59,7 +59,7 @@ class _SignInPageState extends State<SignInPage> {
               buttonItem("assets/icon/email.svg",
                   "Connectes-toi avec ton compte le pacte", 25, () {
                 final emailSignIn = EmailSignIn();
-                emailSignIn.loginWithYourEmail(context, "email", "password");
+                 Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen(isUserSignIn : true)));
               }),
               colorButton("Rejoins la communauté."),
               const SizedBox(
@@ -80,7 +80,7 @@ class _SignInPageState extends State<SignInPage> {
                     ),
                     onTap: () {
                       EachDaysUtils.verboseIt("Redirecting to Sign Up");
-                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen()));
+                      Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen(isUserSignIn: false)));
                     },
                   ),
                 ],

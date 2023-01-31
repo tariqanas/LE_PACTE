@@ -26,7 +26,7 @@ class FacebookSignInProvider extends ChangeNotifier {
                EachDaysUtils.verboseIt(
           "User exists, saving user (in Facebook provider)");
 
-      await Future.value(_baseDB.saveConnectedUsersData(credentials.user!))
+      await Future.value(_baseDB.saveConnectedUsersData(credentials.user!,""))
           .then((processedUser) => {
                 Future.delayed(const Duration(seconds: 1), () {
                   EachDaysUtils.showRandomToast();
@@ -41,7 +41,7 @@ class FacebookSignInProvider extends ChangeNotifier {
                                       connectedUser: processedUser)))
                         }
                       else
-                        {EachDaysUtils.verboseIt("UserId is null")}
+                        {EachDaysUtils.verboseIt("UserId is null while facebook sign in")}
                     })
               });
           }

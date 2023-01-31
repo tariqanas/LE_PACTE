@@ -15,7 +15,7 @@ class handleFireBaseDB {
       FirebaseDatabase.instance.ref();
 
   Future<lePacteUser> saveConnectedUsersData(
-      User connectionAttemptingUser) async {
+      User connectionAttemptingUser, String emailUserName) async {
     lePacteUser maquetteUser = lePacteUser.withoutParams();
     lePacteUser pacteUser = await getLePacteUserData(connectionAttemptingUser);
 
@@ -26,11 +26,11 @@ class handleFireBaseDB {
           .child(connectionAttemptingUser.uid)
           .set({
             'id': connectionAttemptingUser.uid,
-            'username': connectionAttemptingUser.displayName,
+            'username': emailUserName !="" ? emailUserName : connectionAttemptingUser.displayName,
             'previousChallenge': maquetteUser.previousChallenge,
             'currentChallenge': maquetteUser.currentChallenge,
             'urlOfPictureTakenToday': maquetteUser.urlOfPictureTakenToday,
-            'profilePicture': connectionAttemptingUser.photoURL,
+            'profilePicture': connectionAttemptingUser.photoURL ?? "assets/icon/demon.svg" ,
             'creationTime': maquetteUser.creationTime.toString(),
             'lastSignInTime': maquetteUser.creationTime.toString(),
             'dateOfLastRefusedChallenge':
@@ -52,7 +52,8 @@ class handleFireBaseDB {
                 EachDaysUtils.verboseIt("User" +
                     connectionAttemptingUser.uid +
                     " added to database"),
-                pacteUser.id = connectionAttemptingUser.uid
+                pacteUser.id = connectionAttemptingUser.uid,
+                pacteUser.username = emailUserName !="" ? emailUserName : connectionAttemptingUser.displayName!,
               })
           .catchError((error) {
             EachDaysUtils.debugIt("Error saving user" + error.toString());
@@ -158,14 +159,14 @@ class handleFireBaseDB {
   List<dynamic> getTopTenUsersByScoring() {
     List<dynamic> tenFirstUsers = [];
 
-      realTimeDatabaseReference
+    realTimeDatabaseReference
         .orderByChild("users")
         .limitToLast(10)
         .onChildAdded
         .forEach((element) {
       for (var item in (element.snapshot.value as Map).values) {
         tenFirstUsers.add({
-          "title": item['username'] +" : " + item['streak'].toString(),
+          "title": item['username'] + " : " + item['streak'].toString(),
           "profilePicture": item['profilePicture']
         });
       }
@@ -174,3 +175,5 @@ class handleFireBaseDB {
     return tenFirstUsers;
   }
 }
+
+// FIX Display Name => MapGoogleUser

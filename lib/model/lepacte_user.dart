@@ -21,6 +21,7 @@ class lePacteUser {
   String refusedChallengeToday = "false";
   String userBlocked = "false";
   String didUserGivePermissionForPicturing = "false";
+  String didUserCreateAnewEmail = "false";
 
   lePacteUser.withoutParams();
 

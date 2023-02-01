@@ -341,7 +341,7 @@ Widget _buildPopupDialog(BuildContext context, lePacteUser connectedUser) {
           return GFListTile(
               titleText: _CameraPageState.topTenUsers[index]['title'],
               avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture'], height: 55,),
-              icon: const Icon(Icons.favorite, color: Colors.red));
+              icon: const Icon(Icons.sports_score, color: Colors.red));
         }),
   );
 }

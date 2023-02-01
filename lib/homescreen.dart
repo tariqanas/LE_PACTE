@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
+import 'package:eachday/signInScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -14,6 +15,7 @@ import 'package:eachday/utils/eachdayutils.dart';
 
 import 'services/handleFireBaseDB.dart';
 import 'services/notificationService.dart';
+import 'package:cool_alert/cool_alert.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.connectedUser})
@@ -45,13 +47,10 @@ class _MyHomeScreenState extends State<HomeScreen> {
               EachDaysUtils.playTicTacSound(),
               listenToNotificationStream(),
               _verifyIfCountDownHit10MinutesOrNo(),
-
-                 fetchOrder(widget.connectedUser)
-                    .then((value) => setState(() {
-                          widget.connectedUser.currentChallenge = value;
-                          widget.connectedUser.refusedChallengeToday = "false";
-                        }))
-      
+              fetchOrder(widget.connectedUser).then((value) => setState(() {
+                    widget.connectedUser.currentChallenge = value;
+                    widget.connectedUser.refusedChallengeToday = "false";
+                  }))
             }
         });
   }
@@ -82,7 +81,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
           (connectedUser.didUserSendAPictureToday == "false" &&
               connectedUser.refusedChallengeToday == "false")) {
         return Future.value(connectedUser.currentChallenge);
-      } else if (currentChallengeDate.isBefore(todaysDate) && currentChallengeDate.year != 1970) {
+      } else if (currentChallengeDate.isBefore(todaysDate) &&
+          currentChallengeDate.year != 1970) {
         await const GetTodayOrderService()
             .getTodayOrder()
             .then((newChallenge) => {
@@ -149,28 +149,33 @@ class _MyHomeScreenState extends State<HomeScreen> {
       userName = nullableUserUsername;
     }
 
-//Replace FR by signOut.
     return Scaffold(
       appBar: AppBar(
           centerTitle: true,
           backgroundColor: Colors.black,
-          title: Row(
-            mainAxisAlignment: MainAxisAlignment.start,
-            children: [
-            const Expanded(child: Text("🇫🇷"), flex:0,),
-            Expanded(child: Text(" 🔥 " + widget.connectedUser.username.toUpperCase() + " 🔥   ", textAlign: TextAlign.center,), flex:1),
-            Expanded(flex:0 , child: ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: nullableUserPicture != null? Image.network(
-                  userPicture,
-                  repeat: ImageRepeat.noRepeat,
-                  fit: BoxFit.fitWidth,
-                  height: 55,
-                ): SvgPicture.asset(
-                  userPicture,
-                  fit: BoxFit.fitWidth
-                   ))
-      )]),
+          title: Row(mainAxisAlignment: MainAxisAlignment.start, children: [
+            Expanded(
+                flex: 0,
+                child: ClipRRect(
+                    borderRadius: BorderRadius.circular(100),
+                    child: nullableUserPicture != null
+                        ? Image.network(
+                            userPicture,
+                            repeat: ImageRepeat.noRepeat,
+                            fit: BoxFit.fitWidth,
+                            height: 55,
+                          )
+                        : SvgPicture.asset(userPicture, fit: BoxFit.fitWidth))),
+            Expanded(
+                child: Text(
+                  " 🔥 " +
+                      widget.connectedUser.username.toUpperCase() +
+                      " 🔥   ",
+                  textAlign: TextAlign.center,
+                ),
+                flex: 1),
+            logoutButtona(title: "", onPressed: () => signOut),
+          ]),
           automaticallyImplyLeading: false),
       body: Center(
         child: Column(
@@ -329,5 +334,64 @@ class _MyHomeScreenState extends State<HomeScreen> {
     }
     EachDaysUtils.verboseIt("I'am here 6 ");
     return true;
+  }
+
+  signOut() async {
+    return _buildButton(
+      onTap: () {
+        CoolAlert.show(
+            context: context,
+            type: CoolAlertType.confirm,
+            text: 'T\'es sûr que tu veux partir ? ',
+            confirmBtnText: 'Oui',
+            cancelBtnText: 'Non',
+            confirmBtnColor: Colors.green,
+            onConfirmBtnTap: () async {
+              Navigator.pop(context);
+              await FirebaseAuth.instance.signOut();
+
+              Navigator.pushReplacement(context,
+                  MaterialPageRoute(builder: (context) => const SignInPage()));
+            });
+      },
+      text: 'T\'es sûr ?',
+      color: Colors.lightGreen,
+    );
+  }
+
+  Widget logoutButtona({required String title, VoidCallback? onPressed}) {
+    return Expanded(
+        flex: 0,
+        child: FloatingActionButton(
+          onPressed: onPressed,
+          child:
+              Icon(Icons.power_settings_new_outlined, color: Colors.redAccent),
+          backgroundColor: Colors.black,
+        ));
+  }
+
+  Widget _buildButton(
+      {VoidCallback? onTap, required String text, Color? color}) {
+    EachDaysUtils.verboseIt("Building button");
+    return Padding(
+      padding: const EdgeInsets.only(bottom: 10.0),
+      child: MaterialButton(
+        color: color,
+        minWidth: double.infinity,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(30.0),
+        ),
+        onPressed: onTap,
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: 15.0),
+          child: Text(
+            text,
+            style: const TextStyle(
+              color: Colors.white,
+            ),
+          ),
+        ),
+      ),
+    );
   }
 }

@@ -81,17 +81,6 @@ class EachDaysUtils {
         fontSize: 20.0);
   }
 
-  static takeaPictureFirst() {
-    Fluttertoast.showToast(
-        msg: "Réfléchis 😈! ",
-        toastLength: Toast.LENGTH_LONG,
-        gravity: ToastGravity.BOTTOM,
-        backgroundColor: Color.fromARGB(255, 0, 0, 0),
-        timeInSecForIosWeb: 1,
-        textColor: Color.fromARGB(255, 233, 2, 2),
-        fontSize: 20.0);
-    return null;
-  }
 
   static howMuchTimeLeftAccordingToCurrentTime() {
     var format = DateFormat("HH:mm:ss");
@@ -166,6 +155,16 @@ class EachDaysUtils {
             RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
         behavior: SnackBarBehavior.floating,
         backgroundColor: const Color.fromARGB(255, 117, 15, 15),
+        content: Text(message, style: const TextStyle(color: Colors.white)));
+    return snackBar;
+  }
+
+    static SnackBar ShowBlackSnackBar(String message) {
+    SnackBar snackBar = SnackBar(
+        shape:
+            RoundedRectangleBorder(borderRadius: BorderRadius.circular(10.0)),
+        behavior: SnackBarBehavior.floating,
+        backgroundColor: Colors.black,
         content: Text(message, style: const TextStyle(color: Colors.white)));
     return snackBar;
   }

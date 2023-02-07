@@ -370,8 +370,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
         child: FloatingActionButton(
           onPressed: onPressed,
           child: const Icon(Icons.power_settings_new_outlined,
-              color: Colors.redAccent),
-          backgroundColor: Colors.black,
+              color: Colors.white),
+          backgroundColor: Color.fromARGB(255, 34, 2, 2),
         ));
   }
 

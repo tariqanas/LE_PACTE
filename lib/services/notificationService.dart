@@ -14,8 +14,8 @@ class NotificationService {
     const AndroidInitializationSettings initializationSettingsAndroid =
         AndroidInitializationSettings('each_day_splash');
 
-    final IOSInitializationSettings initializationSettingsIOS =
-        IOSInitializationSettings(
+    final DarwinInitializationSettings initializationSettingsIOS =
+        DarwinInitializationSettings(
             requestSoundPermission: true,
             requestBadgePermission: true,
             requestAlertPermission: true,
@@ -28,18 +28,20 @@ class NotificationService {
     );
 
     await _notifications.initialize(initializationSettings,
-        onSelectNotification: selectNotification);
+        onDidReceiveNotificationResponse : selectNotification,
+        onDidReceiveBackgroundNotificationResponse: selectNotification);
   }
 
   void onDidReceiveLocalNotification(
       int id, String? title, String? body, String? payload) {
-     EachDaysUtils.verboseIt("IIIIID" + id.toString());
+     EachDaysUtils.verboseIt("ID Notification $id");
   }
 
-  void selectNotification(String? payload) {
-    if (payload != null && payload.isNotEmpty) {
-      behaviorSubject.add(payload);
-    }
+  void selectNotification(NotificationResponse notificationResponse) async {
+    if (notificationResponse.payload != null && notificationResponse.payload!.isNotEmpty) {
+      behaviorSubject.add(notificationResponse.payload!);
+    } 
+
   }
 
   Future<NotificationDetails> _notificationDetails() async {
@@ -58,15 +60,15 @@ class NotificationService {
     color: Color(0xff2196f3),
   );
 
-  IOSNotificationDetails iosNotificationDetails = const IOSNotificationDetails(
+  DarwinNotificationDetails iosNotificationDetails = const DarwinNotificationDetails(
       threadIdentifier: "thread1",
-      attachments: <IOSNotificationAttachment>[
-        IOSNotificationAttachment("bigPicture")
+      attachments: <DarwinNotificationAttachment>[
+        DarwinNotificationAttachment("bigPicture")
       ]);
 
   final details = await _notifications.getNotificationAppLaunchDetails();
   if (details != null && details.didNotificationLaunchApp) {
-    behaviorSubject.add(details.payload!);
+    behaviorSubject.add(details.notificationResponse!.payload!);
   }
   NotificationDetails platformChannelSpecifics = NotificationDetails(
       android: androidPlatformChannelSpecifics, iOS: iosNotificationDetails);

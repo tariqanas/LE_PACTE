@@ -4,7 +4,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
-
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
 
 void main() async {
@@ -13,8 +13,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  
-  
+
   SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp])
       .then((value) => runApp(const MyApp()));
 }
@@ -23,17 +22,28 @@ class MyApp extends StatelessWidget {
   const MyApp({Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context)  => ChangeNotifierProvider(
-    create: (context) => GoogleSignInProvider(),
-    child: MaterialApp(
-      title: 'Le Pacte',
-      debugShowCheckedModeBanner: false,
-      theme: ThemeData(
-          scaffoldBackgroundColor: Colors.black,
-          primarySwatch: Colors.red,
-          fontFamily: 'Tapestry'),
-          home: const SignInPage(
-      ),
-    ));
-  }
+  Widget build(BuildContext context) => ChangeNotifierProvider(
+      create: (context) => GoogleSignInProvider(),
+      child: MaterialApp(
+        title: 'Le Pacte',
+        localizationsDelegates:  const [
+          GlobalMaterialLocalizations.delegate,
+          GlobalWidgetsLocalizations.delegate,
+          GlobalCupertinoLocalizations.delegate,
+        ],
+        supportedLocales:  const [
+          Locale('en',''),
+          Locale('es',''),
+          Locale('fr',''),
+          Locale('hi',''),
+        ],
+        locale: const  Locale('en',''),
+        debugShowCheckedModeBanner: false,
+        theme: ThemeData(
+            scaffoldBackgroundColor: Colors.black,
+            primarySwatch: Colors.red,
+            fontFamily: 'Tapestry'),
+        home: const SignInPage(),
+      ));
+}
 //flutter run --no-sound-null-safety

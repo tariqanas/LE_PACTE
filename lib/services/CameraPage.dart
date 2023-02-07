@@ -189,7 +189,7 @@ class _CameraPageState extends State<CameraPage> {
     });
   }
 
-  _sendProofOnPressed() {
+  _sendProofOnPressed(BuildContext context) {
     if (pictureTaken) {
       EachDaysUtils.verboseIt("Sending proof for checking...");
       pictureSent = true;
@@ -201,7 +201,9 @@ class _CameraPageState extends State<CameraPage> {
         widget.connectedUser.didUserSendAPictureToday = "true";
       });
     } else {
-      EachDaysUtils.takeaPictureFirst();
+      SnackBar snackbar =
+          EachDaysUtils.ShowBlackSnackBar("Elle est où la photo, le génie 👹📷 ?");
+      ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
 
@@ -264,7 +266,7 @@ class _CameraPageState extends State<CameraPage> {
                 children: [
                   okSendProofButtonV2(
                       title: "sendProof",
-                      onPressed: () => _sendProofOnPressed()),
+                      onPressed: () => _sendProofOnPressed(context)),
                 ],
               ),
             ),
@@ -328,7 +330,6 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
 }
 
 Widget _buildPopupDialog(BuildContext context, lePacteUser connectedUser) {
-
   return SizedBox(
     height: MediaQuery.of(context).size.height *
         0.7, // Change as per your requirement
@@ -340,7 +341,10 @@ Widget _buildPopupDialog(BuildContext context, lePacteUser connectedUser) {
         itemBuilder: (BuildContext context, int index) {
           return GFListTile(
               titleText: _CameraPageState.topTenUsers[index]['title'],
-              avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture'], height: 55,),
+              avatar: Image.network(
+                _CameraPageState.topTenUsers[index]['profilePicture'],
+                height: 55,
+              ),
               icon: const Icon(Icons.sports_score, color: Colors.red));
         }),
   );

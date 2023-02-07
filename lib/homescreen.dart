@@ -174,7 +174,35 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   textAlign: TextAlign.center,
                 ),
                 flex: 1),
-            logoutButtona(title: "", onPressed: () => signOut),
+            logoutButtona(
+                title: "T'es sur ?",
+                onPressed: () => {
+                      CoolAlert.show(
+                          context: context,
+                          title: "T'es sur ? ",
+                          type: CoolAlertType.confirm,
+                          text: 'Tu veux vraiment partir 👹 ? ',
+                          confirmBtnText: 'Oui',
+                          cancelBtnText: 'Non',
+                          cancelBtnTextStyle: TextStyle(color: Colors.black),
+                          backgroundColor: Color.fromARGB(255, 117, 15, 15),
+                          confirmBtnColor: Color.fromARGB(255, 117, 15, 15),
+                          animType: CoolAlertAnimType.rotate,
+                          onConfirmBtnTap: () async {
+                            Navigator.pop(context);
+                            await Future.delayed(
+                                const Duration(milliseconds: 1000));
+
+                            await CoolAlert.show(
+                                    context: context,
+                                    title: "pfff...",
+                                    type: CoolAlertType.success,
+                                    backgroundColor:
+                                        const Color.fromARGB(255, 117, 15, 15),
+                                    text: "🔥 Au revoir.. ou pas 🔥")
+                                .then((value) => {signOut(context)});
+                          })
+                    }),
           ]),
           automaticallyImplyLeading: false),
       body: Center(
@@ -336,47 +364,23 @@ class _MyHomeScreenState extends State<HomeScreen> {
     return true;
   }
 
-  signOut() async {
-    return _buildButton(
-      onTap: () {
-        CoolAlert.show(
-            context: context,
-            type: CoolAlertType.confirm,
-            text: 'T\'es sûr que tu veux partir ? ',
-            confirmBtnText: 'Oui',
-            cancelBtnText: 'Non',
-            confirmBtnColor: Colors.green,
-            onConfirmBtnTap: () async {
-              Navigator.pop(context);
-              await FirebaseAuth.instance.signOut();
-
-              Navigator.pushReplacement(context,
-                  MaterialPageRoute(builder: (context) => const SignInPage()));
-            });
-      },
-      text: 'T\'es sûr ?',
-      color: Colors.lightGreen,
-    );
-  }
-
   Widget logoutButtona({required String title, VoidCallback? onPressed}) {
     return Expanded(
         flex: 0,
         child: FloatingActionButton(
           onPressed: onPressed,
-          child:
-              Icon(Icons.power_settings_new_outlined, color: Colors.redAccent),
+          child: const Icon(Icons.power_settings_new_outlined,
+              color: Colors.redAccent),
           backgroundColor: Colors.black,
         ));
   }
 
   Widget _buildButton(
       {VoidCallback? onTap, required String text, Color? color}) {
-    EachDaysUtils.verboseIt("Building button");
     return Padding(
       padding: const EdgeInsets.only(bottom: 10.0),
       child: MaterialButton(
-        color: color,
+        color: Colors.white,
         minWidth: double.infinity,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(30.0),
@@ -393,5 +397,14 @@ class _MyHomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  signOut(BuildContext context) {
+    FirebaseAuth.instance.signOut().then((value) => {
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (context) => const SignInPage()),
+          )
+        });
   }
 }

@@ -2,6 +2,7 @@ import 'dart:async';
 import 'dart:ffi';
 import 'dart:io';
 
+import 'package:eachday/globalvars/globalvars.dart';
 import 'package:eachday/model/lepacte_user.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -30,7 +31,7 @@ class handleFireBaseDB {
             'previousChallenge': maquetteUser.previousChallenge,
             'currentChallenge': maquetteUser.currentChallenge,
             'urlOfPictureTakenToday': maquetteUser.urlOfPictureTakenToday,
-            'profilePicture': connectionAttemptingUser.photoURL ?? "assets/icon/demon.svg" ,
+            'profilePicture': connectionAttemptingUser.photoURL ?? GlobalVars.defaultlePacteUserPicture ,
             'creationTime': maquetteUser.creationTime.toString(),
             'lastSignInTime': maquetteUser.creationTime.toString(),
             'dateOfLastRefusedChallenge':
@@ -46,7 +47,8 @@ class handleFireBaseDB {
             'didUserGivePermissionForPicturing':
                 maquetteUser.didUserGivePermissionForPicturing.toString(),
             'dateOfLastSavedChallenge':
-                maquetteUser.dateOfLastSavedChallenge.toString()
+                maquetteUser.dateOfLastSavedChallenge.toString(),
+            'didUserCreateAnewEmail': emailUserName != "" ? "true":"false"
           })
           .then((value) => {
                 EachDaysUtils.verboseIt("User" +

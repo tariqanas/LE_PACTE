@@ -8,5 +8,6 @@ class GlobalVars {
   static bool playerRefused = false;
   static String looserMessage =
       'Null ! Ton score repart de  0. \n à demain, poulle mouillée. 🐔';
-      /*static CounterToZero ;  */
+  static String defaultlePacteUserPicture =
+      "https://firebasestorage.googleapis.com/v0/b/le-pacte.appspot.com/o/defaultUserPicture%2Fdemon.png?alt=media&token=b997a314-7b3e-4316-b744-7c2330931f58";
 }

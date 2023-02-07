@@ -8,6 +8,7 @@ import 'package:eachday/services/handleFireBaseDB.dart';
 import 'package:eachday/utils/eachdayutils.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:getwidget/getwidget.dart';
@@ -287,8 +288,8 @@ class _CameraPageState extends State<CameraPage> {
                           builder: (BuildContext context) {
                             return AlertDialog(
                                 title: const Text('10 Meilleurs démons 👹🏆 '),
-                                content:
-                                    _buildPopupDialog(context, providerUser));
+                                content: _buildPopupDialog(
+                                    context, widget.connectedUser));
                           });
                     },
                   )
@@ -326,8 +327,8 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   );
 }
 
-Widget _buildPopupDialog(BuildContext context, User? connectedUser) {
-  debugPrint(_CameraPageState.topTenUsers.length.toString());
+Widget _buildPopupDialog(BuildContext context, lePacteUser connectedUser) {
+
   return SizedBox(
     height: MediaQuery.of(context).size.height *
         0.7, // Change as per your requirement
@@ -339,8 +340,8 @@ Widget _buildPopupDialog(BuildContext context, User? connectedUser) {
         itemBuilder: (BuildContext context, int index) {
           return GFListTile(
               titleText: _CameraPageState.topTenUsers[index]['title'],
-              avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture']),
-              icon: const Icon(Icons.favorite, color: Colors.red));
+              avatar: Image.network(_CameraPageState.topTenUsers[index]['profilePicture'], height: 55,),
+              icon: const Icon(Icons.sports_score, color: Colors.red));
         }),
   );
 }

@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:provider/provider.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'firebase_options.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -26,18 +27,14 @@ class MyApp extends StatelessWidget {
       create: (context) => GoogleSignInProvider(),
       child: MaterialApp(
         title: 'Le Pacte',
-        localizationsDelegates:  const [
+        localizationsDelegates: const [
           GlobalMaterialLocalizations.delegate,
           GlobalWidgetsLocalizations.delegate,
           GlobalCupertinoLocalizations.delegate,
+          AppLocalizations.delegate
         ],
-        supportedLocales:  const [
-          Locale('en',''),
-          Locale('es',''),
-          Locale('fr',''),
-          Locale('hi',''),
-        ],
-        locale: const  Locale('en',''),
+        supportedLocales: const [Locale('en', ''), Locale('fr', '')],
+        locale: const Locale('en', ''),
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.black,

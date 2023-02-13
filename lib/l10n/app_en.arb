@@ -1,0 +1,37 @@
+{
+    "lePacte": "The DEAL",
+    "@lePacte": {
+        "description": "The Deal Title"
+    },
+
+    "connectWithGoogle": "Connect with Google",
+    "@connectWithGoogle": {
+        "description": "Connect using google"
+    },
+
+    "connectWithFacebook": "Connect with Facebook",
+    "@connectWithFacebook": {
+        "description": "Connect using Facebook"
+    },
+
+    "connectWithLePacteAccount": "Connect using The Deal Account",
+    "@connectWithLePacteAccount" : {
+        "description": "Connect using the deal account"
+    },
+
+    "joinTheCommunity": "Join the community",
+    "@joinTheCommunity" : {
+        "description": "Join the community"
+    },
+
+    "createAnAccount": "Else, Create your account",
+    "@createAnAccount": {
+        "description" :  "Invite to create an account"
+    },
+
+    "yourChoice": "Make a choice 👹",
+    "@yourChoice" : {
+        "description" : "Make a choice"
+    }
+
+}

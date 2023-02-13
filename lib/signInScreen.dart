@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:firebase_auth/firebase_auth.dart' as firebase_auth;
 import 'package:provider/provider.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({Key? key}) : super(key: key);
@@ -30,7 +31,7 @@ class _SignInPageState extends State<SignInPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               SizedBox(
-                child: Image.asset("assets/splash/each_day_splash.png"),
+                child:  Image.asset("assets/splash/each_day_splash.png"),
                 height: 300,
               ),
               const Text(
@@ -45,23 +46,23 @@ class _SignInPageState extends State<SignInPage> {
                 height: 20,
               ),
               buttonItem(
-                  "assets/icon/google.svg", "Connectes-toi avec Google", 25,
+                  "assets/icon/google.svg", AppLocalizations.of(context).connectWithGoogle, 25,
                   () {
                 final googleProvider =
                     Provider.of<GoogleSignInProvider>(context, listen: false);
                 googleProvider.googleLogin(context);
               }),
               buttonItem(
-                  "assets/icon/fbk.svg", "Connectes-toi avec Facebook", 25, () {
+                  "assets/icon/fbk.svg",  AppLocalizations.of(context).connectWithFacebook, 25, () {
                 final facebookProvider = FacebookSignInProvider();
                 facebookProvider.signInWithFacebook(context);
               }),
               buttonItem("assets/icon/email.svg",
-                  "Connectes-toi avec ton compte le pacte", 25, () {
+                 AppLocalizations.of(context).connectWithLePacteAccount, 25, () {
                 final emailSignIn = EmailSignIn();
                  Navigator.push(context, MaterialPageRoute(builder: (context) => const SignUpScreen(isUserSignIn : true)));
               }),
-              colorButton("Rejoins la communauté."),
+              colorButton( AppLocalizations.of(context).joinTheCommunity),
               const SizedBox(
                 height: 15,
               ),
@@ -69,9 +70,9 @@ class _SignInPageState extends State<SignInPage> {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children:  [
                   InkWell(
-                    child: const Text(
-                      " Sinon, crées un compte lePacte.",
-                      style: TextStyle(
+                    child: Text(
+                      AppLocalizations.of(context).createAnAccount,
+                      style: const TextStyle(
                         fontWeight: FontWeight.normal,
                         decoration: TextDecoration.underline,
                         color: Colors.orangeAccent,
@@ -87,11 +88,11 @@ class _SignInPageState extends State<SignInPage> {
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
-                children: const [
+                children:  [
                   InkWell(
                     child: Text(
-                      " Fais ton choix ! 👹.",
-                      style: TextStyle(
+                      AppLocalizations.of(context).yourChoice,
+                      style: const TextStyle(
                         fontWeight: FontWeight.bold,
                         color: Colors.white,
                         fontSize: 18,

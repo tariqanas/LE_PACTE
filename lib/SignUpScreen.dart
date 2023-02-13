@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:getwidget/components/button/gf_button.dart';
 import 'package:getwidget/components/text_field/gf_text_field.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class SignUpScreen extends StatefulWidget {
   const SignUpScreen({Key? key, required this.isUserSignIn}) : super(key: key);
@@ -45,8 +46,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     maxLines: 1,
                     controller: emailController,
                     keyboardAppearance: Brightness.dark,
-                    decoration: const InputDecoration(
-                        labelText: 'Donnes moi un email ! ',
+                    decoration:  InputDecoration(
+                        labelText: AppLocalizations.of(context).giveMeAnEmail,
                         prefixIcon: Icon(Icons.email),
                         labelStyle: TextStyle(color: Colors.white),
                         // hintText: "Enter your email",
@@ -66,14 +67,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     maxLines: 1,
                     showCursor: true,
                     controller: passwordController,
-                    decoration: const InputDecoration(
-                        labelText: 'Donnes moi un mot de passe ! ',
+                    decoration:  InputDecoration(
+                        labelText: AppLocalizations.of(context).giveMeAPassword,
                         prefixIcon: Icon(Icons.lock),
                         labelStyle: TextStyle(color: Colors.white),
                         errorMaxLines: 1,
                         filled: true,
                         fillColor: Color.fromARGB(255, 117, 15, 15)),
-                    fieldinitialValue: "Renseigne ton pacte passe !",
+                    fieldinitialValue: AppLocalizations.of(context).fillYourPactePass,
                     style: const TextStyle(color: Colors.white),
                     color: Colors.white,
                   ),
@@ -87,14 +88,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       maxLines: 1,
                       showCursor: true,
                       controller: passwordConfirmationController,
-                      decoration: const InputDecoration(
-                          labelText: 'confirmes ton  mot de passe ! ',
+                      decoration:  InputDecoration(
+                          labelText: AppLocalizations.of(context).confirmYourPassword,
                           prefixIcon: Icon(Icons.lock),
                           labelStyle: TextStyle(color: Colors.white),
                           errorMaxLines: 1,
                           filled: true,
                           fillColor: Color.fromARGB(255, 117, 15, 15)),
-                      fieldinitialValue: "Renseigne ton pacte passe !",
+                      fieldinitialValue: AppLocalizations.of(context).fillYourPactePass,
                       style: const TextStyle(color: Colors.white),
                       color: Colors.white,
                     ),
@@ -108,15 +109,15 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       expands: false,
                       showCursor: true,
                       controller: userNameController,
-                      decoration: const InputDecoration(
-                          labelText: 'Comment je t\'appellerais ?',
+                      decoration:  InputDecoration(
+                          labelText: AppLocalizations.of(context).yourName,
                           prefixIcon: Icon(Icons.spoke),
                           labelStyle: TextStyle(color: Colors.white),
                           errorMaxLines: 1,
                           filled: true,
                           fillColor: Color.fromARGB(255, 117, 15, 15)),
                       style: const TextStyle(color: Colors.white),
-                      fieldinitialValue: "Disciple" ,
+                      fieldinitialValue: AppLocalizations.of(context).disciple ,
                       color: Colors.white,
                     ),
                   if (!widget.isUserSignIn)
@@ -124,14 +125,14 @@ class _SignUpScreenState extends State<SignUpScreen> {
                         "assets/icon/demon.svg",
                         passwordController.text ==
                                 passwordConfirmationController.text
-                            ? "Crées un nouveau compte"
-                            : "Tes mots de passes sont différents ! ",
+                            ? AppLocalizations.of(context).createNewAccount
+                            : AppLocalizations.of(context).differentPassword,
                         25, () {
                       final emailSignIn = EmailSignIn();
                       if (passwordConfirmationController.text !=
                           passwordController.text) {
                         SnackBar snackBar = EachDaysUtils.ShowSnackBar(
-                            "Je t'ai dis que tes mots de passes étaient différents. 😑  ");
+                           AppLocalizations.of(context).nervousDifferentMessage);
                         ScaffoldMessenger.of(context).showSnackBar(snackBar);
                       } else {
                         emailSignIn.SignUpWithaNewEmailAndPassword(
@@ -142,13 +143,13 @@ class _SignUpScreenState extends State<SignUpScreen> {
                       }
                     }),
                   if (widget.isUserSignIn)
-                    buttonItem("assets/icon/demon.svg", "À toi de jouer.", 25,
+                    buttonItem("assets/icon/demon.svg", AppLocalizations.of(context).yourTurnNow, 25,
                         () {
                       final emailSignIn = EmailSignIn();
                       if (emailController.text == "" ||
                           passwordController.text == "") {
                         EachDaysUtils.showSpecificToast(
-                            "Renseignes tes identifiants ! ");
+                            AppLocalizations.of(context).enterYourCredentials);
                       } else {
                         emailSignIn.loginWithYourEmail(context,
                             emailController.text, passwordController.text);
@@ -164,7 +165,7 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     hoverColor: Colors.orange,
                     color: Colors.black,
                     icon: const Icon(Icons.arrow_back, color: Colors.orange),
-                    text: "Je préfère me connecter autrement.",
+                    text: AppLocalizations.of(context).preferToConnectAnotherWay,
                   ),
                 ]))));
   }

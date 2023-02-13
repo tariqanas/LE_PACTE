@@ -32,6 +32,67 @@
     "yourChoice": "Make a choice 👹",
     "@yourChoice" : {
         "description" : "Make a choice"
+    },
+
+    "giveMeAnEmail": "Give me an email ! ",
+    "@giveMeAnEmail" : {
+        "description" : "Give me an email"
+    },
+
+     "giveMeAPassword": "Give me a Password ! ",
+    "@giveMeAPassword" : {
+        "description" : "Give me a Password"
+    },
+
+    "fillYourPactePass" : "Fill your password ! ",
+    "@fillYourPactePass" : {
+        "description" : "Fil your password"
+    },
+
+  "confirmYourPassword": "Confirm your password ! ",
+    "@confirmYourPassword" : {
+        "description" : "Confirm your password"
+    },
+    
+    "yourName" : "What is going to be your name ? ",
+    "@yourName" : {
+        "description": "Your name ? "
+    },
+
+    "disciple" : "Disciple",
+    "@disciple" : {
+        "description" : "Disciple"
+    },
+
+    "createNewAccount" : "Create a new account",
+    "@createNewAccount": {
+        "description": " create new account"
+    },
+
+    "differentPassword": "Your passwords are different ! ",
+    "@differentPassword"  : {
+        "description": "differentPassword"
+    },
+
+    "nervousDifferentMessage": "I told you that your password were different. 😑 ",
+    "@nervousDifferentMessage": {
+        "description": "nervous different passwords"
+    },
+    
+    "yourTurnNow": " It's up to you now",
+    "@yourTurnNow" : {
+        "description": " your turn now"
+    },
+
+    "enterYourCredentials": "Enter your credentials !",
+    "@enterYourCredentials" : {
+        "description": " Enter your credentials !"
+    },
+
+ "preferToConnectAnotherWay": "I prefer to connect another way",
+    "@preferToConnectAnotherWay" : {
+        "description": "I prefer to connect another way."
     }
+
 
 }

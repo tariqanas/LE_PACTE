@@ -401,6 +401,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   signOut(BuildContext context) {
     FirebaseAuth.instance.signOut().then((value) => {
+      EachDaysUtils.audioPlayer.dispose(),
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const SignInPage()),

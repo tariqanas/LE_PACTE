@@ -33,8 +33,7 @@ class MyApp extends StatelessWidget {
           GlobalCupertinoLocalizations.delegate,
           AppLocalizations.delegate
         ],
-        supportedLocales: const [Locale('en', ''), Locale('fr', '')],
-        locale: const Locale('en', ''),
+        supportedLocales: const [Locale('en', ''), Locale('fr', ''), Locale('es','')],
         debugShowCheckedModeBanner: false,
         theme: ThemeData(
             scaffoldBackgroundColor: Colors.black,

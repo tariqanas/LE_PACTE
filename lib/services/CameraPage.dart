@@ -13,6 +13,7 @@ import 'package:image_picker/image_picker.dart';
 import 'package:animated_button/animated_button.dart';
 import 'package:getwidget/getwidget.dart';
 import 'handleFireBaseDB.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class CameraPage extends StatefulWidget {
   final List<CameraDescription>? cameras;
@@ -52,26 +53,26 @@ class _CameraPageState extends State<CameraPage> {
   Widget notNowButtonV2({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
-        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
-                widget.connectedUser.refusedChallengeToday == "true")
-            ? const Text(
-                'Le diable vérifieras..👹⏱️ ',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500),
-              )
-            : const Text('Pas tout de suite..🐔',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500)),
         onPressed: onPressed,
         enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
             widget.connectedUser.refusedChallengeToday == "false"),
         shadowDegree: ShadowDegree.dark,
         color: const Color.fromARGB(255, 117, 15, 15),
         height: 50,
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
+            ?  Text(
+                AppLocalizations.of(context).theDevilWillVerify,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500),
+              )
+            :  Text( AppLocalizations.of(context).notNowChallenge,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -79,18 +80,6 @@ class _CameraPageState extends State<CameraPage> {
   Widget okSendProofButtonV2({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
-        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
-                widget.connectedUser.refusedChallengeToday == "true")
-            ? const Text('En attente de validation ⏱️',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.black,
-                    fontWeight: FontWeight.w500))
-            : const Text('Envoyer la preuve au diable ! 👹 ',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500)),
         enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
             widget.connectedUser.refusedChallengeToday == "false"),
         onPressed: onPressed,
@@ -98,6 +87,18 @@ class _CameraPageState extends State<CameraPage> {
         color: const Color.fromARGB(255, 117, 15, 15),
         height: 50,
         width: MediaQuery.of(context).size.width,
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
+            ?  Text(  AppLocalizations.of(context).waitingForValidation,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.black,
+                    fontWeight: FontWeight.w500))
+            :  Text(AppLocalizations.of(context).sendProofToTheDevil,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -105,18 +106,6 @@ class _CameraPageState extends State<CameraPage> {
   Widget okTakePictureV2({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
-        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
-                widget.connectedUser.refusedChallengeToday == "true")
-            ? const Text('Photo envoyée  ! 👹✔️',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500))
-            : const Text('Prendre une photo 👹📷 ',
-                style: TextStyle(
-                    fontStyle: FontStyle.italic,
-                    color: Colors.white,
-                    fontWeight: FontWeight.w500)),
         enabled: (widget.connectedUser.didUserSendAPictureToday == "false" &&
             widget.connectedUser.refusedChallengeToday == "false"),
         onPressed: () {
@@ -128,6 +117,18 @@ class _CameraPageState extends State<CameraPage> {
         shadowDegree: ShadowDegree.dark,
         color: const Color.fromARGB(255, 117, 15, 15),
         height: 50,
+        child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
+                widget.connectedUser.refusedChallengeToday == "true")
+            ?  Text(AppLocalizations.of(context).pictureSent,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500))
+            :  Text(AppLocalizations.of(context).takeApicture,
+                style: const TextStyle(
+                    fontStyle: FontStyle.italic,
+                    color: Colors.white,
+                    fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -135,18 +136,18 @@ class _CameraPageState extends State<CameraPage> {
   Widget seeHowManyPeopleSeenItButtonV2({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
-        child: const Text(
-          'Statistique des autres ! ⚔️ ',
-          style: TextStyle(
-              fontStyle: FontStyle.italic,
-              color: Colors.white,
-              fontWeight: FontWeight.w500),
-        ),
         onPressed: onPressed,
         shadowDegree: ShadowDegree.dark,
         color: const Color.fromARGB(255, 117, 15, 15),
         height: 50,
         width: MediaQuery.of(context).size.width,
+        child:  Text(
+          AppLocalizations.of(context).othersStatistics,
+          style: const TextStyle(
+              fontStyle: FontStyle.italic,
+              color: Colors.white,
+              fontWeight: FontWeight.w500),
+        ),
       ),
     );
   }
@@ -154,15 +155,15 @@ class _CameraPageState extends State<CameraPage> {
   Widget seeWorldDashboardButtonV2({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
-        child: const Text('10 Meilleurs challengers du monde ! 🏆 ',
-            style: TextStyle(
-                fontStyle: FontStyle.italic,
-                color: Colors.white,
-                fontWeight: FontWeight.w500)),
         onPressed: onPressed,
         shadowDegree: ShadowDegree.dark,
         color: const Color.fromARGB(255, 117, 15, 15),
         width: MediaQuery.of(context).size.width,
+        child:  Text(AppLocalizations.of(context).tenBestDisciple,
+            style: const TextStyle(
+                fontStyle: FontStyle.italic,
+                color: Colors.white,
+                fontWeight: FontWeight.w500)),
       ),
     );
   }
@@ -174,7 +175,7 @@ class _CameraPageState extends State<CameraPage> {
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen(
-                    title: 'You accepted..Tic..Tac ⏱️',
+                    title: AppLocalizations.of(context).youAcceptedTicTac,
                     connectedUser: widget.connectedUser,
                   )));
     });
@@ -202,7 +203,7 @@ class _CameraPageState extends State<CameraPage> {
       });
     } else {
       SnackBar snackbar =
-          EachDaysUtils.ShowBlackSnackBar("Elle est où la photo, le génie 👹📷 ?");
+          EachDaysUtils.ShowBlackSnackBar(AppLocalizations.of(context).whereIsThePictureGenius);
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
@@ -214,7 +215,7 @@ class _CameraPageState extends State<CameraPage> {
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen(
-                    title: 'You accepted..Tic..Tac ⏱️',
+                    title: AppLocalizations.of(context).youAcceptedTicTac,
                     connectedUser: widget.connectedUser,
                   )));
     });
@@ -228,7 +229,7 @@ class _CameraPageState extends State<CameraPage> {
           context,
           MaterialPageRoute(
               builder: (context) => HomeScreen(
-                    title: 'You accepted..Tic..Tac ⏱️',
+                    title: AppLocalizations.of(context).youAcceptedTicTac,
                     connectedUser: widget.connectedUser,
                   )));
     });
@@ -240,7 +241,7 @@ class _CameraPageState extends State<CameraPage> {
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
           centerTitle: true,
-          title: const Text('Prouves-le : 👹🧾 '),
+          title: Text(AppLocalizations.of(context).proveIt),
           automaticallyImplyLeading: false,
           backgroundColor: Colors.black,
         ),
@@ -256,16 +257,16 @@ class _CameraPageState extends State<CameraPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 okTakePictureV2(
-                    title: "proof", onPressed: () => _takePictureOnPressed()),
+                    title:AppLocalizations.of(context).proofButton, onPressed: () => _takePictureOnPressed()),
                 notNowButtonV2(
-                    title: "notNow", onPressed: () => _notNowOnpressed()),
+                    title: AppLocalizations.of(context).notNowChallenge, onPressed: () => _notNowOnpressed()),
               ],
             )),
             SizedBox(
               child: Row(
                 children: [
                   okSendProofButtonV2(
-                      title: "sendProof",
+                      title:AppLocalizations.of(context).sendProofToTheDevil,
                       onPressed: () => _sendProofOnPressed(context)),
                 ],
               ),
@@ -274,8 +275,8 @@ class _CameraPageState extends State<CameraPage> {
               child: Row(
                 children: [
                   seeHowManyPeopleSeenItButtonV2(
-                      title: "proof",
-                      onPressed: () => EachDaysUtils.showEndingToast(false)),
+                      title: AppLocalizations.of(context).proofButton,
+                      onPressed: () => EachDaysUtils.showEndingToast(false,context)),
                 ],
               ),
             ),
@@ -283,13 +284,13 @@ class _CameraPageState extends State<CameraPage> {
               child: Row(
                 children: [
                   seeWorldDashboardButtonV2(
-                    title: "proof",
+                    title: AppLocalizations.of(context).proofButton,
                     onPressed: () {
                       showDialog(
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                                title: const Text('10 Meilleurs démons 👹🏆 '),
+                                title:  Text(AppLocalizations.of(context).tenBestDisciple),
                                 content: _buildPopupDialog(
                                     context, widget.connectedUser));
                           });
@@ -313,9 +314,9 @@ Widget processCameraPicture(BuildContext context, XFile? pictureFile) {
   if (pictureFile == null) {
     return Container(
       margin: const EdgeInsets.only(top: 20.0),
-      child: Image.asset("assets/splash/each_day_splash.png"),
       height: MediaQuery.of(context).size.height / 2,
       width: MediaQuery.of(context).size.width,
+      child: Image.asset("assets/splash/each_day_splash.png"),
     );
   }
   return Container(

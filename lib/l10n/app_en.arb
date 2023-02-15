@@ -92,7 +92,151 @@
  "preferToConnectAnotherWay": "I prefer to connect another way",
     "@preferToConnectAnotherWay" : {
         "description": "I prefer to connect another way."
+    },
+
+    "weakness": "You are weak ! 👎",
+    "@weakness" : {
+        "description": "Weakness when he refuses."
+    },
+
+    "acceptChallenge": "Accept 👑",
+    "@acceptChallenge": {
+        "description": "Accept challenge"
+    },
+
+    "refuseChallenge": "Refuse 🏳️",
+    "@refuseChallenge": {
+        "description": "Refuse challenge"
+    },
+
+    "logoutAreYouSure": "Are you sure ?",
+    "@logoutAreYouSure":{
+        "description": "logout are you sure message"
+    },
+
+    "doYouReallyWantToGo": "Do you really want to go 👹 ? ",
+    "@doYouReallyWantToGo": {
+        "description": "do You really want to go message"
+    },
+
+    "byeOrNot" : "🔥 See you .. or never 🔥",
+    "@byeOrNot":{
+        "description": "See you or never"
+    },
+
+    "todayYouMust": "Today ,you must  :",
+    "@todayYouMust" :{
+        "description": "today you must"
+    },
+
+    "weaknessWithEvil": "Weak👹 ",
+    "@weaknessWithEvil": {
+        "description": "weak with evil"
+    },
+
+    "scoreGoesBackToZero": "You score goes back to  0. Just like you.👎",
+    "@scoreGoesBackToZero": {
+        "description": "scoreGoesBackToZero"
+    },
+
+    "dontLoseYourScore": "☝ Don't lose your score !",
+    "@dontLoseYourScore" : {
+        "description": "dontLoseYourScore"
+    },
+
+    "sumOfPoints": "⚡ Total of score  : ",
+    "@sumOfPoints" : {
+        "description": "sum of points"
+    },
+
+    "refuseButton": "refuse",
+    "@refuseButton":{
+        "description": "refuse button"
+    },
+    
+    "proofButton": "proof",
+    "@proofButton": {
+        "description": "proofButton"
+    },
+
+    "notificationTitle": "The Deal 👹",
+    "@notificationTitle":{
+        "description": "'Le Pacte 👹"
+    },
+
+    "onlyTenMinutesLeft": "Only 10 minutes  left 👹⏱️ ",
+    "@onlyTenMinutesLeft": {
+        "description": "Il te reste juste 10 minutes 👹⏱️ "
+    },
+
+    "theDevilWillVerify": "The devil will verify 👹⏱️... ",
+    "@theDevilWillVerify" : {
+        "description": "Le diable vérifieras.."
+    },
+    "notNowChallenge": "No, not now..🐔",
+    "@notNowChallenge":{
+        "description": "Pas tout de suite"
+    },
+
+    "waitingForValidation": " Waiting for validation ⏱️",
+    "@waitingForValidation":{
+        "description": "En attente de validation ⏱️"
+    },
+    
+    "sendProofToTheDevil": "Send proof to the Devil ! 👹 ",
+    "@sendProofToTheDevil":{
+        "description": "Envoyer la preuve au diable ! 👹 "
+    },
+
+    "pictureSent": "Picture sent  ! 👹✔️",
+    "@pictureSent": {
+        "description": "Photo envoyée  ! 👹✔️"
+    },
+    "takeApicture": "Take a picture 👹📷 ",
+    "@takeApicture":{
+        "description": "Prendre une photo 👹📷 "
+    },
+    "tenBestDisciple": "10 Best Devils ! 👹🏆",
+    "@tenBestDisciple":{
+        "description": "10 Meilleurs challengers du monde !"
+    },
+
+    "othersStatistics": "Others statistics ⚔️",
+    "@othersStatistics":{
+        "description": "Statistique des autres ! "
+    },
+    "youAcceptedTicTac": "You accepted .. Tic..Tac ⏱️",
+    "@youAcceptedTicTac":{
+        "description": "You accepted..Tic..Tac ⏱️"
+    },
+
+    "whereIsThePictureGenius": "Where is the picture, genius 👹📷 ?",
+    "@whereIsThePictureGenius": {
+        "description": " Elle est où la photo, le génie 👹📷 ?"
+    },
+    
+    "proveIt" : "Prove it : 👹🧾",
+    "@proveIt":{
+        "description": " Prouves-le : 👹🧾 "
+    },
+
+    "timeIsDone": "You're time is done ! You Lost. ⚡",
+    "@timeIsDone":{
+        "description": "You're time is done ! You Lost. ⚡"
+    },
+  
+    "yes": "Yes",
+    "@yes":{
+        "description": "yes"
+    },
+    "no": "No",
+    "@no":{
+        "description": "no"
     }
+
+
+
+
 
 
 }

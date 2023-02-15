@@ -8,11 +8,10 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import 'package:eachday/globalvars/globalvars.dart';
 import 'package:logger/logger.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class EachDaysUtils {
   static AudioPlayer audioPlayer = AudioPlayer();
-  static String endMessage = "You're time is done ! You Lost. ⚡";
-  static String almostEndMessage = "Less then 10 minutes left.⏱️";
 
   static verboseIt(String verboseMessage) {
     var logger = Logger(printer: PrettyPrinter(methodCount: 0));
@@ -48,9 +47,9 @@ class EachDaysUtils {
     audioPlayer.dispose();
   }
 
-  static showEndingToast(bool timerEnded) {
+  static showEndingToast(bool timerEnded,BuildContext context) {
     Fluttertoast.showToast(
-        msg: timerEnded ? endMessage : almostEndMessage,
+        msg: timerEnded ?  AppLocalizations.of(context).timeIsDone :  AppLocalizations.of(context).onlyTenMinutesLeft,
         toastLength: Toast.LENGTH_LONG,
         gravity: ToastGravity.BOTTOM_LEFT,
         backgroundColor: Colors.red,

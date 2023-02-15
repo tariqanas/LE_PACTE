@@ -16,6 +16,7 @@ import 'package:eachday/utils/eachdayutils.dart';
 import 'services/handleFireBaseDB.dart';
 import 'services/notificationService.dart';
 import 'package:cool_alert/cool_alert.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.connectedUser})
@@ -104,7 +105,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
         context,
         MaterialPageRoute(
           builder: (context) =>
-              HomeScreen(title: "Faible ! 👎 ", connectedUser: connectedUser),
+              HomeScreen(title: AppLocalizations.of(context).weakness, connectedUser: connectedUser),
         ),
       );
     }
@@ -116,7 +117,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton.extended(
         icon: const Icon(Icons.add_a_photo_rounded),
         onPressed: onPressed,
-        label: const Text('Accepter 👑'),
+        label:  Text(AppLocalizations.of(context).acceptChallenge),
         backgroundColor: Colors.black,
         heroTag: "takePictureButton",
       ),
@@ -128,7 +129,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton.extended(
         icon: const Icon(Icons.cancel),
         onPressed: onPressed,
-        label: const Text('Refuser  🏳️'),
+        label:  Text(AppLocalizations.of(context).refuseChallenge),
         backgroundColor: Colors.black,
         heroTag: "runButton",
       ),
@@ -167,26 +168,27 @@ class _MyHomeScreenState extends State<HomeScreen> {
                           )
                         : SvgPicture.asset(userPicture, fit: BoxFit.fitWidth))),
             Expanded(
+                flex: 1,
                 child: Text(
+                  // ignore: prefer_interpolation_to_compose_strings
                   " 🔥 " +
                       widget.connectedUser.username.toUpperCase() +
                       " 🔥   ",
                   textAlign: TextAlign.center,
-                ),
-                flex: 1),
+                )),
             logoutButtona(
-                title: "T'es sur ?",
+                title: AppLocalizations.of(context).logoutAreYouSure,
                 onPressed: () => {
                       CoolAlert.show(
                           context: context,
-                          title: "T'es sur ? ",
+                          title: AppLocalizations.of(context).logoutAreYouSure,
                           type: CoolAlertType.confirm,
-                          text: 'Tu veux vraiment partir 👹 ? ',
-                          confirmBtnText: 'Oui',
-                          cancelBtnText: 'Non',
+                          text: AppLocalizations.of(context).doYouReallyWantToGo,
+                          confirmBtnText: AppLocalizations.of(context).yes,
+                          cancelBtnText: AppLocalizations.of(context).no,
                           cancelBtnTextStyle: TextStyle(color: Colors.black),
-                          backgroundColor: Color.fromARGB(255, 117, 15, 15),
-                          confirmBtnColor: Color.fromARGB(255, 117, 15, 15),
+                          backgroundColor: const Color.fromARGB(255, 117, 15, 15),
+                          confirmBtnColor: const Color.fromARGB(255, 117, 15, 15),
                           animType: CoolAlertAnimType.rotate,
                           onConfirmBtnTap: () async {
                             Navigator.pop(context);
@@ -199,7 +201,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                                     type: CoolAlertType.success,
                                     backgroundColor:
                                         const Color.fromARGB(255, 117, 15, 15),
-                                    text: "🔥 Au revoir.. ou pas 🔥")
+                                    text: AppLocalizations.of(context).byeOrNot)
                                 .then((value) => {signOut(context)});
                           })
                     }),
@@ -216,8 +218,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
             if (widget.connectedUser.refusedChallengeToday == "false")
-              const Text("Aujourd'hui, tu dois  :",
-                  style: TextStyle(color: Colors.white, fontSize: 20)),
+               Text(AppLocalizations.of(context).todayYouMust,
+                  style: const TextStyle(color: Colors.white, fontSize: 20)),
             if (widget.connectedUser.refusedChallengeToday == "false")
               Text(
                   widget.connectedUser.currentChallenge == ''
@@ -242,27 +244,27 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   onComplete: () {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
-                    EachDaysUtils.showEndingToast(true);
+                    EachDaysUtils.showEndingToast(true,context);
                     notificationService.showLocalNotification(
                         id: 1,
-                        title: "Faible👹 ",
-                        body: "ton score repasse à 0. Comme toi.👎 ",
-                        payload: "ton score repasse à 0. Comme toi.👎 ");
+                        title: AppLocalizations.of(context).weaknessWithEvil,
+                        body: AppLocalizations.of(context).scoreGoesBackToZero,
+                        payload: AppLocalizations.of(context).scoreGoesBackToZero);
                   },
                   duration:
                       EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime(),
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
             if (widget.connectedUser.refusedChallengeToday == "false")
-              const Text('☝ Ne perds pas tes points !',
+               Text(AppLocalizations.of(context).dontLoseYourScore,
                   softWrap: false,
-                  style: TextStyle(color: Colors.white, fontSize: 19)),
+                  style: const TextStyle(color: Colors.white, fontSize: 19)),
             if (widget.connectedUser.refusedChallengeToday == "true")
               Text(GlobalVars.looserMessage,
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
             Text(
-                '⚡ Total de tes points : ' +
+                AppLocalizations.of(context).sumOfPoints +
                     widget.connectedUser.getStreak.toString() +
                     ' ⚡',
                 softWrap: false,
@@ -276,9 +278,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
         children: [
           if (widget.connectedUser.refusedChallengeToday == "false") ...[
             _rejectButton(
-                title: "refuse", onPressed: () => _refuseTheChallenge()),
+                title: AppLocalizations.of(context).refuseButton, onPressed: () => _refuseTheChallenge()),
             _proofButton(
-                title: "proof",
+                title: AppLocalizations.of(context).proofButton,
                 onPressed: () => _openAcceptChallenge(widget.connectedUser)),
           ]
         ],
@@ -312,12 +314,12 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   _verifyIfCountDownHit10MinutesOrNo() {
     if (GlobalVars.timeLeft <= 600) {
-      EachDaysUtils.showEndingToast(false);
+      EachDaysUtils.showEndingToast(false, context);
       notificationService.showLocalNotification(
           id: 0,
-          title: 'Le Pacte 👹 ',
-          body: 'Il te reste juste 10 minutes 👹⏱️ ',
-          payload: 'Il te reste juste 10 minutes 👹⏱️');
+          title: AppLocalizations.of(context).notificationTitle,
+          body: AppLocalizations.of(context).onlyTenMinutesLeft,
+          payload: AppLocalizations.of(context).onlyTenMinutesLeft);
     }
   }
 
@@ -369,9 +371,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
         flex: 0,
         child: FloatingActionButton(
           onPressed: onPressed,
+          backgroundColor: Color.fromARGB(255, 34, 2, 2),
           child: const Icon(Icons.power_settings_new_outlined,
               color: Colors.white),
-          backgroundColor: Color.fromARGB(255, 34, 2, 2),
         ));
   }
 

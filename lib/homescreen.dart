@@ -7,6 +7,7 @@ import 'package:eachday/signInScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/locale.dart';
 import 'dart:async';
 import 'globalvars/globalvars.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
@@ -17,6 +18,7 @@ import 'services/handleFireBaseDB.dart';
 import 'services/notificationService.dart';
 import 'package:cool_alert/cool_alert.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:translator/translator.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key, required this.title, required this.connectedUser})
@@ -34,6 +36,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   final CountDownController _countDownController = CountDownController();
   late final NotificationService notificationService;
+  final translator = GoogleTranslator();
   @override
   void initState() {
     super.initState();
@@ -49,8 +52,18 @@ class _MyHomeScreenState extends State<HomeScreen> {
               listenToNotificationStream(),
               _verifyIfCountDownHit10MinutesOrNo(),
               fetchOrder(widget.connectedUser).then((value) => setState(() {
-                    widget.connectedUser.currentChallenge = value;
-                    widget.connectedUser.refusedChallengeToday = "false";
+                    translator
+                        .translate(value,
+                            from: 'fr',
+                            to: Localizations.localeOf(context).languageCode)
+                        .then((translated) => {
+                              EachDaysUtils.verboseIt(translated.text),
+                              widget.connectedUser.currentChallenge =
+                                  translated.text,
+                              widget.connectedUser.refusedChallengeToday =
+                                  "false",
+                            })
+                        .whenComplete(() => setState(() {}));
                   }))
             }
         });
@@ -104,8 +117,9 @@ class _MyHomeScreenState extends State<HomeScreen> {
       Navigator.push(
         context,
         MaterialPageRoute(
-          builder: (context) =>
-              HomeScreen(title: AppLocalizations.of(context).weakness, connectedUser: connectedUser),
+          builder: (context) => HomeScreen(
+              title: AppLocalizations.of(context).weakness,
+              connectedUser: connectedUser),
         ),
       );
     }
@@ -117,7 +131,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton.extended(
         icon: const Icon(Icons.add_a_photo_rounded),
         onPressed: onPressed,
-        label:  Text(AppLocalizations.of(context).acceptChallenge),
+        label: Text(AppLocalizations.of(context).acceptChallenge),
         backgroundColor: Colors.black,
         heroTag: "takePictureButton",
       ),
@@ -129,7 +143,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
       child: FloatingActionButton.extended(
         icon: const Icon(Icons.cancel),
         onPressed: onPressed,
-        label:  Text(AppLocalizations.of(context).refuseChallenge),
+        label: Text(AppLocalizations.of(context).refuseChallenge),
         backgroundColor: Colors.black,
         heroTag: "runButton",
       ),
@@ -183,12 +197,15 @@ class _MyHomeScreenState extends State<HomeScreen> {
                           context: context,
                           title: AppLocalizations.of(context).logoutAreYouSure,
                           type: CoolAlertType.confirm,
-                          text: AppLocalizations.of(context).doYouReallyWantToGo,
+                          text:
+                              AppLocalizations.of(context).doYouReallyWantToGo,
                           confirmBtnText: AppLocalizations.of(context).yes,
                           cancelBtnText: AppLocalizations.of(context).no,
                           cancelBtnTextStyle: TextStyle(color: Colors.black),
-                          backgroundColor: const Color.fromARGB(255, 117, 15, 15),
-                          confirmBtnColor: const Color.fromARGB(255, 117, 15, 15),
+                          backgroundColor:
+                              const Color.fromARGB(255, 117, 15, 15),
+                          confirmBtnColor:
+                              const Color.fromARGB(255, 117, 15, 15),
                           animType: CoolAlertAnimType.rotate,
                           onConfirmBtnTap: () async {
                             Navigator.pop(context);
@@ -218,7 +235,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
                       fontSize: 40,
                       fontWeight: FontWeight.bold)),
             if (widget.connectedUser.refusedChallengeToday == "false")
-               Text(AppLocalizations.of(context).todayYouMust,
+              Text(AppLocalizations.of(context).todayYouMust,
                   style: const TextStyle(color: Colors.white, fontSize: 20)),
             if (widget.connectedUser.refusedChallengeToday == "false")
               Text(
@@ -244,19 +261,20 @@ class _MyHomeScreenState extends State<HomeScreen> {
                   onComplete: () {
                     debugPrint('countdown finished 24h');
                     _refuseTheChallenge();
-                    EachDaysUtils.showEndingToast(true,context);
+                    EachDaysUtils.showEndingToast(true, context);
                     notificationService.showLocalNotification(
                         id: 1,
                         title: AppLocalizations.of(context).weaknessWithEvil,
                         body: AppLocalizations.of(context).scoreGoesBackToZero,
-                        payload: AppLocalizations.of(context).scoreGoesBackToZero);
+                        payload:
+                            AppLocalizations.of(context).scoreGoesBackToZero);
                   },
                   duration:
                       EachDaysUtils.howMuchTimeLeftAccordingToCurrentTime(),
                   fillColor: Colors.red,
                   ringColor: Colors.redAccent),
             if (widget.connectedUser.refusedChallengeToday == "false")
-               Text(AppLocalizations.of(context).dontLoseYourScore,
+              Text(AppLocalizations.of(context).dontLoseYourScore,
                   softWrap: false,
                   style: const TextStyle(color: Colors.white, fontSize: 19)),
             if (widget.connectedUser.refusedChallengeToday == "true")
@@ -278,7 +296,8 @@ class _MyHomeScreenState extends State<HomeScreen> {
         children: [
           if (widget.connectedUser.refusedChallengeToday == "false") ...[
             _rejectButton(
-                title: AppLocalizations.of(context).refuseButton, onPressed: () => _refuseTheChallenge()),
+                title: AppLocalizations.of(context).refuseButton,
+                onPressed: () => _refuseTheChallenge()),
             _proofButton(
                 title: AppLocalizations.of(context).proofButton,
                 onPressed: () => _openAcceptChallenge(widget.connectedUser)),
@@ -403,7 +422,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
 
   signOut(BuildContext context) {
     FirebaseAuth.instance.signOut().then((value) => {
-      EachDaysUtils.audioPlayer.dispose(),
+          EachDaysUtils.audioPlayer.dispose(),
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => const SignInPage()),

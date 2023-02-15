@@ -57,6 +57,7 @@ dependencies:
   cool_alert: ^1.1.0
   flutter_localizations:
     sdk: flutter
+  translator: ^0.1.7
 
   
 

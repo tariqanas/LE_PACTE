@@ -58,6 +58,7 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   translator: ^0.1.7
+  firebase_messaging: ^14.2.4
 
   
 

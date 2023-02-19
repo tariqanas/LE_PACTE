@@ -5,6 +5,7 @@ import 'package:eachday/services/CameraPage.dart';
 import 'package:eachday/services/get_today_order.dart';
 import 'package:eachday/signInScreen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/locale.dart';
@@ -33,6 +34,7 @@ class HomeScreen extends StatefulWidget {
 
 class _MyHomeScreenState extends State<HomeScreen> {
   final handleFireBaseDB handledb = handleFireBaseDB();
+  FirebaseMessaging firebaseMessaging = FirebaseMessaging.instance;
 
   final CountDownController _countDownController = CountDownController();
   late final NotificationService notificationService;
@@ -50,6 +52,7 @@ class _MyHomeScreenState extends State<HomeScreen> {
               notificationService.initializePlatformNotifications(),
               EachDaysUtils.playTicTacSound(),
               listenToNotificationStream(),
+              listenToFCMCalls(),
               _verifyIfCountDownHit10MinutesOrNo(),
               fetchOrder(widget.connectedUser).then((value) => setState(() {
                     translator
@@ -73,6 +76,18 @@ class _MyHomeScreenState extends State<HomeScreen> {
       notificationService.behaviorSubject.listen((payload) {
         EachDaysUtils.verboseIt("10 minute notification sent");
       });
+
+  void listenToFCMCalls() {
+    FirebaseMessaging.onMessage.listen((RemoteMessage message) {
+      EachDaysUtils.verboseIt(
+          "The user ${widget.connectedUser.username} Got a foreground message =");
+      EachDaysUtils.verboseIt("${message.data}");
+      if (message.notification != null) {
+        EachDaysUtils.verboseIt(
+            'Message also contained a notification: ${message.notification!.body.toString()}');
+      }
+    });
+  }
 
   Future<String> fetchOrder(lePacteUser connectedUser) async {
     DateTime currentChallengeDate =

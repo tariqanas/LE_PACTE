@@ -196,7 +196,7 @@
     "@takeApicture":{
         "description": "Prendre une photo 👹📷 "
     },
-    "tenBestDisciple": "10 Best Devils ! 👹🏆",
+    "tenBestDisciple": "Top 10 Best Devils ! 👹🏆",
     "@tenBestDisciple":{
         "description": "10 Meilleurs challengers du monde !"
     },
@@ -232,8 +232,12 @@
     "no": "No",
     "@no":{
         "description": "no"
-    }
+    },
 
+    "changeTheChallengePlease": " I want to change the challenge 😔 and keep my score",
+    "@changeTheChallengePlease":{
+        "description": "changeTheChallengePlease"
+    }
 
 
 

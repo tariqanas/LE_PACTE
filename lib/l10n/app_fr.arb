@@ -39,12 +39,13 @@
     "sendProofToTheDevil": "Envoies la preuve au Diable ! 👹",
     "pictureSent": "Photo envoyée ! 👹✔️",
     "takeApicture": "Prends une photo 👹📷",
-    "tenBestDisciple": "10 meilleurs diables ! 👹🏆",
+    "tenBestDisciple": "Les 10 meilleurs diables ! 👹🏆",
     "othersStatistics": "Autres statistiques ⚔️",
     "youAcceptedTicTac": "Tu as  accepté... Tic..Tac ⏱️",
     "whereIsThePictureGenius": "Où est la photo, génie 👹📷 ?",
     "proveIt": "Prouves-le 👹🧾",
     "timeIsDone": "Ton temps est finit. T'as perdu.⚡",
     "yes": "Oui",
-    "no": "Non"
+    "no": "Non",
+    "changeTheChallengePlease": "Je veux changer de défi et garder mon score 😔"
 }

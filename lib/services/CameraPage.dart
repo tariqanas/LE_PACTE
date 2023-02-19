@@ -61,14 +61,14 @@ class _CameraPageState extends State<CameraPage> {
         height: 50,
         child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
                 widget.connectedUser.refusedChallengeToday == "true")
-            ?  Text(
+            ? Text(
                 AppLocalizations.of(context).theDevilWillVerify,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
                     fontWeight: FontWeight.w500),
               )
-            :  Text( AppLocalizations.of(context).notNowChallenge,
+            : Text(AppLocalizations.of(context).notNowChallenge,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
@@ -89,12 +89,12 @@ class _CameraPageState extends State<CameraPage> {
         width: MediaQuery.of(context).size.width,
         child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
                 widget.connectedUser.refusedChallengeToday == "true")
-            ?  Text(  AppLocalizations.of(context).waitingForValidation,
+            ? Text(AppLocalizations.of(context).waitingForValidation,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.black,
                     fontWeight: FontWeight.w500))
-            :  Text(AppLocalizations.of(context).sendProofToTheDevil,
+            : Text(AppLocalizations.of(context).sendProofToTheDevil,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
@@ -119,12 +119,12 @@ class _CameraPageState extends State<CameraPage> {
         height: 50,
         child: (widget.connectedUser.didUserSendAPictureToday == "true" ||
                 widget.connectedUser.refusedChallengeToday == "true")
-            ?  Text(AppLocalizations.of(context).pictureSent,
+            ? Text(AppLocalizations.of(context).pictureSent,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
                     fontWeight: FontWeight.w500))
-            :  Text(AppLocalizations.of(context).takeApicture,
+            : Text(AppLocalizations.of(context).takeApicture,
                 style: const TextStyle(
                     fontStyle: FontStyle.italic,
                     color: Colors.white,
@@ -141,8 +141,8 @@ class _CameraPageState extends State<CameraPage> {
         color: const Color.fromARGB(255, 117, 15, 15),
         height: 50,
         width: MediaQuery.of(context).size.width,
-        child:  Text(
-          AppLocalizations.of(context).othersStatistics,
+        child: Text(
+          AppLocalizations.of(context).changeTheChallengePlease,
           style: const TextStyle(
               fontStyle: FontStyle.italic,
               color: Colors.white,
@@ -159,7 +159,7 @@ class _CameraPageState extends State<CameraPage> {
         shadowDegree: ShadowDegree.dark,
         color: const Color.fromARGB(255, 117, 15, 15),
         width: MediaQuery.of(context).size.width,
-        child:  Text(AppLocalizations.of(context).tenBestDisciple,
+        child: Text(AppLocalizations.of(context).tenBestDisciple,
             style: const TextStyle(
                 fontStyle: FontStyle.italic,
                 color: Colors.white,
@@ -202,8 +202,8 @@ class _CameraPageState extends State<CameraPage> {
         widget.connectedUser.didUserSendAPictureToday = "true";
       });
     } else {
-      SnackBar snackbar =
-          EachDaysUtils.ShowBlackSnackBar(AppLocalizations.of(context).whereIsThePictureGenius);
+      SnackBar snackbar = EachDaysUtils.ShowBlackSnackBar(
+          AppLocalizations.of(context).whereIsThePictureGenius);
       ScaffoldMessenger.of(context).showSnackBar(snackbar);
     }
   }
@@ -257,26 +257,19 @@ class _CameraPageState extends State<CameraPage> {
               mainAxisAlignment: MainAxisAlignment.spaceAround,
               children: [
                 okTakePictureV2(
-                    title:AppLocalizations.of(context).proofButton, onPressed: () => _takePictureOnPressed()),
+                    title: AppLocalizations.of(context).proofButton,
+                    onPressed: () => _takePictureOnPressed()),
                 notNowButtonV2(
-                    title: AppLocalizations.of(context).notNowChallenge, onPressed: () => _notNowOnpressed()),
+                    title: AppLocalizations.of(context).notNowChallenge,
+                    onPressed: () => _notNowOnpressed()),
               ],
             )),
             SizedBox(
               child: Row(
                 children: [
                   okSendProofButtonV2(
-                      title:AppLocalizations.of(context).sendProofToTheDevil,
+                      title: AppLocalizations.of(context).sendProofToTheDevil,
                       onPressed: () => _sendProofOnPressed(context)),
-                ],
-              ),
-            ),
-            SizedBox(
-              child: Row(
-                children: [
-                  seeHowManyPeopleSeenItButtonV2(
-                      title: AppLocalizations.of(context).proofButton,
-                      onPressed: () => EachDaysUtils.showEndingToast(false,context)),
                 ],
               ),
             ),
@@ -290,7 +283,8 @@ class _CameraPageState extends State<CameraPage> {
                           context: context,
                           builder: (BuildContext context) {
                             return AlertDialog(
-                                title:  Text(AppLocalizations.of(context).tenBestDisciple),
+                                title: Text(AppLocalizations.of(context)
+                                    .tenBestDisciple),
                                 content: _buildPopupDialog(
                                     context, widget.connectedUser));
                           });
@@ -299,6 +293,16 @@ class _CameraPageState extends State<CameraPage> {
                 ],
               ),
             ),
+            SizedBox(
+              child: Row(
+                children: [
+                  seeHowManyPeopleSeenItButtonV2(
+                      title: AppLocalizations.of(context).proofButton,
+                      onPressed: () =>
+                          EachDaysUtils.showEndingToast(false, context)),
+                ],
+              ),
+            )
           ],
         ));
   }

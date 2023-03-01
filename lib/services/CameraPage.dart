@@ -133,7 +133,7 @@ class _CameraPageState extends State<CameraPage> {
     );
   }
 
-  Widget seeHowManyPeopleSeenItButtonV2({required String title, onPressed}) {
+  Widget changeTheChallengePlease({required String title, onPressed}) {
     return Flexible(
       child: AnimatedButton(
         onPressed: onPressed,
@@ -208,32 +208,7 @@ class _CameraPageState extends State<CameraPage> {
     }
   }
 
-//TODO Modify this.
-  seeHowManyPeopleSeenItPressed() {
-    setState(() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                    title: AppLocalizations.of(context).youAcceptedTicTac,
-                    connectedUser: widget.connectedUser,
-                  )));
-    });
-  }
 
-//TODO Modify this.
-
-  _seeWorldDashBoardPressed() {
-    setState(() {
-      Navigator.push(
-          context,
-          MaterialPageRoute(
-              builder: (context) => HomeScreen(
-                    title: AppLocalizations.of(context).youAcceptedTicTac,
-                    connectedUser: widget.connectedUser,
-                  )));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -296,7 +271,7 @@ class _CameraPageState extends State<CameraPage> {
             SizedBox(
               child: Row(
                 children: [
-                  seeHowManyPeopleSeenItButtonV2(
+                  changeTheChallengePlease(
                       title: AppLocalizations.of(context).proofButton,
                       onPressed: () =>
                           EachDaysUtils.showEndingToast(false, context)),
